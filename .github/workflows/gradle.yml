@@ -2,9 +2,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master","develop" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master" ,"develop" ]
 
 permissions:
   contents: read
@@ -31,11 +31,11 @@ jobs:
       - name: Build MySQL 8.0 Docker Image
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}        
-          docker build -f Docker/Mysql/Dockerfile -t yisc/mysql-8.0 .
+          docker build -f docker/mysql/Dockerfile -t yisc/mysql-8.0 .
           docker push yisc/mysql-8.0
 
       - name: Docker build & push to docker repo
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-          docker build -f Docker/Springboot/Dockerfile -t yisc/springboot .
+          docker build -f docker/springboot/dockerfile -t yisc/springboot .
           docker push yisc/springboot
