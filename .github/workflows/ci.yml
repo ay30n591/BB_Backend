@@ -23,12 +23,12 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: make application.properties
-        run: |
-          cd ./src/main/resources
-          touch ./application.properties
-          echo "${{ secrets.PROPERTIES }}" > ./application.properties
-        shell: bash
+#      - name: make application.properties
+#        run: |
+#          cd ./src/main/resources
+#          touch ./application.properties
+#          echo "${{ secrets.PROPERTIES }}" > ./application.properties
+#        shell: bash
 
       - name: Build with Gradle
         run: |
