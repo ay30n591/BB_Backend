@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,7 +35,7 @@ public class Users extends BaseTime implements UserDetails {
     @Column(nullable = false)
     private  String userName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private  String nickName;
 
     private int picture;

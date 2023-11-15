@@ -89,6 +89,7 @@ public class UsersService {
     }
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
+        // 토큰재발급
         if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
