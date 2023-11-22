@@ -1,25 +1,31 @@
+  version: '3.7'
 
-version: '3.7'
+  services:
 
-services:
+    springboot:
+      image: yisc/springboot
+      container_name: springboot
+      ports:
+        - "8080:80"
+      depends_on:
+        - mysql
+        - redis  # Redis 서비스에 의존성 추가
+      restart: on-failure
 
-  springboot:
-    image: yisc/springboot
-    container_name: springboot
-    ports:
-      - "8080:80"
-    depends_on:
-      - mysql
-    restart: on-failure
+    mysql:
+      image: yisc/mysql-8.0
+      container_name: mysql
+      ports:
+        - "3307:3306"
+      environment:
+        MYSQL_ROOT_PASSWORD: 1234
+        MYSQL_DATABASE: beatbuddy
+      volumes:
+        - /home/ubuntu/databases/mysql/beatbuddy:/var/lib/mysql
 
-  mysql:
-    # 마운트 코드 작성
-    image: yisc/mysql-8.0
-    container_name: mysql
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: BBdb
-    volumes:
-      - /home/ubuntu/databases/mysql/beatbuddy:/var/lib/mysql
+
+    redis:
+      image: yisc/redis
+      container_name: redis
+      expose:
+        - "6379"
