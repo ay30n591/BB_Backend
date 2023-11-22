@@ -40,6 +40,13 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}        
           docker build -f docker/mysql/Dockerfile -t yisc/mysql-8.0 .
           docker push yisc/mysql-8.0
+          
+
+      - name: Build Redis Docker Image
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}        
+          docker build -f docker/redis/Dockerfile -t yisc/redis .
+          docker push yisc/redis
 
       - name: Docker build & push to docker repo
         run: |
@@ -56,6 +63,7 @@ jobs:
           port: 22
           script: |
             sudo docker rm -f $(docker ps -qa)
+            sudo docker pull yisc/redis
             sudo docker pull yisc/springboot
             # sudo docker pull yisc/mysql-8.0 (선택적으로 필요한 경우 활성화)
             sudo docker-compose up -d
