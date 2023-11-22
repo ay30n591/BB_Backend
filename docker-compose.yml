@@ -1,3 +1,4 @@
+
 version: '3.7'
 
 services:
@@ -9,10 +10,10 @@ services:
       - "8080:80"
     depends_on:
       - mysql
-      - redis  # Redis 서비스에 의존성 추가
     restart: on-failure
 
   mysql:
+    # 마운트 코드 작성
     image: yisc/mysql-8.0
     container_name: mysql
     ports:
@@ -20,9 +21,3 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: BBdb
-
-  redis:
-    image: yisc/redis
-    container_name: redis
-    expose:
-      - "6379"

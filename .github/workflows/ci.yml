@@ -40,7 +40,6 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}        
           docker build -f docker/mysql/Dockerfile -t yisc/mysql-8.0 .
           docker push yisc/mysql-8.0
-          
 
       - name: Build Redis Docker Image
         run: |
@@ -54,17 +53,3 @@ jobs:
           docker build -f docker/springboot/Dockerfile -t yisc/springboot .
           docker push yisc/springboot
 
-      - name: Deploy to prod
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_PROD }}
-          username: ubuntu
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull yisc/redis
-            sudo docker pull yisc/springboot
-            sudo docker pull yisc/mysql-8.0
-            sudo docker-compose up -d
-            sudo docker image prune -f
