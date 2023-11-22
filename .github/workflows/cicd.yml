@@ -60,6 +60,7 @@ jobs:
     steps:
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
+
         with:
           host: ${{ secrets.HOST_PROD }}
           username: ubuntu
