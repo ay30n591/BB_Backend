@@ -25,4 +25,4 @@ services:
     image: yisc/redis
     container_name: redis
     expose:
-      - "6379:6379"
+      - "6379"
