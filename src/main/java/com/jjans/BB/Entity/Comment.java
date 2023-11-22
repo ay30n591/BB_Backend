@@ -12,7 +12,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user_id;
+    private Users user_id;
 
     @ManyToOne
     @JoinColumn(name = "feed_id") // 어떤 피드에 대한 댓글인지를 나타내는 필드
