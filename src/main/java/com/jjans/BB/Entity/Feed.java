@@ -3,7 +3,6 @@ package com.jjans.BB.Entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -11,7 +10,7 @@ import java.util.List;
 public class Feed extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
