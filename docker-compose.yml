@@ -21,3 +21,5 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: BBdb
+    volumes:
+      - /home/ubuntu/databases/mysql/beatbuddy:/var/lib/mysql
