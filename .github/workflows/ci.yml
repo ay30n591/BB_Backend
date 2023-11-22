@@ -8,9 +8,9 @@ on:
 
 permissions:
   contents: read
-##
+
 jobs:
-  build_and_deploy:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -53,3 +53,21 @@ jobs:
           docker build -f docker/springboot/Dockerfile -t yisc/springboot .
           docker push yisc/springboot
 
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to prod
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull yisc/springboot
+            # sudo docker pull yisc/mysql-8.0 (선택적으로 필요한 경우 활성화)
+            sudo docker-compose up -d
+            sudo docker image prune -f
