@@ -1,4 +1,4 @@
-name: CI/CD
+name: CICD
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build_and_deploy:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -37,13 +37,13 @@ jobs:
 
       - name: Build MySQL 8.0 Docker Image
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}        
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
           docker build -f docker/mysql/Dockerfile -t yisc/mysql-8.0 .
           docker push yisc/mysql-8.0
 
       - name: Build Redis Docker Image
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}        
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
           docker build -f docker/redis/Dockerfile -t yisc/redis .
           docker push yisc/redis
 
@@ -53,3 +53,23 @@ jobs:
           docker build -f docker/springboot/Dockerfile -t yisc/springboot .
           docker push yisc/springboot
 
+  deploy:
+
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to prod
+        uses: appleboy/ssh-action@master
+
+        with:
+          host: ${{ secrets.HOST_PROD }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull yisc/redis
+            sudo docker pull yisc/mysql-8.0
+            sudo docker pull yisc/springboot
+            sudo docker-compose up -d
+            sudo docker image prune -f

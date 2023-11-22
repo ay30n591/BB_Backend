@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class Comment {
+public class Comment extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
