@@ -1,28 +1,43 @@
 package com.jjans.BB.Entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Feed extends BaseTime{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
 
+    @Column(length = 1000, nullable = false)
     private String content;
 
     private int feedLike;
     private int feedImage;
 
-    @OneToMany(mappedBy = "feed_id", cascade = CascadeType.ALL) // 일대다 관계 설정 및 CascadeType.ALL로 댓글에 대한 변경을 피드에 전파
-    private List<Comment> commentsList;
+    @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE)
+    @OrderBy("id asc") // 댓글 정렬
+    private List<Comment> comments;
+
+    public void update(String content, int feedImage) {
+
+        this.content = content;
+        this.feedImage = feedImage;
+
+    }
+
 }
 
 
