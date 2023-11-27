@@ -20,7 +20,6 @@ public class FeedRequestDto {
     private String content;
     private int feedImage;
 
-
     public Feed toEntity(){
         Feed feed = Feed.builder()
                 .id(id)
