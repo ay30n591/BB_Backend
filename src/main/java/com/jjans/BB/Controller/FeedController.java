@@ -1,16 +1,12 @@
 package com.jjans.BB.Controller;
 
-
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
-import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Service.FeedService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,10 +29,16 @@ public class FeedController {
         return new ResponseEntity<>(feeds, HttpStatus.OK);
     }
 
-    //     @GetMapping("/{userid}/")
-    @GetMapping("/user/{email}")
-    public ResponseEntity<List<FeedResponseDto>> getUserFeeds(@PathVariable String email) {
-        List<FeedResponseDto> userFeeds = feedService.getUserFeeds(email);
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/user")
+    public ResponseEntity<List<FeedResponseDto>> getMyFeeds() {
+        List<FeedResponseDto> userFeeds = feedService.getMyFeeds();
+        return ResponseEntity.ok(userFeeds);
+    }
+
+    @GetMapping("/user/{nickname}")
+    public ResponseEntity<List<FeedResponseDto>> getUserFeeds(@PathVariable String nickname) {
+        List<FeedResponseDto> userFeeds = feedService.getUserFeeds(nickname);
         return ResponseEntity.ok(userFeeds);
     }
     @SecurityRequirement(name = "bearerAuth")
@@ -45,11 +47,13 @@ public class FeedController {
         FeedResponseDto savedFeed = feedService.saveFeed(feedRequestDto);
         return new ResponseEntity<>(savedFeed, HttpStatus.CREATED);
     }
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{feedId}")
     public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {
         FeedResponseDto updatedFeed = feedService.updateFeed(feedId, updatedFeedDto);
         return new ResponseEntity<>(updatedFeed, HttpStatus.OK);
     }
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{feedId}")
     public ResponseEntity<String> deleteFeed(@PathVariable Long feedId) {
         try {
