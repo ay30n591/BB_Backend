@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"nickName", "email"}))
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Users extends BaseTime implements UserDetails {
 
