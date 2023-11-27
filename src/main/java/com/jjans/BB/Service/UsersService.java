@@ -22,7 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,6 +36,14 @@ public class UsersService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
     private final CustomUserDetailsService customUserDetailsService;
+
+
+    public ResponseEntity<?> getAllUsers() {
+        List<Users> allUsers = usersRepository.findAll();
+        return response.success(allUsers, "Successfully retrieved all users.", HttpStatus.OK);
+    }
+
+
 
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (usersRepository.existsByEmail(signUp.getEmail())) {
