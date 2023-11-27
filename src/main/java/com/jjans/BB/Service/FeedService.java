@@ -10,8 +10,9 @@ public interface FeedService {
     List<FeedResponseDto> getAllFeeds();
     FeedResponseDto saveFeed(FeedRequestDto feedDto);
     FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto);
-
     List<FeedResponseDto> getUserFeeds(String email);
+    List<FeedResponseDto> getMyFeeds();
+
     void deleteFeed(Long feedId);
 
 }

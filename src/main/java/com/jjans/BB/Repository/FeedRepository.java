@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface FeedRepository extends JpaRepository<Feed,Long> {
-    List<Feed> findByUserEmail(String userEmail);
+    List<Feed> findByUserNickName(String nickname);
 
 }

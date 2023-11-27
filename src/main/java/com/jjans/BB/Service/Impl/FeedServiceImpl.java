@@ -11,9 +11,7 @@ import com.jjans.BB.Service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -61,8 +59,21 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedResponseDto> getUserFeeds(String email) {
-        List<Feed> feeds = feedRepository.findByUserEmail(email);
+    public List<FeedResponseDto> getUserFeeds(String nickname) {
+        Users user = usersRepository.findByNickName(nickname)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        List<Feed> feeds = feedRepository.findByUserNickName(nickname);
+        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FeedResponseDto> getMyFeeds() {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        List<Feed> feeds = feedRepository.findByUserNickName(user.getNickName());
         return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
