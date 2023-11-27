@@ -18,17 +18,15 @@ import java.time.format.DateTimeFormatter;
 public class CommentRequestDto {
     private Long id;
     private String comment;
-    private Users user;
-    private Feed feed;
+
 
     public Comment toEntity(){
         Comment comments = Comment.builder()
                 .id(id)
                 .contents(comment)
-                .user(user)
-                .feed(feed)
                 .build();
         return comments;
     }
+
 }
 
