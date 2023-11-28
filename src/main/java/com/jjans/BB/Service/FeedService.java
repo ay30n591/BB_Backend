@@ -2,15 +2,17 @@ package com.jjans.BB.Service;
 
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
-import com.jjans.BB.Entity.Users;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface FeedService {
     List<FeedResponseDto> getAllFeeds();
-    FeedResponseDto saveFeed(FeedRequestDto feedDto);
+    FeedResponseDto saveFeed(FeedRequestDto feedDto, MultipartFile imageFile);
     FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto);
-    List<FeedResponseDto> getUserFeeds(String email);
+    List<FeedResponseDto> getUserAllFeeds(String nickname);
+    FeedResponseDto getUserFeed(Long feed_id,String nickname);
+
     List<FeedResponseDto> getMyFeeds();
 
     void deleteFeed(Long feedId);

@@ -1,14 +1,13 @@
 package com.jjans.BB.Dto;
 
-import com.jjans.BB.Entity.Comment;
 import com.jjans.BB.Entity.Feed;
-import com.jjans.BB.Entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 
 
 @Data
@@ -18,14 +17,15 @@ import javax.validation.constraints.NotBlank;
 public class FeedRequestDto {
     private Long id;
     private String content;
-    private int feedImage;
+    private String imageFileUrl;
 
-    public Feed toEntity(){
+    public Feed toEntity() {
         Feed feed = Feed.builder()
                 .id(id)
                 .content(content)
-                .feedImage(feedImage)
+                .feedImageUrl(imageFileUrl)
                 .build();
         return feed;
     }
+
 }

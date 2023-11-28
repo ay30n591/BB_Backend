@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,17 +37,29 @@ public class FeedController {
         return ResponseEntity.ok(userFeeds);
     }
 
+    @GetMapping("/user/{nickname}/{feed_id}")
+    public ResponseEntity<FeedResponseDto> getUserFeed(@PathVariable Long feed_id,
+                                                             @PathVariable String nickname) {
+        FeedResponseDto userFeed = feedService.getUserFeed(feed_id, nickname);
+        return ResponseEntity.ok(userFeed);
+    }
+
     @GetMapping("/user/{nickname}")
-    public ResponseEntity<List<FeedResponseDto>> getUserFeeds(@PathVariable String nickname) {
-        List<FeedResponseDto> userFeeds = feedService.getUserFeeds(nickname);
+    public ResponseEntity<List<FeedResponseDto>> getUserAllFeeds(@PathVariable String nickname) {
+        List<FeedResponseDto> userFeeds = feedService.getUserAllFeeds(nickname);
         return ResponseEntity.ok(userFeeds);
     }
+
+
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping
-    public ResponseEntity<FeedResponseDto> saveFeed(@RequestBody @Valid FeedRequestDto feedRequestDto) {
-        FeedResponseDto savedFeed = feedService.saveFeed(feedRequestDto);
+    @PostMapping(consumes = { "multipart/form-data","application/json" })
+    public ResponseEntity<FeedResponseDto> saveFeed(        @RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto,
+                                                            @RequestPart (name = "imageFile", required = false) MultipartFile imageFile) {
+        FeedResponseDto savedFeed = feedService.saveFeed(feedRequestDto,imageFile);
         return new ResponseEntity<>(savedFeed, HttpStatus.CREATED);
     }
+
+
     @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{feedId}")
     public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {

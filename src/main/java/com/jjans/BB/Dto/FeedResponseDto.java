@@ -2,8 +2,7 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Comment;
 import com.jjans.BB.Entity.Feed;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.jjans.BB.Entity.FeedImage;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ public class FeedResponseDto {
     private Long id;
     private String contents;
     private int feedLike;
-    private int feedImage;
+    private String imageFileUrl;
     private Long userId;
     private String userName;
     private LocalDateTime createdAt;
@@ -28,7 +27,7 @@ public class FeedResponseDto {
         this.id = feed.getId();
         this.contents = feed.getContent();
         this.feedLike = feed.getFeedLike();
-        this.feedImage = feed.getFeedImage();
+        this.imageFileUrl = feed.getFeedImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.userName = feed.getUser().getUsername();
         this.createdAt = feed.getCreateDate();
