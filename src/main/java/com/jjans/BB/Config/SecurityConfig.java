@@ -49,8 +49,8 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
                         "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/oauth2/**").permitAll()
-                .antMatchers("/api/v1/users/userTest").hasRole("ROLE_USER")
-                .antMatchers("/api/v1/users/adminTest").hasRole("ROLE_ADMIN")
+                .antMatchers("/api/v1/users/userTest").hasRole("USER")
+                .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .anyRequest().authenticated();
                         //oauth2Login
         http.oauth2Login()
