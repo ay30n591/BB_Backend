@@ -1,15 +1,12 @@
 package com.jjans.BB.Entity;
+
+import com.jjans.BB.Enum.AuthProvider;
+import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Builder
@@ -19,7 +16,8 @@ import java.util.stream.Collectors;
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Users extends BaseTime implements UserDetails {
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
+public class Users extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +27,13 @@ public class Users extends BaseTime implements UserDetails {
     @Column(nullable = false, unique = true, name = "email")
     private String email;
 
-    @Column(nullable = false)
+    //    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private  String userName;
 
-    @Column(nullable = false, unique = true)
+    //    @Column(nullable = false, unique = true)
     private  String nickName;
 
     private int picture;
@@ -44,54 +42,26 @@ public class Users extends BaseTime implements UserDetails {
 
     private String birth;
 
-//    public void addRole(String roleName) {
-//        if (this.roles == null) {
-//            this.roles = new ArrayList<>();
-//        }
-//        this.roles.add(roleName);
-//    }
-    public void addRole(String roleName) {
-        this.roles = new ArrayList<>(List.copyOf(this.roles));
-        this.roles.add(roleName);
+    private String oauth2Id;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
+
+    public Users update(OAuth2UserInfo oAuth2UserInfo) {
+        this.userName = oAuth2UserInfo.getName();
+        this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
+        return this;
     }
 
     @Column
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
+//    @Enumerated(EnumType.STRING)
     private List<String> roles = new ArrayList<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+    @Enumerated(EnumType.STRING)
+    public void addRole(String roleName){
+        this.roles = new ArrayList<>(List.copyOf(this.roles));
+        this.roles.add(roleName);
     }
 
 }
-
-
