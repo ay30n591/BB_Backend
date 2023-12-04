@@ -26,6 +26,10 @@ public class UsersController {
     private final Response response;
 
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        return usersService.getAllUsers();
+    }
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
         // validation check

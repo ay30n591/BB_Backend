@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
-
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;// 30분
@@ -36,11 +36,13 @@ public class JwtTokenProvider {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
-
-    // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
     public UserResponseDto.TokenInfo generateToken(Authentication authentication) {
+        return generateToken(authentication.getName(), authentication.getAuthorities());
+    }
+    // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
+    public UserResponseDto.TokenInfo generateToken(String name, Collection<? extends  GrantedAuthority> inputAuthorities) {
         // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
+        String authorities = inputAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
@@ -48,7 +50,7 @@ public class JwtTokenProvider {
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(name)
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -67,6 +69,7 @@ public class JwtTokenProvider {
         return UserResponseDto.TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
+                .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
                 .refreshToken(refreshToken)
                 .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
                 .build();
