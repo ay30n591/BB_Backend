@@ -48,7 +48,7 @@ public class Users extends BaseTime{
     private AuthProvider authProvider;
 
     public Users update(OAuth2UserInfo oAuth2UserInfo) {
-        this.nickName = oAuth2UserInfo.getName();
+        this.userName = oAuth2UserInfo.getName();
         this.oauth2Id = oAuth2UserInfo.getOAuth2Id();
         return this;
     }

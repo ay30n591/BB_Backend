@@ -5,6 +5,7 @@ import com.jjans.BB.Config.Security.JwtTokenProvider;
 import com.jjans.BB.Oauth2.OAuth2AuthenticationFailureHandler;
 import com.jjans.BB.Oauth2.OAuth2AuthenticationSuccessHandler;
 import com.jjans.BB.Repository.CookieAuthorizationRequestRepository;
+import com.jjans.BB.Service.AuthService;
 import com.jjans.BB.Service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -56,7 +59,7 @@ public class WebSecurityConfigure {
                 .and()
                 //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User 를 반환하는 클래스를 지정한다.
                 .userInfoEndpoint()
-//                .customOAuth2userService(customOAuth2UserService)
+//                .oidcUserService(customOAuth2UserService)
                 // 회원 정보 처리
 
                 .and()
@@ -76,5 +79,14 @@ public class WebSecurityConfigure {
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public AuthService authService() {
+        return new AuthService();
     }
 }

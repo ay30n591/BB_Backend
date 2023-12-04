@@ -16,10 +16,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.logging.Logger;
+
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UsersRepository usersRepository;
+    private Logger logger;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
@@ -53,6 +56,7 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
     }
 
     private Users registerUser(AuthProvider authProvider, OAuth2UserInfo oAuth2UserInfo) {
+        logger.info(oAuth2UserInfo.getEmail());
         Users users = Users.builder()
                 .email(oAuth2UserInfo.getEmail())
                 .nickName(oAuth2UserInfo.getName())
