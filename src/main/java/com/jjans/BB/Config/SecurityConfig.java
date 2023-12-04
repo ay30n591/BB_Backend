@@ -14,7 +14,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +34,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        //httpBasic, csrf, formLogin, rememberMe, logout, session disable
+
         http
                 .cors()
                 .and()
@@ -47,38 +46,32 @@ public class SecurityConfig {
 
         //요청에 대한 권한 설정
         http.authorizeRequests()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
-                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/oauth2/**").permitAll()
-                .antMatchers("/api/v1/users/userTest").hasRole("ROLE_USER")
-                .antMatchers("/api/v1/users/adminTest").hasRole("ROLE_ADMIN")
+                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout").permitAll()
+                .antMatchers("/api/v1/users/userTest").hasRole("USER")
+                .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .anyRequest().authenticated();
-                        //oauth2Login
-        http.oauth2Login()
-                .authorizationEndpoint()
-                .baseUri("/oauth2/authorization")  // 소셜 로그인 url
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository)  // 인증 요청을 cookie 에 저장
 
-                .and()
-                .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")  // 소셜 인증 후 redirect url
-                .and()
-                //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User 를 반환하는 클래스를 지정한다.
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                // 회원 정보 처리
-
-                .and()
-                .redirectionEndpoint()
-                .baseUri("/*/oauth2/code/*")
-
-
-                .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler);
-
-        http.logout()
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID");
+//                        //oauth2Login
+//        http.oauth2Login()
+//                .authorizationEndpoint()
+//                .baseUri("/oauth2/authorization")  // 소셜 로그인 url
+//                .authorizationRequestRepository(cookieAuthorizationRequestRepository)  // 인증 요청을 cookie 에 저장
+//
+//                .and()
+//                //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User 를 반환하는 클래스를 지정한다.
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//                // 회원 정보 처리
+//
+//                .and()
+//                .successHandler(oAuth2AuthenticationSuccessHandler)
+//                .failureHandler(oAuth2AuthenticationFailureHandler);
+//
+//        http.logout()
+//                .clearAuthentication(true)
+//                .deleteCookies("JSESSIONID");
 
         //jwt filter 설정
         http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
