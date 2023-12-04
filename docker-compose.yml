@@ -23,7 +23,19 @@
       volumes:
         - /home/ubuntu/databases/mysql/beatbuddy:/var/lib/mysql
 
-
+    elasticsearch:
+      image: eeeeeddy/egg-elasticsearch:7.17.13
+      container_name: egg-elasticsearch
+      environment:
+        - node.name=es-node
+        - cluster.name=search-cluster
+        - discovery.type=single-node
+        - xpack.security.enabled=false
+        - xpack.security.http.ssl.enabled=false
+        - xpack.security.transport.ssl.enabled=false
+      ports:
+        - 9200:9200 # https
+        - 9300:9300 # tcp
     redis:
       image: yisc/redis
       container_name: redis

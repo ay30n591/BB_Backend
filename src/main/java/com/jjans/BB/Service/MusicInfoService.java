@@ -12,7 +12,7 @@ public interface MusicInfoService {
 
     List<MusicInfo> findByMusicFileName(String musicFileName);
     List<MusicInfo> findByArtist(String artist);
-    List<MusicInfo> saveAll(List<MusicInfo> musicInfoList);
+    List<MusicInfo> saveAll(List<MusicInfo> musicInfo); // 추가
 
 
 }
