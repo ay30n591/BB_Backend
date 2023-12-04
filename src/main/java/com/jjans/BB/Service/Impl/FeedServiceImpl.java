@@ -4,6 +4,7 @@ import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
+import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.FeedRepository;
 import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.FeedService;
@@ -19,6 +20,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 @Service
