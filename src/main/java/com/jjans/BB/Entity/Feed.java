@@ -27,7 +27,11 @@ public class Feed extends BaseTime{
     private int feedLike;
 
     @Column(nullable = true)
-    private String feedImageUrl; // 이미지 URL을 저장하는 필드
+    private String feedImageUrl;
+
+    private String musicFileName;
+    private String musicFileUrl;
+
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
