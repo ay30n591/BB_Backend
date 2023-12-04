@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
@@ -35,10 +37,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         //httpBasic, csrf, formLogin, rememberMe, logout, session disable
-        http
-                .cors()
-                .and()
+        http.cors().and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .formLogin().disable()
@@ -47,12 +48,16 @@ public class SecurityConfig {
 
         //요청에 대한 권한 설정
         http.authorizeRequests()
-                .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
-                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/oauth2/**").permitAll()
-                .antMatchers("/api/v1/users/userTest").hasRole("ROLE_USER")
-                .antMatchers("/api/v1/users/adminTest").hasRole("ROLE_ADMIN")
+                .antMatchers("/**", "/oauth2/**",
+                        "/v3/api-docs/**", "/configuration/ui",
+                        "/swagger-resources/**", "/configuration/security",
+                        "/swagger-ui.html/**", "/webjars/**",
+                        "/swagger-resources/configuration/ui", "/swagger-ui/**").permitAll()
+                .antMatchers("/api/v1/users/userTest").hasRole("USER")
+                .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .anyRequest().authenticated();
-                        //oauth2Login
+
+        //oauth2Login
         http.oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorization")  // 소셜 로그인 url
