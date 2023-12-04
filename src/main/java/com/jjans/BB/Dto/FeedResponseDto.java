@@ -28,7 +28,7 @@ public class FeedResponseDto {
         this.feedLike = feed.getFeedLike();
         this.imageFileUrl = feed.getFeedImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
-        this.userName = feed.getUser().getUsername();
+        this.userName = feed.getUser().getUserName();
         this.createdAt = feed.getCreateDate();
         this.modifiedAt = feed.getModifiedDate();
 
