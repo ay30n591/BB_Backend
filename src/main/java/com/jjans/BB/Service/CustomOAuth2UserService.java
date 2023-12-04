@@ -40,7 +40,7 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
         logger.info("AuthProvider: " + authProvider);
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
-        logger.info("OAuth2User type: " + oAuth2User.getName().getClass()+ ", Name: " + oAuth2User.getName());
+        logger.info( " Name: " + oAuth2UserInfo.getName() + oAuth2UserInfo.getEmail());
 
         if (!StringUtils.hasText(oAuth2UserInfo.getName())) {
             throw new RuntimeException("Email not found from OAuth2 provider");

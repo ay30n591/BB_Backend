@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"nickName", "email"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
 public class Users extends BaseTime{
 
     @Id
@@ -27,13 +27,13 @@ public class Users extends BaseTime{
     @Column(nullable = false, unique = true, name = "email")
     private String email;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private  String userName;
 
-    @Column(nullable = false, unique = true)
+//    @Column(nullable = false, unique = true)
     private  String nickName;
 
     private int picture;

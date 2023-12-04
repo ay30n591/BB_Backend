@@ -26,60 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(securedEnabled = true)
 
 public class SecurityConfig {
-//    private final CustomOAuth2UserService customOAuth2UserService;
-//    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
-//    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-//    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-//    private final JwtTokenProvider jwtTokenProvider;
-//    private final RedisTemplate redisTemplate;
-//
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .cors()
-//                .and()
-//                .httpBasic().disable()
-//                .csrf().disable()
-//                .formLogin().disable()
-//                .rememberMe().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-////                .httpBasic().disable()
-////                .csrf().disable()
-////                .formLogin().disable()
-////                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
-//                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "auth/**").permitAll()
-//                .antMatchers("/api/v1/users/userTest").hasRole("USER")
-//                .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
-//
-//                .and()
-//                .oauth2Login()
-//                    .userInfoEndpoint()
-//                        .userService(customOAuth2UserService);
-//
-//
-////                .and()
-//        //        .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//        // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
-//    }
-//    // 암호화에 필요한 PasswordEncoder Bean 등록
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//    @Bean
-//    public AuthService authService() {
-//        return new AuthService();
-//    }
-//}
-
-
-
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
@@ -99,13 +45,13 @@ public class SecurityConfig {
                 .rememberMe().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-
         //요청에 대한 권한 설정
         http.authorizeRequests()
                 .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
-                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "auth/**").permitAll()
-                .antMatchers("/api/v1/users/userTest").hasRole("USER")
-                .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN");
+                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/oauth2/**").permitAll()
+                .antMatchers("/api/v1/users/userTest").hasRole("ROLE_USER")
+                .antMatchers("/api/v1/users/adminTest").hasRole("ROLE_ADMIN")
+                .anyRequest().authenticated();
                         //oauth2Login
         http.oauth2Login()
                 .authorizationEndpoint()
