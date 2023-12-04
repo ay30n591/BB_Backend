@@ -1,4 +1,4 @@
-package com.jjans.BB.Config.Utill;
+package com.jjans.BB.Config;
 
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;

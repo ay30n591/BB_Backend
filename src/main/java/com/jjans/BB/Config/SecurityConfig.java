@@ -2,7 +2,9 @@ package com.jjans.BB.Config;
 
 import com.jjans.BB.Config.Security.JwtAuthenticationFilter;
 import com.jjans.BB.Config.Security.JwtTokenProvider;
+import com.jjans.BB.Repository.CookieAuthorizationRequestRepository;
 import com.jjans.BB.Service.AuthService;
+import com.jjans.BB.Service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +26,6 @@ public class SecurityConfig{
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
