@@ -2,7 +2,6 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Comment;
 import com.jjans.BB.Entity.Feed;
-import com.jjans.BB.Entity.FeedImage;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
