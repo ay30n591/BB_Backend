@@ -1,6 +1,5 @@
 package com.jjans.BB.Repository;
 
-import com.jjans.BB.Entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
