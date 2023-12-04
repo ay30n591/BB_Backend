@@ -22,20 +22,27 @@ import java.util.logging.Logger;
 @Service
 public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UsersRepository usersRepository;
-    private Logger logger;
+    private final Logger logger = Logger.getLogger(CustomOAuth2UserService.class.getName());
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
         OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
+        logger.info("OAuth2User information: " + oAuth2User);
+
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
+
     }
     protected OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         //OAuth2 로그인 플랫폼 구분
-        AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
 
-        if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
+        AuthProvider authProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
+        logger.info("AuthProvider: " + authProvider);
+
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(authProvider, oAuth2User.getAttributes());
+        logger.info("OAuth2User type: " + oAuth2User.getName().getClass()+ ", Name: " + oAuth2User.getName());
+
+        if (!StringUtils.hasText(oAuth2UserInfo.getName())) {
             throw new RuntimeException("Email not found from OAuth2 provider");
         }
 
@@ -56,10 +63,10 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
     }
 
     private Users registerUser(AuthProvider authProvider, OAuth2UserInfo oAuth2UserInfo) {
-        logger.info(oAuth2UserInfo.getEmail());
+
         Users users = Users.builder()
                 .email(oAuth2UserInfo.getEmail())
-                .nickName(oAuth2UserInfo.getName())
+                .nickName(" ")
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .authProvider(authProvider)
 //                .roles(Authority.ROLE_USER)
