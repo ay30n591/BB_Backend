@@ -29,8 +29,7 @@ public class Feed extends BaseTime{
     @Column(nullable = true)
     private String feedImageUrl;
 
-    private String musicFileName;
-    private String musicFileUrl;
+    private String videoId;
 
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.LAZY,  cascade = CascadeType.REMOVE)

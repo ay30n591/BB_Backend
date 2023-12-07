@@ -18,16 +18,15 @@ public class FeedRequestDto {
     private Long id;
     private String content;
     private String imageFileUrl;
-    private String musicFileUrl;
-    private String musicFileName;
+    private String videoId;
+
 
     public Feed toEntity() {
         Feed feed = Feed.builder()
                 .id(id)
                 .content(content)
                 .feedImageUrl(imageFileUrl)
-                .musicFileName(musicFileName)
-                .musicFileUrl(musicFileUrl)
+                .videoId(videoId)
                 .build();
         return feed;
     }

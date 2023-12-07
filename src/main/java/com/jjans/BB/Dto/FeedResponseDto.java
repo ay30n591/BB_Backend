@@ -18,6 +18,7 @@ public class FeedResponseDto {
     private String imageFileUrl;
     private Long userId;
     private String userName;
+    private String vedioId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
@@ -29,6 +30,7 @@ public class FeedResponseDto {
         this.imageFileUrl = feed.getFeedImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.userName = feed.getUser().getUserName();
+        this.vedioId = feed.getVideoId();
         this.createdAt = feed.getCreateDate();
         this.modifiedAt = feed.getModifiedDate();
 
