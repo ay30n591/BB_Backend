@@ -14,16 +14,18 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
+@CrossOrigin(origins = "http://localhost:3000") // CORS 설정
 
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -48,33 +50,33 @@ public class SecurityConfig {
         //요청에 대한 권한 설정
         http.authorizeRequests()
                 .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
-                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/oauth2/**").permitAll()
+                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/auth/**", "/oauth2/**").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .anyRequest().authenticated();
                         //oauth2Login
         http.oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorization")  // 소셜 로그인 url
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository)  // 인증 요청을 cookie 에 저장
+                    .baseUri("/oauth2/authorize")
+                    .authorizationRequestRepository(cookieAuthorizationRequestRepository) // 인증 요청을 쿠키에 저장하고 검색
 
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")  // 소셜 인증 후 redirect url
+                    .baseUri("/oauth2/callback/*")  // 소셜 인증 후 redirect url
                 .and()
                 //userService()는 OAuth2 인증 과정에서 Authentication 생성에 필요한 OAuth2User 를 반환하는 클래스를 지정한다.
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                // 회원 정보 처리
+                    .userService(customOAuth2UserService)
 
+                // 회원 정보 처리
                 .and()
                 .redirectionEndpoint()
                 .baseUri("/*/oauth2/code/*")
 
 
                 .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler);
+                .successHandler(oAuth2AuthenticationSuccessHandler) // 401
+                .failureHandler(oAuth2AuthenticationFailureHandler); // 403
 
         http.logout()
                 .clearAuthentication(true)

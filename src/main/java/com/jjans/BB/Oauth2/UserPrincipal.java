@@ -1,7 +1,7 @@
 package com.jjans.BB.Oauth2;
 
 import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Enum.Authority;
+import com.jjans.BB.Enum.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,7 +25,7 @@ public class UserPrincipal  implements OAuth2User, UserDetails{
         this.authorities = authorities;
     }
     public static UserPrincipal create(Users user, Map<String, Object> attributes) {
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(Authority.ROLE_USER.name()));
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(Role.ROLE_USER.name()));
         UserPrincipal userPrincipal = new UserPrincipal(user.getId(), user.getEmail(), authorities);
         userPrincipal.setAttributes(attributes);
         return userPrincipal;

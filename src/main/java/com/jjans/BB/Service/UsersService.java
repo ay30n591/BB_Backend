@@ -6,7 +6,7 @@ import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Dto.UserResponseDto;
 import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Enum.Authority;
+import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
@@ -61,7 +60,7 @@ public class UsersService {
                 .orElseThrow(() -> new UsernameNotFoundException("이메일이 없습니다: " + email));
 
         // 사용자에게 admin 권한을 부여
-        user.addRole(Authority.ROLE_ADMIN.name());
+        user.addRole(Role.ROLE_ADMIN.name());
 
         // 사용자 정보를 업데이트
         usersRepository.save(user);
@@ -131,7 +130,7 @@ public class UsersService {
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
-        user.getRoles().add(Authority.ROLE_ADMIN.name());
+        user.getRoles().add(Role.ROLE_ADMIN.name());
         usersRepository.save(user);
         return response.success();
     }
