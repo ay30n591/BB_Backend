@@ -16,15 +16,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 @Service
 public class FeedServiceImpl implements FeedService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
     private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
     private final FeedRepository feedRepository;
     private final UsersRepository usersRepository;
@@ -67,13 +71,15 @@ public class FeedServiceImpl implements FeedService {
 
         // 피드 엔터티 생성 및 저장
         Feed feed = feedRequestDto.toEntity();
-        feed.setFeedImageUrl(imageFileUrl);
+        feed.setImageUrl(imageFileUrl);
         feed.setUser(user);
-        Feed savedFeed = feedRepository.save(feed);
+        entityManager.persist(feed);
 
 
-        return new FeedResponseDto(savedFeed);
+
+        return new FeedResponseDto(feed);
     }
+
 
 
     @Override

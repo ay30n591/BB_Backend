@@ -13,21 +13,20 @@ import java.io.IOException;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class FeedRequestDto {
-    private Long id;
     private String content;
     private String imageFileUrl;
+    private int feedLike;
     private String videoId;
 
 
     public Feed toEntity() {
-        Feed feed = Feed.builder()
-                .id(id)
-                .content(content)
-                .feedImageUrl(imageFileUrl)
-                .videoId(videoId)
-                .build();
+
+        Feed feed = new Feed();
+        feed.setContent(content);
+        feed.setFeedLike(feedLike);
+        feed.setVideoId(videoId);
+
         return feed;
     }
 

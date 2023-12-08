@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class FeedResponseDto {
+public class FeedResponseDto{
 
     private Long id;
     private String contents;
@@ -27,7 +27,7 @@ public class FeedResponseDto {
         this.id = feed.getId();
         this.contents = feed.getContent();
         this.feedLike = feed.getFeedLike();
-        this.imageFileUrl = feed.getFeedImageUrl();  // 수정된 부분
+        this.imageFileUrl = feed.getImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.userName = feed.getUser().getUserName();
         this.vedioId = feed.getVideoId();

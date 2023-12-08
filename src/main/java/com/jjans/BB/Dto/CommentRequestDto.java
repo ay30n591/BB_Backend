@@ -20,7 +20,6 @@ public class CommentRequestDto {
     private Long id;
     private String comment;
 
-
     public Comment toEntity(){
         Comment comments = Comment.builder()
                 .id(id)

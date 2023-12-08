@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,23 +63,24 @@ public class FeedController {
 
 
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping(consumes = { "multipart/form-data","application/json" })
+    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
     @Operation(summary = "Post User's feed", description = "피드 작성 가져오기")
-    public ResponseEntity<FeedResponseDto> saveFeed(        @RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto,
-                                                            @RequestPart (name = "imageFile", required = false) MultipartFile imageFile) {
+    public ResponseEntity<FeedResponseDto> saveFeed(@RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto
+        , @RequestPart(name = "imageFile", required = false) @Valid MultipartFile imageFile){
+
         FeedResponseDto savedFeed = feedService.saveFeed(feedRequestDto,imageFile);
         return new ResponseEntity<>(savedFeed, HttpStatus.CREATED);
     }
 
 
-    @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Put feed", description = "피드 수정")
-
-    @PutMapping("/{feedId}")
-    public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {
-        FeedResponseDto updatedFeed = feedService.updateFeed(feedId, updatedFeedDto);
-        return new ResponseEntity<>(updatedFeed, HttpStatus.OK);
-    }
+//    @SecurityRequirement(name = "bearerAuth")
+//    @Operation(summary = "Put feed", description = "피드 수정")
+//
+//    @PutMapping("/{feedId}")
+//    public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {
+//        FeedResponseDto updatedFeed = feedService.updateFeed(feedId, updatedFeedDto);
+//        return new ResponseEntity<>(updatedFeed, HttpStatus.OK);
+//    }
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{feedId}")
     @Operation(summary = "Delete feed", description = "피드 삭제")
