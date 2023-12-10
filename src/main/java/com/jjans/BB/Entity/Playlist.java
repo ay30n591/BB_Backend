@@ -17,7 +17,6 @@ public class Playlist extends Article {
     @ElementCollection
     private List<String> videoIds;
 
-
 }
 
 

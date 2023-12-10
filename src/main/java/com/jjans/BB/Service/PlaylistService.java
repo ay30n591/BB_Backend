@@ -15,9 +15,8 @@ public interface PlaylistService {
     PlaylistResponseDto updatePl(Long feedId, PlaylistRequestDto updatedPlDto);
     List<PlaylistResponseDto> getUserAllPls(String nickname);
     PlaylistResponseDto getUserPl(Long pl_id,String nickname);
-
+    PlaylistResponseDto getMyPl(Long feed_id);
     List<PlaylistResponseDto> getMyPls();
-    //PlaylistResponseDto getMyPl(Long feed_id);
 
 
     void deleteFeed(Long feedId);

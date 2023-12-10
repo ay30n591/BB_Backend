@@ -124,6 +124,17 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
+    public FeedResponseDto getMyFeed(Long feed_id) {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        Feed feed = feedRepository.findByIdAndUserNickName(feed_id, user.getNickName());
+
+        return new FeedResponseDto(feed);
+    }
+
+    @Override
     public void deleteFeed(Long feedId) {
         feedRepository.deleteById(feedId);
     }

@@ -36,6 +36,22 @@ public class PlaylistController {
         return new ResponseEntity<>(pls, HttpStatus.OK);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/user/{plId}")
+    @Operation(summary = "Get my playlist", description = "내 플리 가져오기")
+    public ResponseEntity<PlaylistResponseDto> getMyPl(@PathVariable Long plId) {
+        PlaylistResponseDto myPl = playlistService.getMyPl(plId);
+        return ResponseEntity.ok(myPl);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/user/{plId}")
+    @Operation(summary = "Get my playlist", description = "내 플리 가져오기")
+    public ResponseEntity<List<PlaylistResponseDto>> getMyPls() {
+        List<PlaylistResponseDto> myPls = playlistService.getMyPls();
+        return ResponseEntity.ok(myPls);
+    }
+
 
     @GetMapping("/user/{nickname}")
     @Operation(summary = "Get User's all playlists", description = "유저 플리 전체 가져오기")
@@ -65,7 +81,6 @@ public class PlaylistController {
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Put playlist", description = "플리 수정")
-
     @PutMapping("/{plId}")
     public ResponseEntity<PlaylistResponseDto> updateFeed(@PathVariable Long plId, @RequestBody PlaylistRequestDto updatedPlDto) {
         PlaylistResponseDto updatedPl = playlistService.updatePl(plId, updatedPlDto);

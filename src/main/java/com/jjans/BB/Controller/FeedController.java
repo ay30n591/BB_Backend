@@ -37,10 +37,18 @@ public class FeedController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/user")
     @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")
-
     public ResponseEntity<List<FeedResponseDto>> getMyFeeds() {
         List<FeedResponseDto> userFeeds = feedService.getMyFeeds();
         return ResponseEntity.ok(userFeeds);
+    }
+
+
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/user/{feedId}")
+    @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")
+    public ResponseEntity<FeedResponseDto> getMyFeeds(@PathVariable Long feed_id) {
+        FeedResponseDto myFeed = feedService.getMyFeed(feed_id);
+        return ResponseEntity.ok(myFeed);
     }
 
     @GetMapping("/user/{nickname}")
@@ -60,8 +68,6 @@ public class FeedController {
     }
 
 
-
-
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
     @Operation(summary = "Post User's feed", description = "피드 작성 가져오기")
@@ -73,14 +79,15 @@ public class FeedController {
     }
 
 
-//    @SecurityRequirement(name = "bearerAuth")
-//    @Operation(summary = "Put feed", description = "피드 수정")
-//
-//    @PutMapping("/{feedId}")
-//    public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {
-//        FeedResponseDto updatedFeed = feedService.updateFeed(feedId, updatedFeedDto);
-//        return new ResponseEntity<>(updatedFeed, HttpStatus.OK);
-//    }
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "Put feed", description = "피드 수정")
+    @PutMapping("/{feedId}")
+    public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {
+        FeedResponseDto updatedFeed = feedService.updateFeed(feedId, updatedFeedDto);
+        return new ResponseEntity<>(updatedFeed, HttpStatus.OK);
+    }
+
+
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{feedId}")
     @Operation(summary = "Delete feed", description = "피드 삭제")

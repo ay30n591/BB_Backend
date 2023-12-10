@@ -1,11 +1,8 @@
 package com.jjans.BB.Service.Impl;
 
 import com.jjans.BB.Config.Utill.SecurityUtil;
-import com.jjans.BB.Dto.FeedRequestDto;
-import com.jjans.BB.Dto.FeedResponseDto;
 import com.jjans.BB.Dto.PlaylistRequestDto;
 import com.jjans.BB.Dto.PlaylistResponseDto;
-import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Entity.Playlist;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.PlaylistRepository;
@@ -109,6 +106,17 @@ public class PlaylistServiceImpl implements PlaylistService {
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
         Playlist pl = playlistRepository.findByIdAndUserNickName(plId,nickname);
+        return new PlaylistResponseDto(pl);
+    }
+
+    @Override
+    public PlaylistResponseDto getMyPl(Long feed_id) {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        Playlist pl = playlistRepository.findByIdAndUserNickName(feed_id,user.getNickName());
+
         return new PlaylistResponseDto(pl);
     }
 
