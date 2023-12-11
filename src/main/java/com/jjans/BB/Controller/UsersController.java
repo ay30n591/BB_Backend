@@ -19,6 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.logging.Logger;
 
 @RestController
@@ -107,22 +108,17 @@ public class UsersController {
         return response.success();
     }
 
-//    @PostMapping("/social-login")
-//    public ResponseEntity<?> doSocialLogin(@RequestBody @Valid SocialLoginRequest request) {
-//
-//        return ResponseEntity.created(URI.create("/social-login"))
-//                .body(userService.doSocialLogin(request));
-//    }
-//    @RestController
-//    @RequestMapping("auth")
-//    public class AuthController {
-//        @GetMapping( "/token")
-//        public String token(@RequestParam String token, @RequestParam String error) {
-//            if (StringUtils.isNotBlank(error)) {
-//                return error;
-//            } else {
-//                return token;
-//            }
-//        }
-//    }
+
+    @RestController
+    @RequestMapping("auth")
+    public class AuthController {
+        @GetMapping( "/token")
+        public String token(@RequestParam String token, @RequestParam String error) {
+            if (StringUtils.isNotBlank(error)) {
+                return error;
+            } else {
+                return token;
+            }
+        }
+    }
 }
