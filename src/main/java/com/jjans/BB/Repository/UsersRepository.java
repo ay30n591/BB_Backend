@@ -11,7 +11,10 @@ import java.util.Optional;
 public interface UsersRepository extends JpaRepository<Users,Long> {
     // 중복id 체크
     Optional<Users> findByEmail(String email);
+    Optional<Users> findByNickName(String nickname);
+
     boolean existsByEmail(String email);
     List<Users> findAll();
+
 
 }
