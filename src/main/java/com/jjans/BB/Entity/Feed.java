@@ -3,7 +3,9 @@ package com.jjans.BB.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -37,6 +39,11 @@ public class Feed extends BaseTime{
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
 
+    @ManyToMany
+    @JoinTable(name = "feed_hashtags",
+            joinColumns = @JoinColumn(name = "feed_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
+    private Set<HashTag> hashTags = new HashSet<>();
 
 }
 

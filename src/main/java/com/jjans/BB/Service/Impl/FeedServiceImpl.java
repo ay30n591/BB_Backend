@@ -1,11 +1,14 @@
 package com.jjans.BB.Service.Impl;
 
 import com.jjans.BB.Config.Utill.SecurityUtil;
+import com.jjans.BB.Dto.HashTagDto;
 import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
+import com.jjans.BB.Entity.HashTag;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.FeedRepository;
+import com.jjans.BB.Repository.HashtagRepository;
 import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.FeedService;
 import org.apache.logging.log4j.LogManager;
@@ -19,24 +22,27 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 @Service
 public class FeedServiceImpl implements FeedService {
     private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
     private final FeedRepository feedRepository;
     private final UsersRepository usersRepository;
+    private final HashtagRepository hashtagRepository;
+
 
     @Value("${image.upload.directory}")
     private String imageUploadDirectory;
 
 
     @Autowired
-    public FeedServiceImpl(FeedRepository feedRepository, UsersRepository usersRepository) {
+    public FeedServiceImpl(FeedRepository feedRepository, UsersRepository usersRepository, HashtagRepository hashtagRepository) {
         this.feedRepository = feedRepository;
         this.usersRepository = usersRepository;
+        this.hashtagRepository = hashtagRepository;
     }
 
     @Override
@@ -121,8 +127,6 @@ public class FeedServiceImpl implements FeedService {
     public void deleteFeed(Long feedId) {
         feedRepository.deleteById(feedId);
     }
-
-
     // 이미지 저장 로직
     private String saveImage(MultipartFile imageFile) throws IOException {
         String originalFilename = imageFile.getOriginalFilename();
@@ -142,4 +146,66 @@ public class FeedServiceImpl implements FeedService {
     public String getImagePath(String fileName) {
         return imageUploadDirectory + File.separator + fileName;
     }
+
+    @Override
+    public List<HashTagDto> getAllHashTags() {
+        return null;
+    }
+
+    @Override
+    public HashTagDto getHashTagByName(String tagName) {
+        return null;
+    }
+
+    @Override
+    public HashTagDto createHashTag(HashTagDto hashTagDto) {
+        return null;
+    }
+
+    @Override
+    public HashTagDto updateHashTag(Long id, HashTagDto updatedHashTagDto) {
+        return null;
+    }
+
+    @Override
+    public void deleteHashTag(Long id) {
+
+    }
+
+    @Override
+    public Feed saveHashtag(Feed feed) {
+        // 해시태그 추출
+        Set<HashTag> hashTags = extractHashTags(feed.getContent());
+
+        // DB에 이미 있는 해시태그를 사용하도록 설정
+        Set<HashTag> existingHashTags = new HashSet<>();
+        for (HashTag hashTag : hashTags) {
+            hashtagRepository.findByTagName(hashTag.getTagName())
+                    .ifPresent(existingHashTags::add);
+        }
+        hashTags.removeAll(existingHashTags);
+        hashTags.addAll(existingHashTags);
+
+        feed.setHashTags(hashTags);
+
+        return feedRepository.save(feed);
+    }
+    @Override
+    public Set<HashTag> extractHashTags(String content) {
+        // 정규식을 사용하여 내용에서 해시태그 추출
+        // 예: #Java #SpringBoot
+        // 정규식 패턴은 적절하게 변경 가능
+        Pattern pattern = Pattern.compile("#\\w+");
+        Matcher matcher = pattern.matcher(content);
+
+        Set<HashTag> hashTags = new HashSet<>();
+        while (matcher.find()) {
+            String tagName = matcher.group().substring(1); // # 제외
+            hashTags.add(new HashTag(tagName));
+        }
+
+        return hashTags;
+    }
+
+
 }

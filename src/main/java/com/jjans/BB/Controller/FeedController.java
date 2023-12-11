@@ -30,7 +30,7 @@ public class FeedController {
         return new ResponseEntity<>(feeds, HttpStatus.OK);
     }
 
-    @SecurityRequirement(name = "bearerAuth")
+//    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/user")
     public ResponseEntity<List<FeedResponseDto>> getMyFeeds() {
         List<FeedResponseDto> userFeeds = feedService.getMyFeeds();
@@ -51,7 +51,7 @@ public class FeedController {
     }
 
 
-    @SecurityRequirement(name = "bearerAuth")
+//    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = { "multipart/form-data","application/json" })
     public ResponseEntity<FeedResponseDto> saveFeed(        @RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto,
                                                             @RequestPart (name = "imageFile", required = false) MultipartFile imageFile) {
@@ -60,13 +60,13 @@ public class FeedController {
     }
 
 
-    @SecurityRequirement(name = "bearerAuth")
+//    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/{feedId}")
     public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId, @RequestBody FeedRequestDto updatedFeedDto) {
         FeedResponseDto updatedFeed = feedService.updateFeed(feedId, updatedFeedDto);
         return new ResponseEntity<>(updatedFeed, HttpStatus.OK);
     }
-    @SecurityRequirement(name = "bearerAuth")
+//    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{feedId}")
     public ResponseEntity<String> deleteFeed(@PathVariable Long feedId) {
         try {
