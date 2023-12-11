@@ -53,6 +53,7 @@ public class SecurityConfig {
                         "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/auth/**", "/oauth2/**").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
+                .antMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()  // 스웨거 엔드포인트에 대한 권한 허용
                 .anyRequest().authenticated();
                         //oauth2Login
         http.oauth2Login()
