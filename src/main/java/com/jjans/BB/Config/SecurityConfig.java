@@ -49,11 +49,13 @@ public class SecurityConfig {
 
         //요청에 대한 권한 설정
         http.authorizeRequests()
-                .antMatchers("/api/v1/users/sign-up", "/api/v1/users/login", "/api/v1/users/authority",
-                        "https://localhost:8080/**","/api/v1/users/reissue", "/api/v1/users/logout", "/auth/**", "/oauth2/**").permitAll()
+                .antMatchers("/**", "/oauth2/**",
+                        "/v3/api-docs/**", "/configuration/ui",
+                        "/swagger-resources/**", "/configuration/security",
+                        "/swagger-ui.html/**", "/webjars/**",
+                        "/swagger-resources/configuration/ui", "/swagger-ui/**").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
-                .antMatchers("/swagger-ui.html", "/swagger-ui/**").permitAll()  // 스웨거 엔드포인트에 대한 권한 허용
                 .anyRequest().authenticated();
                         //oauth2Login
         http.oauth2Login()
