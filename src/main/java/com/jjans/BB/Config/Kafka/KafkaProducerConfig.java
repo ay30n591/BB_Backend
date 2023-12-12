@@ -21,7 +21,7 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     //@Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServers = "172.19.0.4:9092";
+    private String bootstrapServers = "kafka:9092";
 
     @Value("${spring.kafka.producer.key-serializer}")
     private String serializerKey;
