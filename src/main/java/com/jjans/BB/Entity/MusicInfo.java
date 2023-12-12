@@ -16,7 +16,6 @@ public class MusicInfo{
     @Id
     private String id;
     private String artist;
-
     private String musicFileName;
     private String musicFileUrl;
 
