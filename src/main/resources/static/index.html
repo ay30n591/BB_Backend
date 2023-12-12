@@ -1,0 +1,75 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>WebSocket Test</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div>-->
+<!--    <label for="message-input">메시지 입력:</label>-->
+<!--    <input type="text" id="message-input" />-->
+<!--    <button onclick="sendMessage()">전송</button>-->
+<!--</div>-->
+
+<!--<div id="message-container"></div>-->
+
+<!--<script>-->
+<!--    // WebSocket 인스턴스를 전역으로 선언-->
+<!--    document.addEventListener('DOMContentLoaded', (event) => {-->
+<!--        const socket = new WebSocket('ws://localhost:8080/ws-chat');-->
+
+<!--        socket.onopen = () => {-->
+<!--            appendMessage('WebSocket 연결이 열렸습니다.');-->
+<!--            // 최초에 한 번만 subscribe 메시지를 보냅니다.-->
+<!--            if (!socket.subscribed) {-->
+<!--                socket.send(JSON.stringify({-->
+<!--                    type: 'SUBSCRIBE',-->
+<!--                    destination: '/chatting/topic/room/1'-->
+<!--                }));-->
+<!--                socket.subscribed = true;-->
+<!--            }-->
+<!--        };-->
+
+<!--        socket.onmessage = (event) => {-->
+<!--            const message = JSON.parse(event.data);-->
+<!--            appendMessage('서버로부터 메시지 수신: ' + message.content);-->
+<!--        };-->
+
+<!--        socket.onclose = (event) => {-->
+<!--            appendMessage('WebSocket 연결이 닫혔습니다.');-->
+<!--        };-->
+
+<!--        document.getElementById('message-input').addEventListener('keydown', (event) => {-->
+<!--            if (event.key === 'Enter') {-->
+<!--                sendMessage();-->
+<!--            }-->
+<!--        });-->
+
+<!--        function appendMessage(message) {-->
+<!--            const messageDiv = document.createElement('div');-->
+<!--            messageDiv.textContent = message;-->
+<!--            document.getElementById('message-container').appendChild(messageDiv);-->
+<!--        }-->
+
+<!--        function sendMessage() {-->
+<!--            const messageInput = document.getElementById('message-input');-->
+<!--            const message = messageInput.value;-->
+
+<!--            if (message.trim() !== '') {-->
+<!--                socket.send(JSON.stringify({-->
+<!--                    type: 'SEND_MESSAGE',-->
+<!--                    destination: '/chatting/topic/room/1',-->
+<!--                    content: message-->
+<!--                }));-->
+
+<!--                messageInput.value = '';-->
+<!--            }-->
+<!--        }-->
+<!--    });-->
+
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
