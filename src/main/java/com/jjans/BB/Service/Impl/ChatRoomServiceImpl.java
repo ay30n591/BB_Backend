@@ -8,10 +8,12 @@ import com.jjans.BB.Repository.ChatRoomRepository;
 import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.ChatRoomService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final UsersRepository userRepository;

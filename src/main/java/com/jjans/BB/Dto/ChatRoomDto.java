@@ -2,10 +2,12 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.ChatRoom;
 import com.jjans.BB.Entity.Users;
+import lombok.Getter;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 public class ChatRoomDto {
     private Long id;
     private Set<Long> participantIds;
