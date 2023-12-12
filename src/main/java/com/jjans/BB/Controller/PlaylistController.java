@@ -45,7 +45,7 @@ public class PlaylistController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/user/{plId}")
+    @GetMapping("/user")
     @Operation(summary = "Get my playlist", description = "내 플리 가져오기")
     public ResponseEntity<List<PlaylistResponseDto>> getMyPls() {
         List<PlaylistResponseDto> myPls = playlistService.getMyPls();
