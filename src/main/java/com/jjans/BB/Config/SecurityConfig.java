@@ -50,7 +50,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**", "/configuration/ui",
                         "/swagger-resources/**", "/configuration/security",
                         "/swagger-ui.html/**", "/webjars/**",
-                        "/swagger-resources/configuration/ui", "/swagger-ui/**").permitAll()
+                        "/swagger-resources/configuration/ui", "/swagger-ui/**","http://localhost:9092/**").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .anyRequest().authenticated();
