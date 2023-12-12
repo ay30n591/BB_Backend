@@ -20,7 +20,7 @@ public class CommentResponseDto {
         this.id = comment.getId();
         this.comment = comment.getContents();
         this.nickName = comment.getUser().getNickName();
-        this.feedId = comment.getFeed().getId();
+        this.feedId = comment.getArticle().getId();
         this.createdAt = comment.getCreateDate();
         this.modifiedAt = comment.getModifiedDate();
     }

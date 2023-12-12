@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = commentDto.toEntity();
         comment.setUser(user);
-        comment.setFeed(feed);
+        comment.setArticle(feed);
         Comment savedComment = commentRepository.save(comment);
 
         return new CommentResponseDto(savedComment);
@@ -50,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
 
         String userEmail = SecurityUtil.getCurrentUserEmail();
 
-        Comment existingComment = Optional.ofNullable(commentRepository.findByFeedIdAndId(feedId, commentId))
+        Comment existingComment = Optional.ofNullable(commentRepository.findByArticleIdAndId(feedId, commentId))
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + commentId));
 
         if (!existingComment.getUser().getEmail().equals(userEmail)) {
@@ -74,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
             throw new IllegalArgumentException("불법적인 접근: 해당 유저가 아닙니다.");
         }
 
-        if (!commentToDelete.getFeed().getId().equals(feedId)) {
+        if (!commentToDelete.getArticle().getId().equals(feedId)) {
             throw new IllegalArgumentException("불법적인 접근: 댓글이 지정된 피드에 속해 있지 않습니다.");
         }
 

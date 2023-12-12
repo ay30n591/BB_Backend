@@ -1,16 +1,15 @@
 package com.jjans.BB.Service.Impl;
 
 import com.jjans.BB.Config.Utill.SecurityUtil;
-import com.jjans.BB.Entity.Feed;
-import com.jjans.BB.Dto.FeedRequestDto;
-import com.jjans.BB.Dto.FeedResponseDto;
+import com.jjans.BB.Dto.PlaylistRequestDto;
+import com.jjans.BB.Dto.PlaylistResponseDto;
+import com.jjans.BB.Entity.Playlist;
 import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Repository.FeedRepository;
+import com.jjans.BB.Repository.PlaylistRepository;
 import com.jjans.BB.Repository.UsersRepository;
-import com.jjans.BB.Service.FeedService;
+import com.jjans.BB.Service.PlaylistService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,34 +23,34 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+
 @Service
-public class FeedServiceImpl implements FeedService {
+public class PlaylistServiceImpl implements PlaylistService {
 
     @PersistenceContext
     private EntityManager entityManager;
     private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
-    private final FeedRepository feedRepository;
+    private final PlaylistRepository playlistRepository;
     private final UsersRepository usersRepository;
 
     @Value("${image.upload.directory}")
     private String imageUploadDirectory;
 
-
-    @Autowired
-    public FeedServiceImpl(FeedRepository feedRepository, UsersRepository usersRepository) {
-        this.feedRepository = feedRepository;
+    public PlaylistServiceImpl(PlaylistRepository playlistRepository, UsersRepository usersRepository) {
+        this.playlistRepository = playlistRepository;
         this.usersRepository = usersRepository;
     }
 
     @Override
-    public List<FeedResponseDto> getAllFeeds() {
-        List<Feed> feeds = feedRepository.findAll();
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+    public List<PlaylistResponseDto> getAllPls() {
+        List<Playlist> pls = playlistRepository.findAll();
+        return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public FeedResponseDto saveFeed(FeedRequestDto feedRequestDto, MultipartFile imageFile) {
+    public PlaylistResponseDto savePl(PlaylistRequestDto plDto, MultipartFile imageFile) {
         // 현재 사용자 정보 가져오기
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
@@ -70,77 +69,73 @@ public class FeedServiceImpl implements FeedService {
         }
 
         // 피드 엔터티 생성 및 저장
-        Feed feed = feedRequestDto.toEntity();
-        feed.setImageUrl(imageFileUrl);
-        feed.setUser(user);
-        entityManager.persist(feed);
+        Playlist pl = plDto.toEntity();
+        pl.setImageUrl(imageFileUrl);
+        pl.setUser(user);
+        entityManager.persist(pl);
 
-
-
-        return new FeedResponseDto(feed);
+        return new PlaylistResponseDto(pl);
     }
 
-
-
     @Override
-    public FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto) {
-        Feed existingFeed = feedRepository.findById(feedId)
-                .orElseThrow(() -> new RuntimeException("Feed not found with id: " + feedId));
+    public PlaylistResponseDto updatePl(Long plId, PlaylistRequestDto updatedPlDto) {
+        Playlist existingPl = playlistRepository.findById(plId)
+                .orElseThrow(() -> new RuntimeException("Feed not found with id: " + plId));
 
-        existingFeed.setContent(updatedFeedDto.getContent());
+        existingPl.setContent(updatedPlDto.getContent());
         //existingFeed.setFeedImage(updatedFeedDto.getFeedImage());
 
-        Feed updatedFeed = feedRepository.save(existingFeed);
+        Playlist updatedPl = playlistRepository.save(existingPl);
 
-        return new FeedResponseDto(updatedFeed);
+        return new PlaylistResponseDto(updatedPl);
     }
 
     @Override
-    public List<FeedResponseDto> getUserAllFeeds(String nickname) {
+    public List<PlaylistResponseDto> getUserAllPls(String nickname) {
         Users user = usersRepository.findByNickName(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Feed> feeds = feedRepository.findByUserNickName(nickname);
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        List<Playlist> pls = playlistRepository.findByUserNickName(nickname);
+        return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public FeedResponseDto getUserFeed(Long feed_id, String nickname) {
+    public PlaylistResponseDto getUserPl(Long plId, String nickname) {
+
         Users user = usersRepository.findByNickName(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        Feed feed = feedRepository.findByIdAndUserNickName(feed_id,nickname);
-        return new FeedResponseDto(feed);
+        Playlist pl = playlistRepository.findByIdAndUserNickName(plId,nickname);
+        return new PlaylistResponseDto(pl);
     }
 
     @Override
-    public List<FeedResponseDto> getMyFeeds() {
+    public PlaylistResponseDto getMyPl(Long feed_id) {
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Feed> feeds = feedRepository.findByUserNickName(user.getNickName());
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        Playlist pl = playlistRepository.findByIdAndUserNickName(feed_id,user.getNickName());
+
+        return new PlaylistResponseDto(pl);
     }
 
     @Override
-    public FeedResponseDto getMyFeed(Long feed_id) {
+    public List<PlaylistResponseDto> getMyPls() {
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        Feed feed = feedRepository.findByIdAndUserNickName(feed_id, user.getNickName());
-
-        return new FeedResponseDto(feed);
+        List<Playlist> pls = playlistRepository.findByUserNickName(user.getNickName());
+        return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteFeed(Long feedId) {
-        feedRepository.deleteById(feedId);
+    public void deleteFeed(Long plId) {
+        // 권한 체크 필요
+        playlistRepository.deleteById(plId);
     }
 
-
-    // 이미지 저장 로직
     private String saveImage(MultipartFile imageFile) throws IOException {
         String originalFilename = imageFile.getOriginalFilename();
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")); // 파일 확장자 추출
@@ -154,9 +149,8 @@ public class FeedServiceImpl implements FeedService {
 
         return fileName;
     }
-
-    // 이미지 불러오기 로직
     public String getImagePath(String fileName) {
         return imageUploadDirectory + File.separator + fileName;
     }
+
 }
