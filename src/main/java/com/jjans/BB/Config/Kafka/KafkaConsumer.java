@@ -20,7 +20,14 @@ public class KafkaConsumer {
     private final SimpMessagingTemplate template;
     @KafkaListener(groupId = "my-consumer-group" ,topics="chatting")
     public void listenChat(ChatDto chatDto){
-        template.convertAndSend("/chatting/topic/room/"+chatDto.getRoomId(), chatDto);
+        log.info("Received message: {}", chatDto);
+
+        try {
+            template.convertAndSend("/chatting/topic/room/" + chatDto.getRoomId(), chatDto);
+            log.info("Message sent to WebSocket");
+        } catch (Exception e) {
+            log.error("Error sending message to WebSocket", e);
+        }
     }
 
 }

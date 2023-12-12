@@ -10,6 +10,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,18 +22,18 @@ public class KafkaProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
+
     @Value("${spring.kafka.producer.key-serializer}")
     private String serializerKey;
     @Value("${spring.kafka.producer.value-serializer}")
     private String serializervalue;
-
     @Bean
     public ProducerFactory<String, ChatDto> producerFactory() {
 
         Map<String,Object> configs = new HashMap<>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, serializerKey);
-        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, serializervalue);
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory(configs);
     }
     @Bean
