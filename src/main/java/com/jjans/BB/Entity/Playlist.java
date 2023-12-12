@@ -14,6 +14,10 @@ import java.util.List;
 
 public class Playlist extends Article {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ElementCollection
     private List<String> videoIds;
 

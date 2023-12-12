@@ -14,6 +14,10 @@ import java.util.List;
 @DiscriminatorValue("FEED_TYPE")
 public class Feed extends Article{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String videoId;
 
 }
