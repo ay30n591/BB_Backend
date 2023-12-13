@@ -22,7 +22,7 @@ import java.util.Map;
 public class KafkaConsumerConfig {
 
     //@Value("${spring.kafka.bootstrap-servers}")
-    private String bootstrapServer = "kafka:9092";
+    private String bootstrapServer = "13.125.0.53:9092";
     @Value("${spring.kafka.consumer.key-deserializer}")
     private String deserializerKey;
     @Value("${spring.kafka.consumer.value-deserializer}")
