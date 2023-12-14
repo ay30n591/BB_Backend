@@ -9,7 +9,8 @@
         - "8080:80"
       depends_on:
         - mysql
-        - redis  # Redis 서비스에 의존성 추가
+        - redis
+        - elasticsearch   # Redis 서비스에 의존성 추가
       restart: on-failure
 
     mysql:
@@ -24,15 +25,10 @@
         - /home/ubuntu/databases/mysql/beatbuddy:/var/lib/mysql
 
     elasticsearch:
-      image: eeeeeddy/egg-elasticsearch:7.17.13
-      container_name: egg-elasticsearch
+      image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13  # Elasticsearch 7.17.13 이미지 사용
+      container_name: elasticsearch
       environment:
-        - node.name=es-node
-        - cluster.name=search-cluster
         - discovery.type=single-node
-        - xpack.security.enabled=false
-        - xpack.security.http.ssl.enabled=false
-        - xpack.security.transport.ssl.enabled=false
       ports:
         - 9200:9200 # https
         - 9300:9300 # tcp
