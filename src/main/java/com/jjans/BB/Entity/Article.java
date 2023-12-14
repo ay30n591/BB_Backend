@@ -28,6 +28,14 @@ public class Article extends BaseTime {
 
     private int feedLike;
 
+    private String musicArtist;
+    private String releaseDate;
+    private String musicTitle;
+    private String albumName;
+    @ElementCollection
+    private List<String> hashTagList;
+
+    // 사진
     @Column(nullable = true)
     private String imageUrl;
 
