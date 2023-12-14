@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.Cookie;
@@ -24,8 +25,10 @@ import static com.jjans.BB.Repository.CookieAuthorizationRequestRepository.REDIR
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000"}) // CORS 설정
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-   private String redirectUri;
+
+//   private String "redirectUri";
    private final JwtTokenProvider jwtTokenProvider;
    private final CookieAuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
@@ -65,7 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
    private boolean isAuthorizedRedirectUri(String uri) {
       URI clientRedirectUri = URI.create(uri);
-      URI authorizedUri = URI.create(redirectUri);
+      URI authorizedUri = URI.create("http://localhost:8080/oauth2/callback/{provider}");
 
       if (authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
               && authorizedUri.getPort() == clientRedirectUri.getPort()) {

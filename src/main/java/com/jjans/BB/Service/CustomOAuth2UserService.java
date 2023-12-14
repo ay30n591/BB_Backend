@@ -2,6 +2,7 @@ package com.jjans.BB.Service;
 
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Enum.AuthProvider;
+import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import com.jjans.BB.Oauth2.OAuth2UserInfoFactory;
 import com.jjans.BB.Oauth2.UserPrincipal;
@@ -70,7 +71,7 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
                 .nickName(" ")
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .authProvider(authProvider)
-//                .roles(Authority.ROLE_USER)
+//                .roles(Role.ROLE_USER)
                 .build();
 
         return usersRepository.save(users);
