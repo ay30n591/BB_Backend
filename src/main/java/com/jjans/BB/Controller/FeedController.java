@@ -79,6 +79,7 @@ public class FeedController {
     }
 
 
+
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Put feed", description = "피드 수정")
     @PutMapping("/{feedId}")

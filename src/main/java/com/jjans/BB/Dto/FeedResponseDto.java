@@ -17,6 +17,11 @@ public class FeedResponseDto{
     private int feedLike;
     private String imageFileUrl;
     private Long userId;
+
+    private String musicArtist;
+    private String releaseDate;
+    private String musicTitle;
+    private String albumName;
     private String userName;
     private String vedioId;
     private LocalDateTime createdAt;
@@ -33,6 +38,10 @@ public class FeedResponseDto{
         this.vedioId = feed.getVideoId();
         this.createdAt = feed.getCreateDate();
         this.modifiedAt = feed.getModifiedDate();
+        this.releaseDate = feed.getReleaseDate();
+        this.musicTitle = feed.getMusicTitle();
+        this.albumName = feed.getAlbumName();
+        this.musicArtist = feed.getMusicArtist();
 
         List<Comment> comments = feed.getComments();
         if (comments != null) {
