@@ -37,7 +37,7 @@ public class PlaylistController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/user/{plId}")
+    @GetMapping("/my/{plId}")
     @Operation(summary = "Get my playlist", description = "내 플리 가져오기")
     public ResponseEntity<PlaylistResponseDto> getMyPl(@PathVariable Long plId) {
         PlaylistResponseDto myPl = playlistService.getMyPl(plId);
@@ -45,7 +45,7 @@ public class PlaylistController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/user")
+    @GetMapping("/my")
     @Operation(summary = "Get my playlist", description = "내 플리 가져오기")
     public ResponseEntity<List<PlaylistResponseDto>> getMyPls() {
         List<PlaylistResponseDto> myPls = playlistService.getMyPls();
@@ -90,7 +90,6 @@ public class PlaylistController {
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{plId}")
     @Operation(summary = "Delete playlist", description = "플리 삭제")
-
     public ResponseEntity<String> deleteFeed(@PathVariable Long plId) {
         try {
             playlistService.deleteFeed(plId);

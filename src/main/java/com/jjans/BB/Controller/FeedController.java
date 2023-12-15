@@ -35,7 +35,7 @@ public class FeedController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/user")
+    @GetMapping("/my")
     @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")
     public ResponseEntity<List<FeedResponseDto>> getMyFeeds() {
         List<FeedResponseDto> userFeeds = feedService.getMyFeeds();
@@ -44,16 +44,15 @@ public class FeedController {
 
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/user/{feedId}")
+    @GetMapping("/my/{feedId}")
     @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")
-    public ResponseEntity<FeedResponseDto> getMyFeeds(@PathVariable Long feed_id) {
+    public ResponseEntity<FeedResponseDto> getMyFeed(@PathVariable Long feed_id) {
         FeedResponseDto myFeed = feedService.getMyFeed(feed_id);
         return ResponseEntity.ok(myFeed);
     }
 
     @GetMapping("/user/{nickname}")
     @Operation(summary = "Get User's all feeds", description = "유저 피드 전체 가져오기")
-
     public ResponseEntity<List<FeedResponseDto>> getUserAllFeeds(@PathVariable String nickname) {
         List<FeedResponseDto> userFeeds = feedService.getUserAllFeeds(nickname);
         return ResponseEntity.ok(userFeeds);
@@ -70,7 +69,7 @@ public class FeedController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
-    @Operation(summary = "Post User's feed", description = "피드 작성 가져오기")
+    @Operation(summary = "Post User's feed", description = "피드 작성")
     public ResponseEntity<FeedResponseDto> saveFeed(@RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto
         , @RequestPart(name = "imageFile", required = false) @Valid MultipartFile imageFile){
 
