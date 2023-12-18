@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,9 +52,16 @@ public class SecurityConfig {
                         "/v3/api-docs/**", "/configuration/ui",
                         "/swagger-resources/**", "/configuration/security",
                         "/swagger-ui.html/**", "/webjars/**",
-                        "/swagger-resources/configuration/ui", "/swagger-ui/**").permitAll()
+                        "/swagger-resources/configuration/ui", "/swagger-ui/**","http://localhost:9092/**",
+                        "https://94ed-121-190-220-40.ngrok-free.app/**",
+                        "https://94ed-121-190-220-40.ngrok-free.app").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .antMatchers(HttpMethod.HEAD, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/**").permitAll()
                 .anyRequest().authenticated();
 
         //oauth2Login
