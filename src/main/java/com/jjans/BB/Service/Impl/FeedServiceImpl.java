@@ -5,6 +5,7 @@ import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
 import com.jjans.BB.Entity.HashTag;
+import com.jjans.BB.Entity.MusicInfo;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.FeedRepository;
 import com.jjans.BB.Repository.HashTagRepository;
@@ -91,8 +92,11 @@ public class FeedServiceImpl implements FeedService {
             }
         }
 
-        // 피드 엔터티 생성 및 저장
+        MusicInfo musicInfo = feedRequestDto.getMusicInfo();
+
         Feed feed = feedRequestDto.toEntity();
+
+        feed.setMusicInfo(musicInfo);
         feed.setHashTags(hashTags);
         feed.setImageUrl(imageFileUrl);
         feed.setUser(user);

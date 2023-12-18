@@ -2,6 +2,7 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Entity.HashTag;
+import com.jjans.BB.Entity.MusicInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,23 +23,14 @@ public class FeedRequestDto {
 
     private String content;
     private String videoId;
-    private String musicArtist;
-    private String releaseDate;
-    private String musicTitle;
-    private String albumName;
+    private MusicInfo musicInfo; // Change to MusicInfo
     private String albumSrc;
     private List<String> hashTags;
 
     public Feed toEntity() {
-
         Feed feed = new Feed();
         feed.setContent(content);
-        feed.setMusicArtist(musicArtist);
-        feed.setReleaseDate(releaseDate);
-        feed.setMusicTitle(musicTitle);
-        feed.setAlbumName(albumName);
-        feed.setVideoId(videoId);
-        feed.setAlbumUrl(albumSrc);
+        feed.setMusicInfo(musicInfo);
         Set<HashTag> hashTagSet = hashTags.stream()
                 .map(tagName -> {
                     HashTag hashTag = new HashTag();
@@ -46,7 +39,6 @@ public class FeedRequestDto {
                 })
                 .collect(Collectors.toSet());
         feed.setHashTags(hashTagSet);
-
 
         return feed;
     }

@@ -14,12 +14,8 @@ import java.util.List;
 @DiscriminatorValue("FEED_TYPE")
 public class Feed extends Article{
 
-    private String musicArtist;
-    private String releaseDate;
-    private String musicTitle;
-    private String albumName;
-
-    private String videoId;
+    @Embedded
+    private MusicInfo musicInfo;
 
 }
 

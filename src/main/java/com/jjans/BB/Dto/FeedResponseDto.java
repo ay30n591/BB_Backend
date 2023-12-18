@@ -3,6 +3,7 @@ package com.jjans.BB.Dto;
 import com.jjans.BB.Entity.Comment;
 import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Entity.HashTag;
+import com.jjans.BB.Entity.MusicInfo;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -14,19 +15,15 @@ import java.util.stream.Collectors;
 public class FeedResponseDto{
 
     private Long id;
-    private String contents;
+    private String content;
     private int feedLike;
     private String imageFileUrl;
     private Long userId;
 
-    private String musicArtist;
-    private String releaseDate;
-    private String musicTitle;
-    private String albumName;
+    private List<MusicInfo> musicInfoList; // Change to List<MusicInfo>
+
     private String userName;
-    private String vedioId;
     private String tagName;
-    private String albumUrl;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -34,20 +31,14 @@ public class FeedResponseDto{
 
     public FeedResponseDto(Feed feed) {
         this.id = feed.getId();
-        this.contents = feed.getContent();
+        this.content = feed.getContent();
         this.feedLike = feed.getFeedLike();
         this.imageFileUrl = feed.getImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.userName = feed.getUser().getUserName();
-        this.vedioId = feed.getVideoId();
         this.createdAt = feed.getCreateDate();
         this.modifiedAt = feed.getModifiedDate();
-        this.releaseDate = feed.getReleaseDate();
-        this.musicTitle = feed.getMusicTitle();
-        this.albumName = feed.getAlbumName();
-        this.albumUrl = feed.getAlbumUrl();
-
-        this.musicArtist = feed.getMusicArtist();
+        this.musicInfoList = Collections.singletonList(feed.getMusicInfo());
         // Set<HashTag>에서 각 HashTag의 tagName을 추출하여 List<String>으로 변환
         List<String> tagNames = feed.getHashTags().stream()
                 .map(HashTag::getTagName)
