@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>구글 로그인 및 정보 설정 페이지</title>
+</head>
+<body>
+<h1>구글 소셜 로그인 페이지</h1>
+<hr/>
+
+<!-- 구글 소셜 로그인 정보 표시 -->
+<div th:if="${#authorization.expression('isAuthenticated()')}" style="background-color:lightgreen; padding:1em;">
+  <h3>구글 소셜 로그인 정보:</h3>
+  <p>이름: <span th:text="${#authentication.principal.attributes['name']}"></span></p>
+  <p>이메일: <span th:text="${#authentication.principal.attributes['email']}"></span></p>
+  <p>프로필 사진: <img th:src="${#authentication.principal.attributes['picture']}" alt="프로필 사진"></p>
+</div>
+
+<!-- 닉네임과 비밀번호 입력 폼 -->
+<div sec:authorize="isAnonymous()" style="background-color:pink; padding:1em;">
+  <form action="/register" method="post" >
+    <label for="nickname">닉네임:</label>
+    <input type="text" id="nickname" name="nickname" required/>
+    <br>
+    <label for="password">비밀번호:</label>
+    <input type="password" id="password" name="password" required/>
+    <br>
+    <!-- 구글 소셜 로그인 정보 전달 -->
+    <input type="hidden" id="googleName" name="googleName" th:value="${#authentication.principal.attributes['name']}"/>
+    <input type="hidden" id="googleEmail" name="googleEmail" th:value="${#authentication.principal.attributes['email']}"/>
+    <button type="submit">가입하기</button>
+  </form>
+  <a href="/oauth2/authorization/google">Google 로그인</a>
+</div>
+
+</body>
+</html>
