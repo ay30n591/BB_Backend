@@ -4,7 +4,10 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -34,8 +37,8 @@ public class Article extends BaseTime {
     private String musicTitle;
     private String albumName;
 
-    @ElementCollection
-    private List<String> hashTagList;
+//    @ElementCollection
+//    private List<String> hashTagList;
 
     // 사진
     @Column(nullable = true)
@@ -44,4 +47,10 @@ public class Article extends BaseTime {
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
+
+    @ManyToMany
+    @JoinTable(name = "articleHashtags",
+            joinColumns = @JoinColumn(name = "articleId"),
+            inverseJoinColumns = @JoinColumn(name = "hashtagId"))
+    private Set<HashTag> hashTags = new HashSet<>();
 }
