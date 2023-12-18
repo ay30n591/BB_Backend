@@ -27,20 +27,24 @@ public class Users extends BaseTime{
     @Column(nullable = false, unique = true, name = "email")
     private String email;
 
-    //    @Column(nullable = false)
+    //@Column(nullable = false)
     private String password;
 
+
+    // null 가능
     @Column(nullable = false)
     private  String userName;
 
-    //    @Column(nullable = false, unique = true)
+    //@Column(nullable = false, unique = true)
     private  String nickName;
 
+    // url 로 수정
     private int picture;
 
+    // null 가능
     private String gender;
-
     private String birth;
+
 
     private String oauth2Id;
 

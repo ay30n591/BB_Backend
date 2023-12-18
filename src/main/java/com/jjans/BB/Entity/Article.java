@@ -28,10 +28,12 @@ public class Article extends BaseTime {
 
     private int feedLike;
 
+    // 피드 플리 구분
     private String musicArtist;
     private String releaseDate;
     private String musicTitle;
     private String albumName;
+
     @ElementCollection
     private List<String> hashTagList;
 
