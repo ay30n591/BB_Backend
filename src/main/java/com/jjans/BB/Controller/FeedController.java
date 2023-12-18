@@ -70,7 +70,7 @@ public class FeedController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
     @Operation(summary = "Post User's feed", description = "피드 작성")
-    public ResponseEntity<FeedResponseDto> saveFeed(@RequestParam(name = "feedRequestDto", required = true) @RequestBody @Valid FeedRequestDto feedRequestDto
+    public ResponseEntity<FeedResponseDto> saveFeed(@RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto
         , @RequestPart(name = "imageFile", required = false) @Valid MultipartFile imageFile){
 
         FeedResponseDto savedFeed = feedService.saveFeed(feedRequestDto,imageFile);
