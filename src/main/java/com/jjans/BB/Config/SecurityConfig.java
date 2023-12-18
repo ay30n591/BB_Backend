@@ -27,7 +27,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @RequiredArgsConstructor
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000"}) // CORS 설정
+@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000","http://192.168.45.123:3000"}) // CORS 설정
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -40,8 +40,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         //httpBasic, csrf, formLogin, rememberMe, logout, session disable
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-                .and()
+        http.cors().configurationSource(request -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.applyPermitDefaultValues();
+            corsConfiguration.addAllowedMethod("*");
+            return corsConfiguration;
+        }).and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .formLogin().disable()
