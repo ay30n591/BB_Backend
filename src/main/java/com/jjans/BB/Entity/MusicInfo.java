@@ -1,23 +1,25 @@
 package com.jjans.BB.Entity;
 
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Data
-@Document(indexName = "music")
+@Embeddable
+@Getter
+@Setter
 @NoArgsConstructor
-public class MusicInfo{
+@AllArgsConstructor
+public class MusicInfo {
 
-    @Id
-    private String id;
-    private String artist;
-    private String musicFileName;
-    private String musicFileUrl;
-
-
+    private String musicArtist;
+    private String releaseDate;
+    private String musicTitle;
+    private String albumName;
+    private String videoId;
+    private String albumUrl;
 }
