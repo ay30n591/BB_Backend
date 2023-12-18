@@ -22,11 +22,6 @@ public class KafkaProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-
-    @Value("${spring.kafka.producer.key-serializer}")
-    private String serializerKey;
-    @Value("${spring.kafka.producer.value-serializer}")
-    private String serializervalue;
     @Bean
     public ProducerFactory<String, ChatDto> producerFactory() {
 

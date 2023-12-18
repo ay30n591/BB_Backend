@@ -27,9 +27,6 @@ public class KafkaProducer {
 
     private static final String TOPIC = "chatting";
     private final KafkaTemplate<String, ChatDto> kafkaTemplate;
-    private ChatService chatService;
-    private ChatRoomService chatRoomService;
-
 
     public void sendMessage(ChatDto message) {
 

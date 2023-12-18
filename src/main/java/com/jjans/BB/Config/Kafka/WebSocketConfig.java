@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         // `/chatting/queue/room/{room_id}'
-        registry.enableSimpleBroker("/chatting/queue","/chatting/topic");
+        registry.enableSimpleBroker("/chatting/topic");
         registry.setApplicationDestinationPrefixes("/chatting/pub");
     }
 
@@ -26,7 +26,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("*");
         registry.addEndpoint("/ws-chat").setAllowedOrigins("*").withSockJS();
     }
-
 
 
 }

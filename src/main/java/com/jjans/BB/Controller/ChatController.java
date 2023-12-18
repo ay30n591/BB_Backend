@@ -40,17 +40,16 @@ public class ChatController {
 //        }
         ChatDto savedMessage = chatService.saveChatMessage(chatDto);
         producer.sendMessage(chatDto);
-
         return ResponseEntity.ok(chatDto);
     }
     @SecurityRequirement(name = "bearerAuth")
-    @MessageMapping("/chatting/pub")
-    public void sendSocketMessage(@RequestBody ChatDto chatDto) {
+    @MessageMapping("/message")
+    public void sendSocketMessage(ChatDto chatDto) {
         if(!chatRoomService.existsRoom(chatDto.getRoomId())){
             return;
         }
-        ChatDto savedMessage = chatService.saveChatMessage(chatDto);
-        producer.sendMessage(savedMessage);
+        //ChatDto savedMessage = chatService.saveChatMessage(chatDto);
+        producer.sendMessage(chatDto);
 
     }
     @SecurityRequirement(name = "bearerAuth")
