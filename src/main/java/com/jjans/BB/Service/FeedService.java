@@ -16,5 +16,6 @@ public interface FeedService {
     FeedResponseDto getMyFeed(Long feed_id);
     void deleteFeed(Long feedId);
 
+    List<FeedResponseDto> findFeedsByTagName(String tagName);
 
 }

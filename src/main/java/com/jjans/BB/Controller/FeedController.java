@@ -44,8 +44,8 @@ public class FeedController {
 
 
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/my/{feedId}")
-    @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")
+    @GetMapping("/my/{feed_id}")
+    @Operation(summary = "Get my feeds", description = "내 피드  가져오기")
     public ResponseEntity<FeedResponseDto> getMyFeed(@PathVariable Long feed_id) {
         FeedResponseDto myFeed = feedService.getMyFeed(feed_id);
         return ResponseEntity.ok(myFeed);
@@ -66,6 +66,11 @@ public class FeedController {
         return ResponseEntity.ok(userFeed);
     }
 
+    @GetMapping("/byTag/{tagName}")
+    public ResponseEntity<List<FeedResponseDto>> getFeedsByTagName(@PathVariable String tagName) {
+        List<FeedResponseDto> feedDtos = feedService.findFeedsByTagName(tagName);
+        return new ResponseEntity<>(feedDtos, HttpStatus.OK);
+    }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })

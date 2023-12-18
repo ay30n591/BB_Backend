@@ -4,8 +4,10 @@ import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
+import com.jjans.BB.Entity.HashTag;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.FeedRepository;
+import com.jjans.BB.Repository.HashTagRepository;
 import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.FeedService;
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +23,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -33,14 +34,17 @@ public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
     private final UsersRepository usersRepository;
 
+    private HashTagRepository hashTagRepository;
+
     @Value("${image.upload.directory}")
     private String imageUploadDirectory;
 
 
     @Autowired
-    public FeedServiceImpl(FeedRepository feedRepository, UsersRepository usersRepository) {
+    public FeedServiceImpl(FeedRepository feedRepository, UsersRepository usersRepository, HashTagRepository hashTagRepository) {
         this.feedRepository = feedRepository;
         this.usersRepository = usersRepository;
+        this.hashTagRepository = hashTagRepository;
     }
 
     @Override
@@ -72,8 +76,24 @@ public class FeedServiceImpl implements FeedService {
             throw new RuntimeException("Failed to save image.");
         }
 
+
+        Set<HashTag> hashTags = new HashSet<>();
+        for (String tagName : feedRequestDto.getHashTags()) {
+            HashTag existingHashTag = hashTagRepository.findByTagName(tagName);
+            if (existingHashTag == null) {
+                // 데이터베이스에 HashTag가 존재하지 않으면 새로 생성하고 저장
+                HashTag newHashTag = new HashTag(tagName);
+                entityManager.persist(newHashTag);
+                hashTags.add(newHashTag);
+            } else {
+                // 데이터베이스에 이미 존재하는 경우 기존 것을 사용
+                hashTags.add(existingHashTag);
+            }
+        }
+
         // 피드 엔터티 생성 및 저장
         Feed feed = feedRequestDto.toEntity();
+        feed.setHashTags(hashTags);
         feed.setImageUrl(imageFileUrl);
         feed.setUser(user);
         entityManager.persist(feed);
@@ -130,6 +150,7 @@ public class FeedServiceImpl implements FeedService {
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
+
         Feed feed = feedRepository.findByIdAndUserNickName(feed_id, user.getNickName());
 
         return new FeedResponseDto(feed);
@@ -138,6 +159,13 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public void deleteFeed(Long feedId) {
         feedRepository.deleteById(feedId);
+    }
+
+    @Override
+    public List<FeedResponseDto> findFeedsByTagName(String tagName) {
+
+        List<Feed> feeds =  feedRepository.findByHashTags_TagName(tagName);
+        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
 
