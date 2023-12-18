@@ -15,22 +15,23 @@ import java.util.stream.Collectors;
 
 
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+//        (access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Setter
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
 public class Users extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(nullable = false, unique = true, name = "email")
-    @Column(nullable = true)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name = "email")
+//    @Column(nullable = true)
     private String email;
 
     @Column(nullable = true)

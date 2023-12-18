@@ -6,12 +6,10 @@ import lombok.Getter;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-
 @Getter
 public class ChatRoomDto {
     private Long id;
     private Set<Long> participantIds;
-
 
     public ChatRoomDto(ChatRoom chatRoom) {
         this.id = chatRoom.getId();
@@ -19,6 +17,7 @@ public class ChatRoomDto {
                 .map(Users::getId)
                 .collect(Collectors.toSet());
     }
+
     public ChatRoom toEntity() {
         ChatRoom chatRoom = new ChatRoom();
 
