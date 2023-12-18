@@ -40,8 +40,7 @@ public class Article extends BaseTime {
     // 사진
     @Column(nullable = true)
     private String imageUrl;
-    @Column(nullable = true)
-    private String albumUrl;
+
 
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
