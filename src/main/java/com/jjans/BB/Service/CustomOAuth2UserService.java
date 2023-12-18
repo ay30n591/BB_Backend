@@ -27,9 +27,7 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
         OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
-        logger.info("Type - " + oAuth2User.getClass() + ",OAuth2User information: " + oAuth2User);
-        System.out.println("OAuth2User information: " + oAuth2User);
-        System.out.println("OAuth2User type: " + oAuth2User.getClass().getName());
+        logger.info("OAuth2User information: " + oAuth2User);
 
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
 

@@ -1,7 +1,6 @@
 package com.jjans.BB.Entity;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,10 +10,12 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("FEED_TYPE")
-public class Feed extends Article{
+@DiscriminatorValue("PLAYLIST_TYPE")
 
-    private String videoId;
+public class Playlist extends Article {
+
+    @ElementCollection
+    private List<String> videoIds;
 
 }
 

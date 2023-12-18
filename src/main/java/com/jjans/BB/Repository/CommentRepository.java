@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
-    Comment findByFeedIdAndId(Long feedId, Long commentId);
+    Comment findByArticleIdAndId(Long feedId, Long commentId);
 
 }
 

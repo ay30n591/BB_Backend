@@ -14,13 +14,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -52,7 +50,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**", "/configuration/ui",
                         "/swagger-resources/**", "/configuration/security",
                         "/swagger-ui.html/**", "/webjars/**",
-                        "/swagger-resources/configuration/ui", "/swagger-ui/**").permitAll()
+                        "/swagger-resources/configuration/ui", "/swagger-ui/**","http://localhost:9092/**").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .anyRequest().authenticated();
