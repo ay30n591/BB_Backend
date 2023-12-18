@@ -1,5 +1,6 @@
 package com.jjans.BB.Dto;
 
+import com.jjans.BB.Entity.MusicInfo;
 import com.jjans.BB.Entity.Playlist;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,18 +14,20 @@ import java.util.List;
 
 public class PlaylistRequestDto {
 
+    private String title;
     private String content;
     private String imageFileUrl;
     private int feedLike;
-    private List<String> videoIds;
+    private List<MusicInfo> musicInfoList;
 
 
     public Playlist toEntity() {
 
         Playlist playlist = new Playlist();
+        playlist.setTitle(title);
         playlist.setContent(content);
         playlist.setFeedLike(feedLike);
-        playlist.setVideoIds(videoIds);
+        playlist.setMusicInfoList(musicInfoList);
 
         return playlist;
     }

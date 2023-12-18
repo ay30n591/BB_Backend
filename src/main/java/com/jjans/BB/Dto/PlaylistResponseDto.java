@@ -3,6 +3,7 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Comment;
 import com.jjans.BB.Entity.Feed;
+import com.jjans.BB.Entity.MusicInfo;
 import com.jjans.BB.Entity.Playlist;
 import lombok.Getter;
 
@@ -16,24 +17,25 @@ public class PlaylistResponseDto {
 
     private Long id;
     private String contents;
+    private String title;
     private int feedLike;
     private String imageFileUrl;
     private Long userId;
     private String userName;
-    private List<String> vedioIds;
+    private List<MusicInfo> musicInfoList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
 
-
     public PlaylistResponseDto(Playlist playlist) {
         this.id = playlist.getId();
+        this.title = playlist.getTitle();
         this.contents = playlist.getContent();
         this.feedLike = playlist.getFeedLike();
-        this.imageFileUrl = playlist.getImageUrl();  // 수정된 부분
+        this.imageFileUrl = playlist.getImageUrl();
         this.userId = playlist.getUser().getId();
         this.userName = playlist.getUser().getUserName();
-        this.vedioIds = playlist.getVideoIds();
+        this.musicInfoList = playlist.getMusicInfoList(); // Updated field name
         this.createdAt = playlist.getCreateDate();
         this.modifiedAt = playlist.getModifiedDate();
 
@@ -42,6 +44,6 @@ public class PlaylistResponseDto {
             this.comments = comments.stream().map(CommentResponseDto::new).collect(Collectors.toList());
         } else {
             this.comments = Collections.emptyList();
-        }    }
-
+        }
+    }
 }

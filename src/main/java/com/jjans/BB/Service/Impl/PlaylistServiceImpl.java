@@ -3,6 +3,7 @@ package com.jjans.BB.Service.Impl;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.PlaylistRequestDto;
 import com.jjans.BB.Dto.PlaylistResponseDto;
+import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Entity.Playlist;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.PlaylistRepository;
@@ -70,8 +71,12 @@ public class PlaylistServiceImpl implements PlaylistService {
 
         // 피드 엔터티 생성 및 저장
         Playlist pl = plDto.toEntity();
+        pl.setMusicInfoList(plDto.getMusicInfoList());
         pl.setImageUrl(imageFileUrl);
         pl.setUser(user);
+        entityManager.persist(pl);
+
+
         entityManager.persist(pl);
 
         return new PlaylistResponseDto(pl);
