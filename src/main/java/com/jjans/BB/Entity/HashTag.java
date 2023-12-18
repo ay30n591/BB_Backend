@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class HashTag {
 
     @Id
@@ -17,8 +18,8 @@ public class HashTag {
     @Column(unique = true)
     private String tagName;
     // 기본 생성자
-    public HashTag() {
+    public HashTag(String tagName) {
+        this.tagName = tagName;
     }
-
 
 }
