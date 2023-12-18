@@ -63,9 +63,9 @@ public class FeedServiceImpl implements FeedService {
                 imageFileUrl = saveImage(imageFile);
 
             }
-            else{
-                imageFileUrl = feedRequestDto.getAlbumSrc();
-            }
+//            else{
+//                imageFileUrl = feedRequestDto.getAlbumSrc();
+//            }
         } catch (IOException e) {
             e.printStackTrace();
             // 이미지 저장에 실패한 경우 예외 처리
@@ -77,8 +77,6 @@ public class FeedServiceImpl implements FeedService {
         feed.setImageUrl(imageFileUrl);
         feed.setUser(user);
         entityManager.persist(feed);
-
-
 
         return new FeedResponseDto(feed);
     }

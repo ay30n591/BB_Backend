@@ -15,6 +15,6 @@ public interface FeedRepository extends JpaRepository<Feed,Long> {
     List<Feed> findByUserNickName(String nickname);
     Feed findByIdAndUserNickName(Long id, String nickname);
 
-    Optional<List<HashTag>> findByTagName(String tagName);
+    //Optional<Feed> findByTagName(String tagName);
 
 }

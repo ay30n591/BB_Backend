@@ -1,13 +1,13 @@
 package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Feed;
-import com.jjans.BB.Entity.HashTag;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
+import java.io.IOException;
 
 
 @Data
@@ -22,8 +22,6 @@ public class FeedRequestDto {
     private String musicTitle;
     private String albumName;
     private String albumSrc;
-    @NotBlank(message = "Tag name is required")
-    private String tagName;
 
     public Feed toEntity() {
 
@@ -34,15 +32,9 @@ public class FeedRequestDto {
         feed.setMusicTitle(musicTitle);
         feed.setAlbumName(albumName);
         feed.setVideoId(videoId);
-        // tagName에 해당하는 HashTag 엔티티 생성
-        HashTag hashTag = HashTag.builder().tagName(tagName).build();
-
-        // Feed에 HashTag 추가
-        feed.getHashTags().add(hashTag);
+        feed.setAlbumUrl(albumSrc);
 
         return feed;
     }
-
 //    가수, 노래제목, 발매연도, 앨범이름, 사진, 글, 해시태그, 작성자,
 }
-

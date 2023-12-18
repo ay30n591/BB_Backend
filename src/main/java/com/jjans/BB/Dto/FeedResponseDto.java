@@ -26,6 +26,8 @@ public class FeedResponseDto{
     private String userName;
     private String vedioId;
     private String tagName;
+    private String albumUrl;
+
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
@@ -43,6 +45,8 @@ public class FeedResponseDto{
         this.releaseDate = feed.getReleaseDate();
         this.musicTitle = feed.getMusicTitle();
         this.albumName = feed.getAlbumName();
+        this.albumUrl = feed.getAlbumUrl();
+
         this.musicArtist = feed.getMusicArtist();
         // Set<HashTag>에서 각 HashTag의 tagName을 추출하여 List<String>으로 변환
         List<String> tagNames = feed.getHashTags().stream()

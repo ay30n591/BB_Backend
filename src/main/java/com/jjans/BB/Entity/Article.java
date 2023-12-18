@@ -32,10 +32,7 @@ public class Article extends BaseTime {
     private int feedLike;
 
     // 피드 플리 구분
-    private String musicArtist;
-    private String releaseDate;
-    private String musicTitle;
-    private String albumName;
+
 
 //    @ElementCollection
 //    private List<String> hashTagList;
@@ -43,6 +40,9 @@ public class Article extends BaseTime {
     // 사진
     @Column(nullable = true)
     private String imageUrl;
+    @Column(nullable = true)
+    private String albumUrl;
+
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
