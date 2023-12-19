@@ -25,16 +25,16 @@ public class FeedRequestDto {
     private String videoId;
     private MusicInfo musicInfo; // Change to MusicInfo
     private String albumSrc;
-    private List<String> hashTags;
+    private List<HashTag> hashTags; // Change to List<HashTag>
 
     public Feed toEntity() {
         Feed feed = new Feed();
         feed.setContent(content);
         feed.setMusicInfo(musicInfo);
         Set<HashTag> hashTagSet = hashTags.stream()
-                .map(tagName -> {
+                .map(tag -> {
                     HashTag hashTag = new HashTag();
-                    hashTag.setTagName(tagName);
+                    hashTag.setTagName(tag.getTagName());
                     return hashTag;
                 })
                 .collect(Collectors.toSet());

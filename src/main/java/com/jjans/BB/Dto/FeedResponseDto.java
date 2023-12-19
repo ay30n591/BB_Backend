@@ -20,10 +20,10 @@ public class FeedResponseDto{
     private String imageFileUrl;
     private Long userId;
 
-    private List<MusicInfo> musicInfoList; // Change to List<MusicInfo>
+    private List<MusicInfo> musicInfoList;
 
     private String userName;
-    private String tagName;
+    private List<String> tagName;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -44,7 +44,7 @@ public class FeedResponseDto{
                 .map(HashTag::getTagName)
                 .collect(Collectors.toList());
         // List<String>을 쉼표로 구분된 하나의 문자열로 결합
-        this.tagName = String.join(", ", tagNames);
+        this.tagName = tagNames;
 
         List<Comment> comments = feed.getComments();
         if (comments != null) {
