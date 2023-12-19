@@ -1,5 +1,6 @@
 package com.jjans.BB.Service.Impl;
 
+import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.PlaylistRequestDto;
 import com.jjans.BB.Dto.PlaylistResponseDto;
@@ -11,6 +12,7 @@ import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.PlaylistService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ import java.util.stream.Collectors;
 @Service
 public class PlaylistServiceImpl implements PlaylistService {
 
+    @Autowired
+    private S3Uploader s3Uploader;
     @PersistenceContext
     private EntityManager entityManager;
     private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
@@ -60,7 +64,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         String imageFileUrl = null;
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                imageFileUrl = saveImage(imageFile);
+                imageFileUrl = s3Uploader.upload(imageFile,"playlist-image");
 
             }
         } catch (IOException e) {
@@ -74,9 +78,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         pl.setMusicInfoList(plDto.getMusicInfoList());
         pl.setImageUrl(imageFileUrl);
         pl.setUser(user);
-        entityManager.persist(pl);
-
-
         entityManager.persist(pl);
 
         return new PlaylistResponseDto(pl);

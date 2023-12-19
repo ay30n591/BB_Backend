@@ -1,5 +1,6 @@
 package com.jjans.BB.Service.Impl;
 
+import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Entity.Feed;
 import com.jjans.BB.Dto.FeedRequestDto;
@@ -29,6 +30,8 @@ import java.util.stream.Collectors;
 @Service
 public class FeedServiceImpl implements FeedService {
 
+    @Autowired
+    private S3Uploader s3Uploader;
     @PersistenceContext
     private EntityManager entityManager;
     private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
@@ -62,15 +65,12 @@ public class FeedServiceImpl implements FeedService {
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
+        // 이미지 s3 업로드
         String imageFileUrl = null;
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                imageFileUrl = saveImage(imageFile);
-
+                imageFileUrl = s3Uploader.upload(imageFile,"feed-image");
             }
-//            else{
-//                imageFileUrl = feedRequestDto.getAlbumSrc();
-//            }
         } catch (IOException e) {
             e.printStackTrace();
             // 이미지 저장에 실패한 경우 예외 처리
@@ -79,11 +79,11 @@ public class FeedServiceImpl implements FeedService {
 
 
         Set<HashTag> hashTags = new HashSet<>();
-        for (String tagName : feedRequestDto.getHashTags()) {
-            HashTag existingHashTag = hashTagRepository.findByTagName(tagName);
+        for (HashTag tag : feedRequestDto.getHashTags()) {
+            HashTag existingHashTag = hashTagRepository.findByTagName(tag.getTagName());
             if (existingHashTag == null) {
                 // 데이터베이스에 HashTag가 존재하지 않으면 새로 생성하고 저장
-                HashTag newHashTag = new HashTag(tagName);
+                HashTag newHashTag = new HashTag(tag.getTagName());
                 entityManager.persist(newHashTag);
                 hashTags.add(newHashTag);
             } else {
@@ -172,24 +172,4 @@ public class FeedServiceImpl implements FeedService {
         return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
-
-    // 이미지 저장 로직
-    private String saveImage(MultipartFile imageFile) throws IOException {
-        String originalFilename = imageFile.getOriginalFilename();
-        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")); // 파일 확장자 추출
-
-        // UUID를 사용하여 고유한 파일 이름 생성
-        String fileName = UUID.randomUUID().toString() + fileExtension;
-        String filePath = imageUploadDirectory + File.separator + fileName;
-
-        File dest = new File(filePath);
-        imageFile.transferTo(dest);
-
-        return fileName;
-    }
-
-    // 이미지 불러오기 로직
-    public String getImagePath(String fileName) {
-        return imageUploadDirectory + File.separator + fileName;
-    }
 }
