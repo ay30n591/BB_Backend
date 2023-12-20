@@ -17,6 +17,7 @@ public class Feed extends Article{
     @Embedded
     private MusicInfo musicInfo;
 
+
 }
 
 

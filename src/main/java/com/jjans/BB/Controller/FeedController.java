@@ -82,7 +82,17 @@ public class FeedController {
         return new ResponseEntity<>(savedFeed, HttpStatus.CREATED);
     }
 
-
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{feedId}/like")
+    @Operation(summary = "Like a feed", description = "피드 좋아요 클릭")
+    public ResponseEntity<String> likeFeed(@PathVariable Long feedId) {
+        try {
+            feedService.likeFeed(feedId);
+            return ResponseEntity.ok("Feed liked successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking feed");
+        }
+    }
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "Put feed", description = "피드 수정")

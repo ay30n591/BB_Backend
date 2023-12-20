@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.File;
@@ -171,5 +172,16 @@ public class FeedServiceImpl implements FeedService {
         List<Feed> feeds =  feedRepository.findByHashTags_TagName(tagName);
         return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
+
+    @Override
+    public void likeFeed(Long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new EntityNotFoundException("피드 ID 찾을 수 없음: " + feedId));
+        feed.increaseFeedLike();
+
+        feedRepository.save(feed);
+
+    }
+
 
 }

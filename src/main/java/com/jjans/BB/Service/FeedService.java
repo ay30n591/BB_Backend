@@ -17,5 +17,5 @@ public interface FeedService {
     void deleteFeed(Long feedId);
 
     List<FeedResponseDto> findFeedsByTagName(String tagName);
-
+    void likeFeed(Long feedId);
 }
