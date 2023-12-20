@@ -52,4 +52,8 @@ public class Article extends BaseTime {
             joinColumns = @JoinColumn(name = "articleId"),
             inverseJoinColumns = @JoinColumn(name = "hashtagId"))
     private Set<HashTag> hashTags = new HashSet<>();
+
+    public void increaseFeedLike() {
+        this.setFeedLike(this.getFeedLike() + 1);
+    }
 }
