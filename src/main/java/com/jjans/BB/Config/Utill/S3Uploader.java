@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
-@RequiredArgsConstructor    // final 멤버변수가 있으면 생성자 항목에 포함시킴
+@RequiredArgsConstructor
 @Component
 @Service
 public class S3Uploader {
@@ -43,7 +43,7 @@ public class S3Uploader {
         String originalFilename = file.getName();
         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         String uuidFilename = java.util.UUID.randomUUID().toString() + extension;
-        log.info("File name changed to: {}", uuidFilename);
+        log.info("파일 이름 변경 : {}", uuidFilename);
         return uuidFilename;
     }
     private String upload(File uploadFile, String dirName) {
@@ -92,7 +92,7 @@ public class S3Uploader {
 
     public void delete(String dirName) {
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, dirName));
-        log.info("File {} deleted from S3 bucket.", dirName);
+        log.info("S3 bucket에서 File {} 삭제.", dirName);
     }
 
 }
