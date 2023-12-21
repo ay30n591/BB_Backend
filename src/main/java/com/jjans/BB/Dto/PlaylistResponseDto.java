@@ -1,10 +1,7 @@
 package com.jjans.BB.Dto;
 
 
-import com.jjans.BB.Entity.Comment;
-import com.jjans.BB.Entity.Feed;
-import com.jjans.BB.Entity.MusicInfo;
-import com.jjans.BB.Entity.Playlist;
+import com.jjans.BB.Entity.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -26,6 +23,7 @@ public class PlaylistResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
+    private List<String> tagName;
 
     public PlaylistResponseDto(Playlist playlist) {
         this.id = playlist.getId();
@@ -38,6 +36,12 @@ public class PlaylistResponseDto {
         this.musicInfoList = playlist.getMusicInfoList(); // Updated field name
         this.createdAt = playlist.getCreateDate();
         this.modifiedAt = playlist.getModifiedDate();
+
+        List<String> tagNames = playlist.getHashTags().stream()
+                .map(HashTag::getTagName)
+                .collect(Collectors.toList());
+        // List<String>을 쉼표로 구분된 하나의 문자열로 결합
+        this.tagName = tagNames;
 
         List<Comment> comments = playlist.getComments();
         if (comments != null) {
