@@ -77,18 +77,19 @@ public class UsersService {
         if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
             return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        else {
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(login.getEmail());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(login.getEmail());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+            System.out.println(tokenInfo.getAccessToken());
+            System.out.println(tokenInfo.getRefreshToken());
 
-        System.out.println(tokenInfo.getAccessToken());
-        System.out.println(tokenInfo.getRefreshToken());
+            redisTemplate.opsForValue()
+                    .set("RT:" + userDetails.getUsername(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-        redisTemplate.opsForValue()
-                .set("RT:" + userDetails.getUsername(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+            return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+        }
     }
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {

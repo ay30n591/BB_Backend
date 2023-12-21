@@ -32,6 +32,19 @@
       ports:
         - 9200:9200 # https
         - 9300:9300 # tcp
+
+    kibana:
+      image: docker.elastic.co/kibana/kibana:7.17.13
+      container_name: kibana
+      environment:
+        SERVER_NAME: kibana
+        ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ports:
+        - 5601:5601
+      # Elasticsearch Start Dependency
+      depends_on:
+        - elasticsearch
+
     redis:
       image: yisc/redis
       container_name: redis
