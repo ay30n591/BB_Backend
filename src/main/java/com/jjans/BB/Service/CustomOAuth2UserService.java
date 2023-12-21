@@ -71,7 +71,8 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
                 .nickName(" ")
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .authProvider(authProvider)
-//                .roles(Role.ROLE_USER)
+//                .authProvider(authProvider.GOOGLE) // 로컬 회원가입인 경우
+                .role(Role.ROLE_USER)
                 .build();
 
         return usersRepository.save(users);

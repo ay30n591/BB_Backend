@@ -6,6 +6,7 @@ import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Dto.UserResponseDto;
 import com.jjans.BB.Entity.Users;
+import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
@@ -45,6 +47,8 @@ public class UsersService {
                 .gender(signUp.getGender())
                 .birth(signUp.getBirth())
                 .nickName(signUp.getNickName())
+                .authProvider(AuthProvider.LOCAL) // 로컬 회원가입인 경우
+                .role(Role.ROLE_USER) // 일반 사용자 권한 부여
                 .build();
         usersRepository.save(user);
 
@@ -73,18 +77,19 @@ public class UsersService {
         if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
             return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+        else {
+            UserDetails userDetails = customUserDetailsService.loadUserByUsername(login.getEmail());
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(login.getEmail());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+            System.out.println(tokenInfo.getAccessToken());
+            System.out.println(tokenInfo.getRefreshToken());
 
-        System.out.println(tokenInfo.getAccessToken());
-        System.out.println(tokenInfo.getRefreshToken());
+            redisTemplate.opsForValue()
+                    .set("RT:" + userDetails.getUsername(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 
-        redisTemplate.opsForValue()
-                .set("RT:" + userDetails.getUsername(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+            return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+        }
     }
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
@@ -134,4 +139,11 @@ public class UsersService {
         usersRepository.save(user);
         return response.success();
     }
+
+    public ResponseEntity<?> getAllUsers() {
+        // 여기에 적절한 로직을 추가하고, ResponseEntity를 반환하는 코드를 작성하세요.
+        List<Users> allUsers = usersRepository.findAll();
+        return response.success(allUsers, "모든 사용자 정보를 성공적으로 가져왔습니다.", HttpStatus.OK);
+    }
+
 }

@@ -26,17 +26,17 @@ import java.util.logging.Logger;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000"}) // CORS 설정
+//@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000"}) // CORS 설정
 public class UsersController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UsersService usersService;
     private final Response response;
 
-//
-//    @GetMapping("/all")
-//    public ResponseEntity<?> getAllUsers() {
-//        return usersService.getAllUsers();
-//    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        return usersService.getAllUsers();
+    }
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
         // validation check
@@ -106,6 +106,7 @@ public class UsersController {
         log.info("ROLE_ADMIN TEST");
         return response.success();
     }
+
 
 //    @PostMapping("/social-login")
 //    public ResponseEntity<?> doSocialLogin(@RequestBody @Valid SocialLoginRequest request) {
