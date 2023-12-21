@@ -15,12 +15,13 @@ import lombok.NoArgsConstructor;
 public class ChatDto {
 
     private String message;
-    //sender
+    private String sender;
     private Long roomId;
 
 
     public ChatDto(Chat chat) {
         this.message = chat.getMessage();
+        this.sender = chat.getSender().getNickName();
         this.roomId = chat.getChatRoom().getId();
     }
 
@@ -28,7 +29,6 @@ public class ChatDto {
         Chat chat = Chat.builder()
                 .message(message)
                 .build();
-
         return chat;
     }
 
