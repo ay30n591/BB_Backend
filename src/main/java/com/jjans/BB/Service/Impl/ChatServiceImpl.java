@@ -1,5 +1,6 @@
 package com.jjans.BB.Service.Impl;
 
+import com.jjans.BB.Config.Kafka.StompHandler;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.ChatDto;
 import com.jjans.BB.Dto.FeedResponseDto;
@@ -11,6 +12,8 @@ import com.jjans.BB.Repository.ChatRepository;
 import com.jjans.BB.Repository.ChatRoomRepository;
 import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.ChatService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +29,8 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final UsersRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final Logger logger = LoggerFactory.getLogger(ChatServiceImpl.class);
+
     public ChatServiceImpl(ChatRepository chatRepository, UsersRepository userRepository, ChatRoomRepository chatRoomRepository) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
@@ -34,12 +39,12 @@ public class ChatServiceImpl implements ChatService {
 
 
     @Override
-    public ChatDto saveChatMessage(ChatDto chatDto) {
+    public ChatDto saveChatMessage(ChatDto chatDto, String email) {
             ChatRoom room = chatRoomRepository.findById(chatDto.getRoomId())
                     .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-            String userEmail = SecurityUtil.getCurrentUserEmail();
-            Users user = userRepository.findByEmail(userEmail)
+
+            Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
             Chat chat = chatDto.toEntity();
@@ -50,6 +55,8 @@ public class ChatServiceImpl implements ChatService {
 
         return new ChatDto(savedChat);
     }
+
+
 
 //    @Override
 //    public List<ChatDto> getChatMessagesByRoomId(Long roomId, int page, int size) {
