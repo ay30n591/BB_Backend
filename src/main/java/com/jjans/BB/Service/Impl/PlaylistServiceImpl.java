@@ -4,9 +4,10 @@ import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.PlaylistRequestDto;
 import com.jjans.BB.Dto.PlaylistResponseDto;
-import com.jjans.BB.Entity.Feed;
+import com.jjans.BB.Entity.HashTag;
 import com.jjans.BB.Entity.Playlist;
 import com.jjans.BB.Entity.Users;
+import com.jjans.BB.Repository.HashTagRepository;
 import com.jjans.BB.Repository.PlaylistRepository;
 import com.jjans.BB.Repository.UsersRepository;
 import com.jjans.BB.Service.PlaylistService;
@@ -23,7 +24,9 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,13 +41,16 @@ public class PlaylistServiceImpl implements PlaylistService {
     private static final Logger log = LogManager.getLogger(FeedServiceImpl.class);
     private final PlaylistRepository playlistRepository;
     private final UsersRepository usersRepository;
+    private HashTagRepository hashTagRepository;
+
 
     @Value("${image.upload.directory}")
     private String imageUploadDirectory;
 
-    public PlaylistServiceImpl(PlaylistRepository playlistRepository, UsersRepository usersRepository) {
+    public PlaylistServiceImpl(PlaylistRepository playlistRepository, UsersRepository usersRepository, HashTagRepository hashTagRepository) {
         this.playlistRepository = playlistRepository;
         this.usersRepository = usersRepository;
+        this.hashTagRepository = hashTagRepository;
     }
 
     @Override
@@ -73,9 +79,24 @@ public class PlaylistServiceImpl implements PlaylistService {
             throw new RuntimeException("Failed to save image.");
         }
 
+
+        Set<HashTag> hashTags = new HashSet<>();
+        for (HashTag tag : plDto.getHashTags()) {
+            HashTag existingHashTag = hashTagRepository.findByTagName(tag.getTagName());
+            if (existingHashTag == null) {
+                // 데이터베이스에 HashTag가 존재하지 않으면 새로 생성하고 저장
+                HashTag newHashTag = new HashTag(tag.getTagName());
+                entityManager.persist(newHashTag);
+                hashTags.add(newHashTag);
+            } else {
+                // 데이터베이스에 이미 존재하는 경우 기존 것을 사용
+                hashTags.add(existingHashTag);
+            }
+        }
         // 피드 엔터티 생성 및 저장
         Playlist pl = plDto.toEntity();
         pl.setMusicInfoList(plDto.getMusicInfoList());
+        pl.setHashTags(hashTags);
         pl.setImageUrl(imageFileUrl);
         pl.setUser(user);
         entityManager.persist(pl);
