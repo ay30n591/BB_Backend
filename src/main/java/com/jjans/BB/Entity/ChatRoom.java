@@ -1,6 +1,7 @@
 package com.jjans.BB.Entity;
 
 import lombok.*;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
+
 @Table(name = "chat_rooms")
 public class ChatRoom extends BaseTime {
 
