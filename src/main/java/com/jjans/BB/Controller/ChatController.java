@@ -8,13 +8,14 @@ import com.jjans.BB.Service.ChatRoomService;
 import com.jjans.BB.Service.ChatService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,23 +25,41 @@ public class ChatController {
     private ChatRoomService chatRoomService;
     private ChatService chatService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate<String, String> chatRoomConnectTemplate;
 
     private final KafkaProducer producer;
+    private final Logger logger = LoggerFactory.getLogger(ChatController.class);
+
     @Autowired
-    public ChatController(ChatRoomService chatRoomService, ChatService chatService, JwtTokenProvider jwtTokenProvider, KafkaProducer producer) {
+    public ChatController(ChatRoomService chatRoomService, ChatService chatService, JwtTokenProvider jwtTokenProvider, RedisTemplate<String, String> chatRoomConnectTemplate, KafkaProducer producer) {
         this.chatRoomService = chatRoomService;
         this.chatService = chatService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.chatRoomConnectTemplate = chatRoomConnectTemplate;
         this.producer = producer;
     }
 
+    //@DestinationVariable String chatRoomID,
     @MessageMapping("/message")
-    public void sendSocketMessage(ChatDto chatDto, @Header("Authorization") String Authorization) {
+    public void sendSocketMessage(ChatDto chatDto,
+                                  @Header("Authorization") String Authorization) {
+
+        logger.info("sendSocketMessage called with Authorization: {}", Authorization);
+
         if(!chatRoomService.existsRoom(chatDto.getRoomId())){
             return;
         }
         String email = jwtTokenProvider.extractUserEmail(Authorization);
+        String key = "chatroom:" + chatDto.getRoomId().toString();
+        int size  = chatRoomConnectTemplate.keys(key).size();
         ChatDto savedMessage = chatService.saveChatMessage(chatDto,email);
+
+        if (size > 1){
+            savedMessage.setReadCount(0);
+        }
+        else {
+            savedMessage.setReadCount(1);
+        }
         producer.sendMessage(savedMessage);
 
     }
@@ -49,6 +68,16 @@ public class ChatController {
     @GetMapping("/rooms")
     public List<ChatRoomDto> getAllChatRoomsByUser() {
         return chatRoomService.getAllChatRoomsByUser();
+    }
+
+
+    @GetMapping("/room/{roomId}/messages")
+    public List<ChatDto> getChatMessagesByRoomIdWithPaging(
+            @PathVariable Long roomId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return chatService.getChatMessagesByRoomIdWithPaging(roomId, page, size);
     }
 
 
