@@ -18,4 +18,6 @@ public interface FeedService {
 
     List<FeedResponseDto> findFeedsByTagName(String tagName);
     void likeFeed(Long feedId);
+    void unlikeFeed(Long feedId);
+
 }
