@@ -33,6 +33,7 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
+
     private final CustomUserDetailsService customUserDetailsService;
 
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
