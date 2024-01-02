@@ -2,12 +2,9 @@ package com.jjans.BB.Service.Impl;
 
 import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
-import com.jjans.BB.Entity.Feed;
+import com.jjans.BB.Entity.*;
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
-import com.jjans.BB.Entity.HashTag;
-import com.jjans.BB.Entity.MusicInfo;
-import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Repository.FeedRepository;
 import com.jjans.BB.Repository.HashTagRepository;
 import com.jjans.BB.Repository.UsersRepository;
@@ -54,8 +51,24 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public List<FeedResponseDto> getAllFeeds() {
+
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
+
         List<Feed> feeds = feedRepository.findAll();
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        for (Feed feed : feeds) {
+            List<Users> likedUsers = feed.getLikedUsers();
+            boolean userLiked = likedUsers.stream()
+                    .anyMatch(likedUser -> likedUser.getId() == user.getId());
+
+            FeedResponseDto feedResponseDto = new FeedResponseDto(feed);
+            feedResponseDto.setLikeCheck(userLiked);
+            feedResponseDtos.add(feedResponseDto);
+        }
+        return feedResponseDtos;
     }
 
     @Override
@@ -127,6 +140,7 @@ public class FeedServiceImpl implements FeedService {
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
         List<Feed> feeds = feedRepository.findByUserNickName(nickname);
+
         return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
@@ -177,10 +191,39 @@ public class FeedServiceImpl implements FeedService {
     public void likeFeed(Long feedId) {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new EntityNotFoundException("피드 ID 찾을 수 없음: " + feedId));
-        feed.increaseFeedLike();
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        ArticleLike articleLike = new ArticleLike();
+        articleLike.setUser(user);
+        articleLike.setArticle(feed);
+
+        feed.addArticleLike(articleLike);
 
         feedRepository.save(feed);
 
+    }
+
+    @Override
+    public void unlikeFeed(Long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new EntityNotFoundException("피드 ID 찾을 수 없음: " + feedId));
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        // Find the existing ArticleLike associated with the user and the feed
+        ArticleLike existingLike = feed.getLikes().stream()
+                .filter(like -> like.getUser().equals(user))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 이 피드를 좋아하지 않았습니다."));
+
+        // Remove the ArticleLike from the Feed's list
+        feed.removeArticleLike(existingLike);
+
+        // Save the updated Feed
+        feedRepository.save(feed);
     }
 
 
