@@ -20,7 +20,6 @@ public class PlaylistRequestDto {
     private String title;
     private String content;
     private String imageFileUrl;
-    private int feedLike;
     private List<MusicInfo> musicInfoList;
     private List<HashTag> hashTags; // Change to List<HashTag>
 
@@ -30,7 +29,6 @@ public class PlaylistRequestDto {
         Playlist playlist = new Playlist();
         playlist.setTitle(title);
         playlist.setContent(content);
-        playlist.setFeedLike(feedLike);
         playlist.setMusicInfoList(musicInfoList);
         Set<HashTag> hashTagSet = hashTags.stream()
                 .map(tag -> {
