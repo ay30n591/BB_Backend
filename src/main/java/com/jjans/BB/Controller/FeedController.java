@@ -27,6 +27,7 @@ public class FeedController {
     }
 
 
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping
     @Operation(summary = "Get all feeds", description = "모든 피드 가져오기[id 순서. 개인화x]")
     public ResponseEntity<List<FeedResponseDto>> getAllFeeds() {
@@ -92,6 +93,14 @@ public class FeedController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking feed");
         }
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{feedId}/unlike")
+    @Operation(summary = "Unlike a feed", description = "피드 좋아요 취소")
+    public ResponseEntity<String> unlikeFeed(@PathVariable Long feedId) {
+            feedService.unlikeFeed(feedId);
+            return ResponseEntity.ok("Feed unliked successfully");
     }
 
     @SecurityRequirement(name = "bearerAuth")
