@@ -3,6 +3,7 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -10,12 +11,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class PlaylistResponseDto {
 
     private Long id;
     private String contents;
     private String title;
-    private int feedLike;
+    private int plLike;
+    private boolean likeCheck;
     private String imageFileUrl;
     private Long userId;
     private String userName;
@@ -29,7 +32,7 @@ public class PlaylistResponseDto {
         this.id = playlist.getId();
         this.title = playlist.getTitle();
         this.contents = playlist.getContent();
-        this.feedLike = playlist.getFeedLike();
+        this.plLike = playlist.getLikes().size();
         this.imageFileUrl = playlist.getImageUrl();
         this.userId = playlist.getUser().getId();
         this.userName = playlist.getUser().getUserName();
