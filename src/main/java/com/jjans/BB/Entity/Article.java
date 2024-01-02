@@ -4,9 +4,11 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -29,7 +31,9 @@ public class Article extends BaseTime {
     @Column(length = 1000, nullable = false)
     private String content;
 
-    private int feedLike;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleLike> likes = new ArrayList<>();
+//    private int feedLike;
 
     // 피드 플리 구분
 
@@ -53,7 +57,19 @@ public class Article extends BaseTime {
             inverseJoinColumns = @JoinColumn(name = "hashtagId"))
     private Set<HashTag> hashTags = new HashSet<>();
 
-    public void increaseFeedLike() {
-        this.setFeedLike(this.getFeedLike() + 1);
+//    public void increaseFeedLike() {
+//        this.setFeedLike(this.getFeedLike() + 1);
+//    }
+
+    public void addArticleLike(ArticleLike articleLike) {
+        this.likes.add(articleLike);
+    }
+    public List<Users> getLikedUsers() {
+        return likes.stream().map(ArticleLike::getUser).collect(Collectors.toList());
+    }
+
+    public void removeArticleLike(ArticleLike articleLike) {
+        this.likes.remove(articleLike);
+        articleLike.setArticle(null);
     }
 }
