@@ -1,10 +1,8 @@
 package com.jjans.BB.Dto;
 
-import com.jjans.BB.Entity.Comment;
-import com.jjans.BB.Entity.Feed;
-import com.jjans.BB.Entity.HashTag;
-import com.jjans.BB.Entity.MusicInfo;
+import com.jjans.BB.Entity.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class FeedResponseDto{
 
     private Long id;
@@ -19,9 +18,8 @@ public class FeedResponseDto{
     private int feedLike;
     private String imageFileUrl;
     private Long userId;
-
+    private boolean likeCheck;
     private List<MusicInfo> musicInfoList;
-
     private String userName;
     private List<String> tagName;
 
@@ -32,7 +30,7 @@ public class FeedResponseDto{
     public FeedResponseDto(Feed feed) {
         this.id = feed.getId();
         this.content = feed.getContent();
-        this.feedLike = feed.getFeedLike();
+        this.feedLike = feed.getLikes().size(); // feed의 좋아요 수를 유저 수로 변경
         this.imageFileUrl = feed.getImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.userName = feed.getUser().getUserName();
