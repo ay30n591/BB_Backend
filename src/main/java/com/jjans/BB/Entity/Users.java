@@ -71,6 +71,9 @@ public class Users extends BaseTime{
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleLike> likedArticles = new ArrayList<>();
+
     public void addRole(String roleName) {
         if (this.roles == null) {
             this.roles = new ArrayList<>();
