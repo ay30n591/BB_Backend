@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -51,7 +52,7 @@ public class ChatController {
         }
         String email = jwtTokenProvider.extractUserEmail(Authorization);
         String key = "chatroom:" + chatDto.getRoomId().toString();
-        int size  = chatRoomConnectTemplate.keys(key).size();
+        int size = chatRoomConnectTemplate.opsForSet().members(key).size();
         ChatDto savedMessage = chatService.saveChatMessage(chatDto,email);
 
         if (size > 1){

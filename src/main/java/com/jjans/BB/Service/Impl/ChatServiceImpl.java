@@ -1,6 +1,7 @@
 package com.jjans.BB.Service.Impl;
 
-import com.jjans.BB.Config.Utill.SecurityUtil;
+import com.jjans.BB.Config.Kafka.KafkaProducer;
+import com.jjans.BB.Config.Security.JwtTokenProvider;
 import com.jjans.BB.Dto.ChatDto;
 import com.jjans.BB.Entity.Chat;
 import com.jjans.BB.Entity.ChatRoom;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -25,12 +27,19 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final UsersRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate<String, String> chatRoomConnectTemplate;
+    private final KafkaProducer producer;
     private final Logger logger = LoggerFactory.getLogger(ChatServiceImpl.class);
 
-    public ChatServiceImpl(ChatRepository chatRepository, UsersRepository userRepository, ChatRoomRepository chatRoomRepository) {
+    public ChatServiceImpl(ChatRepository chatRepository, UsersRepository userRepository, ChatRoomRepository chatRoomRepository, JwtTokenProvider jwtTokenProvider, RedisTemplate<String, String> chatRoomConnectTemplate, KafkaProducer producer) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
         this.chatRoomRepository = chatRoomRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.chatRoomConnectTemplate = chatRoomConnectTemplate;
+        this.producer = producer;
     }
 
 
@@ -84,6 +93,7 @@ public class ChatServiceImpl implements ChatService {
                 }
         }
     }
+
 
 
 }
