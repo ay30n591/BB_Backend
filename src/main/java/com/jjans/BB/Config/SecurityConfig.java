@@ -59,8 +59,8 @@ public class SecurityConfig {
                         "/swagger-resources/**", "/configuration/security",
                         "/swagger-ui.html/**", "/webjars/**",
                         "/swagger-resources/configuration/ui", "/swagger-ui/**","http://localhost:9092/**",
-                        "https://94ed-121-190-220-40.ngrok-free.app/**",
-                        "https://94ed-121-190-220-40.ngrok-free.app").permitAll()
+                        "https://9d71-121-143-39-62.ngrok-free.app/**",
+                        "https://9d71-121-143-39-62.ngrok-free.app").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/**").permitAll()
