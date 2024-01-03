@@ -11,5 +11,5 @@ public interface ChatService {
     List<ChatDto> getChatMessagesByRoomIdWithPaging(Long roomId, int page, int size);
     void decreaseReadCount(Long roomId, String email);
 
-
+//    void updateMessage();
 }
