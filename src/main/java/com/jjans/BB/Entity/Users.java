@@ -1,5 +1,6 @@
 package com.jjans.BB.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
@@ -8,9 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
+@JsonIgnoreProperties({"following", "followers"})
 public class Users extends BaseTime{
 
     @Id
@@ -74,12 +74,19 @@ public class Users extends BaseTime{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleLike> likedArticles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserFollower> following;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserFollower> followers;
+
     public void addRole(String roleName) {
         if (this.roles == null) {
             this.roles = new ArrayList<>();
         }
         this.roles.add(roleName);
     }
+
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {
