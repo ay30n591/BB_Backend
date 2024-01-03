@@ -5,6 +5,7 @@ import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Dto.UserResponseDto;
+import com.jjans.BB.Entity.UserFollower;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
@@ -146,5 +148,6 @@ public class UsersService {
         List<Users> allUsers = usersRepository.findAll();
         return response.success(allUsers, "모든 사용자 정보를 성공적으로 가져왔습니다.", HttpStatus.OK);
     }
+
 
 }
