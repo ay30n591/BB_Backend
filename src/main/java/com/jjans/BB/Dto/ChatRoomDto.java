@@ -10,11 +10,16 @@ import java.util.stream.Collectors;
 public class ChatRoomDto {
     private Long id;
     private Set<Long> participantIds;
+    private Set<String> participantNames;
+
 
     public ChatRoomDto(ChatRoom chatRoom) {
         this.id = chatRoom.getId();
         this.participantIds = chatRoom.getParticipants().stream()
                 .map(Users::getId)
+                .collect(Collectors.toSet());
+        this.participantNames = chatRoom.getParticipants().stream()
+                .map(Users::getNickName)
                 .collect(Collectors.toSet());
     }
 
