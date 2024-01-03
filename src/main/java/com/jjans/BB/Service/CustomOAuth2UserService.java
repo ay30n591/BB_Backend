@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.logging.Logger;
 
@@ -33,7 +34,6 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
         System.out.println("OAuth2User type: " + oAuth2User.getClass().getName());
 
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
-
     }
     protected OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
         //OAuth2 로그인 플랫폼 구분
@@ -55,12 +55,12 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
                 throw new RuntimeException("Email already signed up.");
             }
             user = updateUser(user, oAuth2UserInfo);
+
         }
         //가입되지 않은 경우
         else {
             user = registerUser(authProvider, oAuth2UserInfo);
         }
-
         return UserPrincipal.create(user, oAuth2UserInfo.getAttributes());
     }
 
@@ -78,8 +78,15 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
         return usersRepository.save(users);
     }
 
-    private Users updateUser(Users user, OAuth2UserInfo oAuth2UserInfo) {
 
-        return usersRepository.save(user.update(oAuth2UserInfo));
+    private Users updateUser(Users user, OAuth2UserInfo oAuth2UserInfo) {
+        // OAuth2UserInfo를 기반으로 사용자 정보 업데이트
+        user = user.update(oAuth2UserInfo);
+
+        // 사용자의 이름을 구글에서 제공한 값으로 userName 및 nickName으로 설정
+        user.setUserName(oAuth2UserInfo.getName());
+        user.setNickName(oAuth2UserInfo.getName());
+
+        return usersRepository.save(user);
     }
 }

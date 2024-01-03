@@ -4,6 +4,7 @@ package com.jjans.BB.Controller;
 import com.jjans.BB.Config.Security.JwtTokenProvider;
 import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
+import com.jjans.BB.Oauth2.UserPrincipal;
 import com.jjans.BB.Service.CustomOAuth2UserService;
 import com.jjans.BB.Service.Helper;
 import com.jjans.BB.Service.UsersService;
@@ -113,8 +114,6 @@ public class UsersController {
         return response.success();
     }
 
-
-
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/current-user")
     public ResponseEntity<?> getCurrentUser() {
@@ -135,22 +134,5 @@ public class UsersController {
             return ResponseEntity.status(401).body(null);
         }
     }
-//    @PostMapping("/social-login")
-//    public ResponseEntity<?> doSocialLogin(@RequestBody @Valid SocialLoginRequest request) {
-//
-//        return ResponseEntity.created(URI.create("/social-login"))
-//                .body(userService.doSocialLogin(request));
-//    }
-//    @RestController
-//    @RequestMapping("auth")
-//    public class AuthController {
-//        @GetMapping( "/token")
-//        public String token(@RequestParam String token, @RequestParam String error) {
-//            if (StringUtils.isNotBlank(error)) {
-//                return error;
-//            } else {
-//                return token;
-//            }
-//        }
-//    }
 }
+

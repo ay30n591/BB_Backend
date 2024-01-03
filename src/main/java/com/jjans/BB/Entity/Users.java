@@ -4,14 +4,10 @@ import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Builder
