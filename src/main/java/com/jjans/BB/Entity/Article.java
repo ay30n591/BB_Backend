@@ -72,4 +72,21 @@ public class Article extends BaseTime {
         this.likes.remove(articleLike);
         articleLike.setArticle(null);
     }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "bookmarked_articles",
+            joinColumns = @JoinColumn(name = "bookmark_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id"))
+    private List<Article> bookmarkedPosts = new ArrayList<>();
+
+    public void addBookmark(Feed feed) {
+        BookMark bookMark = new BookMark();
+        bookMark.setUser(user);
+        bookMark.setArticle(this);
+        this.bookmarkedPosts.add(bookMark.getArticle());
+    }
+
+    public void removeBookmark(Feed feed) {
+        bookmarkedPosts.removeIf(bookmark -> bookmark.getBookmarkedPosts().equals(feed));
+    }
 }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -124,5 +126,37 @@ public class FeedController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting feed");
         }
     }
+    @PostMapping("/{feedId}/bookmark")
+    public ResponseEntity<String> bookmarkFeed(@PathVariable Long feedId) {
+        try {
+            feedService.bookmarkFeed(feedId);
+            return new ResponseEntity<>("피드가 성공적으로 북마크되었습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("피드 북마크에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    // 피드 북마크 해제하기
+    @PostMapping("/{feedId}/unbookmark")
+    public ResponseEntity<String> unbookmarkFeed(@PathVariable Long feedId) {
+        try {
+            feedService.unbookmarkFeed(feedId);
+            return new ResponseEntity<>("피드 북마크가 성공적으로 해제되었습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("피드 북마크 해제에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/bookmarked")
+    public ResponseEntity<List<FeedResponseDto>> getBookmarkedFeeds() {
+        try {
+            // 현재 인증된 사용자의 이메일을 가져옴
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userEmail = authentication.getName();
+
+            List<FeedResponseDto> bookmarkedFeeds = feedService.getBookmarkedFeeds(userEmail);
+            return new ResponseEntity<>(bookmarkedFeeds, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

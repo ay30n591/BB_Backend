@@ -5,12 +5,9 @@ import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Builder
@@ -22,7 +19,7 @@ import java.util.stream.Collectors;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
-@JsonIgnoreProperties({"following", "followers"})
+@JsonIgnoreProperties({"following", "followers", "bookmarkedPosts"})
 public class Users extends BaseTime{
 
     @Id
@@ -86,12 +83,4 @@ public class Users extends BaseTime{
         }
         this.roles.add(roleName);
     }
-
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
 }

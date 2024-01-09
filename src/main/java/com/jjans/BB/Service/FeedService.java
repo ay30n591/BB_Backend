@@ -19,5 +19,8 @@ public interface FeedService {
     List<FeedResponseDto> findFeedsByTagName(String tagName);
     void likeFeed(Long feedId);
     void unlikeFeed(Long feedId);
+    void bookmarkFeed(Long feedId);
+    void unbookmarkFeed(Long feedId);
+    List<FeedResponseDto> getBookmarkedFeeds(String userEmail);
 
 }

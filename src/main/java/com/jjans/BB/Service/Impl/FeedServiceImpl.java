@@ -226,5 +226,35 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(feed);
     }
 
+    @Override
+    public void bookmarkFeed(Long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new EntityNotFoundException("피드 ID를 찾을 수 없음: " + feedId));
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("인증 정보 없음."));
 
+        feed.addBookmark(feed);
+        usersRepository.save(user);
+    }
+
+    @Override
+    public void unbookmarkFeed(Long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new EntityNotFoundException("피드 ID를 찾을 수 없음: " + feedId));
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("인증 정보 없음."));
+
+        feed.removeBookmark(feed);
+        usersRepository.save(user);
+    }
+    @Override
+    public List<FeedResponseDto> getBookmarkedFeeds(String userEmail) {
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        List<Feed> bookmarkedFeeds = feedRepository.findByBookmarkedPostsOrderByUser(user);
+        return bookmarkedFeeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+    }
 }
