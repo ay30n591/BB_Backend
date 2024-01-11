@@ -19,8 +19,9 @@ public class Chat extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @NotNull
-//    private String messageType;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ChatType chatType;
 
     @ManyToOne
     @JoinColumn(name = "chat_room_id", nullable = false)
@@ -36,5 +37,9 @@ public class Chat extends BaseTime {
     @Builder.Default // 기본값을 사용하도록 지정
     private int readCount = 1;
 
-
+    public enum ChatType {
+        ENTER,
+        MESSAGE,
+        EXIT,
+    }
 }
