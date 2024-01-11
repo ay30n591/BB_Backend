@@ -19,7 +19,7 @@ public class PlaylistRequestDto {
 
     private String title;
     private String content;
-    private String imageFileUrl;
+    private String albumSrc;
     private List<MusicInfo> musicInfoList;
     private List<HashTag> hashTags; // Change to List<HashTag>
 

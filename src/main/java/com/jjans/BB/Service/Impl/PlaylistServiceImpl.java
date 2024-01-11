@@ -4,9 +4,7 @@ import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.PlaylistRequestDto;
 import com.jjans.BB.Dto.PlaylistResponseDto;
-import com.jjans.BB.Entity.HashTag;
-import com.jjans.BB.Entity.Playlist;
-import com.jjans.BB.Entity.Users;
+import com.jjans.BB.Entity.*;
 import com.jjans.BB.Repository.HashTagRepository;
 import com.jjans.BB.Repository.PlaylistRepository;
 import com.jjans.BB.Repository.UsersRepository;
@@ -20,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.File;
@@ -156,6 +155,46 @@ public class PlaylistServiceImpl implements PlaylistService {
         List<Playlist> pls = playlistRepository.findByUserNickName(user.getNickName());
         return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
     }
+
+    @Override
+    public void likePl(Long plId) {
+        Playlist pl = playlistRepository.findById(plId)
+                .orElseThrow(() -> new EntityNotFoundException("피드 ID 찾을 수 없음: " + plId));
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        ArticleLike articleLike = new ArticleLike();
+        articleLike.setUser(user);
+        articleLike.setArticle(pl);
+
+        pl.addArticleLike(articleLike);
+
+        playlistRepository.save(pl);
+    }
+
+    @Override
+    public void unlikePl(Long plId) {
+        Playlist pl = playlistRepository.findById(plId)
+                .orElseThrow(() -> new EntityNotFoundException("피드 ID 찾을 수 없음: " + plId));
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        // Find the existing ArticleLike associated with the user and the feed
+        ArticleLike existingLike = pl.getLikes().stream()
+                .filter(like -> like.getUser().equals(user))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 이 피드를 좋아하지 않았습니다."));
+
+        // Remove the ArticleLike from the Feed's list
+        pl.removeArticleLike(existingLike);
+
+        // Save the updated Feed
+        playlistRepository.save(pl);
+    }
+
+
 
     @Override
     public void deleteFeed(Long plId) {

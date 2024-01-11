@@ -19,6 +19,10 @@ public interface PlaylistService {
     List<PlaylistResponseDto> getMyPls();
 
 
+
+    void likePl(Long feedId);
+    void unlikePl(Long feedId);
+
     void deleteFeed(Long feedId);
 
 }

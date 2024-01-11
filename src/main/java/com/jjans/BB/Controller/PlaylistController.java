@@ -99,4 +99,26 @@ public class PlaylistController {
         }
     }
 
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{plId}/like")
+    @Operation(summary = "Like a playlist", description = "플리 좋아요 클릭")
+    public ResponseEntity<String> likeFeed(@PathVariable Long plId) {
+        try {
+            playlistService.likePl(plId);
+            return ResponseEntity.ok("Feed liked successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking feed");
+        }
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{plId}/unlike")
+    @Operation(summary = "Unlike a playlist", description = "플리 좋아요 취소")
+    public ResponseEntity<String> unlikeFeed(@PathVariable Long plId) {
+        playlistService.unlikePl(plId);
+        return ResponseEntity.ok("Feed unliked successfully");
+    }
+
+
+
 }

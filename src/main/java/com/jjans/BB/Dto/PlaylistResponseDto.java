@@ -22,7 +22,9 @@ public class PlaylistResponseDto {
     private String imageFileUrl;
     private Long userId;
     private String userName;
+
     private List<MusicInfo> musicInfoList;
+
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
