@@ -15,9 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +57,7 @@ public class ChatServiceImpl implements ChatService {
             Chat chat = chatDto.toEntity();
             chat.setChatRoom(room);
             chat.setSender(user);
+            chat.setChatType(chatDto.getChatType());
 
             Chat savedChat = chatRepository.save(chat);
 
@@ -62,12 +66,15 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatDto> getChatMessagesByRoomIdWithPaging(Long roomId, int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
         // 페이징된 결과를 반환
         Page<Chat> chatMessagesPage = chatRepository.getChatMessagesByRoomId(roomId, pageable);
         List<ChatDto> chatDtoList = chatMessagesPage.getContent().stream()
-                .map(chat -> new ChatDto(chat.getMessage(),
+                .sorted(Comparator.comparing(Chat::getId)) // id 기준으로 정방향으로 정렬
+                .map(chat -> new ChatDto(
+                        chat.getChatType(),
+                        chat.getMessage(),
                         chat.getSender().getNickName(),
                         chat.getChatRoom().getId(),
                         chat.getCreateDate(),
@@ -75,7 +82,6 @@ public class ChatServiceImpl implements ChatService {
                 .collect(Collectors.toList());
 
         return chatDtoList;
-
     }
 
     @Override
@@ -94,6 +100,15 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
+    @Override
+    public void updateMessage(Long roomId, String email) {
+        ChatDto chat = new ChatDto();
+        chat.setChatType(Chat.ChatType.ENTER);
+        chat.setMessage(email+"님 입장");
+        chat.setSender("SysTem");
+        chat.setRoomId(roomId);
+        producer.sendMessage(chat);
+    }
 
 
 }
