@@ -6,6 +6,7 @@ import com.jjans.BB.Service.FeedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,6 @@ public class FeedController {
         this.feedService = feedService;
     }
 
-
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping
     @Operation(summary = "Get all feeds", description = "모든 피드 가져오기[id 순서. 개인화x]")
@@ -37,6 +37,15 @@ public class FeedController {
         return new ResponseEntity<>(feeds, HttpStatus.OK);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/followings")
+    @Operation(summary = "Get my following's feeds", description = "팔로잉한 유저들 피드 가져오기[id 순서. 개인화x]")
+    public ResponseEntity<List<FeedResponseDto>> getFeedsOfFollowing(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size) {
+        List<FeedResponseDto> feedsOfFollowers = feedService.getFeedsOfFollowing(page, size);
+        return new ResponseEntity<>(feedsOfFollowers, HttpStatus.OK);
+    }
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/my")
     @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")

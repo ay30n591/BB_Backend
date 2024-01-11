@@ -21,11 +21,11 @@ public class FeedResponseDto{
     private boolean likeCheck;
     private List<MusicInfo> musicInfoList;
     private String userName;
-    private List<String> tagName;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
+    private List<String> tagName;
 
     public FeedResponseDto(Feed feed) {
         this.id = feed.getId();
