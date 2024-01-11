@@ -13,6 +13,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -257,4 +261,31 @@ public class FeedServiceImpl implements FeedService {
         List<Feed> bookmarkedFeeds = feedRepository.findByBookmarkedPostsOrderByUser(user);
         return bookmarkedFeeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
+
+    @Override
+    public List<FeedResponseDto> getFeedsOfFollowing(int page, int size) {
+
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        Set<UserFollower> followers = user.getFollowing();
+        System.out.println(followers);
+
+        Set<Users> users =  new HashSet<>();
+
+        for (UserFollower userFollower : followers) {
+            if (userFollower.getFollower() != null) {
+                users.add(userFollower.getFollower());
+            }
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createDate")));
+
+        Page<Feed> feedsOfMultipleUsers = feedRepository.findByUserIn(users, pageable);
+
+
+        return feedsOfMultipleUsers.getContent().stream()
+                .map(FeedResponseDto::new)
+                .collect(Collectors.toList());    }
 }
