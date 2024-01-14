@@ -9,37 +9,21 @@ services:
     depends_on:
       - mysql
       - redis
-      # - elasticsearch
+      - elasticsearch
     networks:
       - ubuntu_my_network
     restart: on-failure
 
   mysql:
-    image: yisc/mysql-8.0
+    image: mysql:5.7.8
     container_name: mysql
     ports:
       - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: beatbuddy
-    volumes:
-      - /home/ubuntu/databases/mysql/beatbuddy:/var/lib/mysql
     networks:
       - ubuntu_my_network
-
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13
-  #   container_name: elasticsearch
-  #   environment:
-  #     - node.name=single-node
-  #     - cluster.name=elasticsearch
-  #     - discovery.type=single-node
-  #     - network.host=0.0.0.0
-  #   ports:
-  #     - 9200:9200
-  #     - 9300:9300
-  #   networks:
-  #     - ubuntu_my_network
 
   redis:
     image: yisc/redis
@@ -64,11 +48,12 @@ services:
       - '9092:9092'
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_HOST_NAME: 13.125.0.53
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - ubuntu_my_network
+
   setup:
     profiles:
       - setup
@@ -96,6 +81,7 @@ services:
       - elasticsearch
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       context: elasticsearch/
       args:
@@ -108,17 +94,12 @@ services:
       - 9300:9300
     environment:
       node.name: elasticsearch
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
-      # Bootstrap password.
-      # Used to initialize the keystore during the initial startup of
-      # Elasticsearch. Ignored on subsequent runs.
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
-      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
-      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      ES_JAVA_OPTS: -Xms1024m -Xmx1024m
+      ELASTIC_PASSWORD: 'bb123'
       discovery.type: single-node
     networks:
       - ubuntu_my_network
-    restart: unless-stopped
+    # restart: unless-stopped
 
   logstash:
     build:
@@ -126,6 +107,7 @@ services:
       args:
         ELASTIC_VERSION: ${ELASTIC_VERSION}
     volumes:
+      - /Users/jangsuhyeon/Documents/project_BB/BB_BackEnd/BB/docker-elk/logstash/mysql-connector-java-5:/usr/share/logstash/mysql-connector-java-5:ro,Z
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
     ports:
@@ -135,7 +117,7 @@ services:
       - 9600:9600
     environment:
       LS_JAVA_OPTS: -Xms256m -Xmx256m
-      LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
+      LOGSTASH_INTERNAL_PASSWORD: ${ELASTIC_PASSWORD:-}
     networks:
       - ubuntu_my_network
     depends_on:
@@ -152,7 +134,7 @@ services:
     ports:
       - 5601:5601
     environment:
-      KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      KIBANA_SYSTEM_PASSWORD: ${ELASTIC_PASSWORD:-}
     networks:
       - ubuntu_my_network
     depends_on:

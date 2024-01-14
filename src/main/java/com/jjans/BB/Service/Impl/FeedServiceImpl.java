@@ -42,7 +42,8 @@ public class FeedServiceImpl implements FeedService {
 
     private HashTagRepository hashTagRepository;
 
-
+    @Value("${image.upload.directory}")
+    private String imageUploadDirectory;
 
 
     @Autowired
@@ -246,7 +247,6 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(feed);
 
     }
-
     @Override
     public void unbookmarkFeed(Long feedId) {
         Feed feed = feedRepository.findById(feedId)
