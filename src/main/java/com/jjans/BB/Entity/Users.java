@@ -5,7 +5,6 @@ import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import lombok.*;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -26,7 +25,7 @@ public class Users extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true, name = "email")
 //    @Column(nullable = true)
     private String email;
@@ -37,12 +36,11 @@ public class Users extends BaseTime{
     @Column(nullable = true)
     private  String userName;
     @Column(nullable = true)
-
 //    @Column(nullable = false, unique = true)
     private  String nickName;
     @Column(nullable = true)
 
-    private int picture;
+    private String imgSrc;
 
     @Column(nullable = true)
     private String gender;
@@ -70,6 +68,9 @@ public class Users extends BaseTime{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArticleLike> likedArticles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMark> bookMarkedArticles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserFollower> following;
