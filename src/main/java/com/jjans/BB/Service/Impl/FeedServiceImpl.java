@@ -42,8 +42,7 @@ public class FeedServiceImpl implements FeedService {
 
     private HashTagRepository hashTagRepository;
 
-    @Value("${image.upload.directory}")
-    private String imageUploadDirectory;
+
 
 
     @Autowired
@@ -234,12 +233,18 @@ public class FeedServiceImpl implements FeedService {
     public void bookmarkFeed(Long feedId) {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new EntityNotFoundException("피드 ID를 찾을 수 없음: " + feedId));
+
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("인증 정보 없음."));
 
-        feed.addBookmark(feed);
-        usersRepository.save(user);
+        BookMark bookMark = new BookMark();
+        bookMark.setUser(user);
+        bookMark.setArticle(feed);
+
+        feed.addBookmark(bookMark);
+        feedRepository.save(feed);
+
     }
 
     @Override
@@ -250,15 +255,25 @@ public class FeedServiceImpl implements FeedService {
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("인증 정보 없음."));
 
-        feed.removeBookmark(feed);
-        usersRepository.save(user);
+        BookMark existingBookmark = feed.getBookMarks().stream()
+                .filter(like -> like.getUser().equals(user))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 이 피드를 좋아하지 않았습니다."));
+
+        // Remove the ArticleLike from the Feed's list
+        feed.removeBookmark(existingBookmark);
+
+        // Save the updated Feed
+        feedRepository.save(feed);
     }
     @Override
-    public List<FeedResponseDto> getBookmarkedFeeds(String userEmail) {
+    public List<FeedResponseDto> getBookmarkedFeeds() {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Feed> bookmarkedFeeds = feedRepository.findByBookmarkedPostsOrderByUser(user);
+        List<Feed> bookmarkedFeeds = feedRepository.findByBookMarks_User(user);
         return bookmarkedFeeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 

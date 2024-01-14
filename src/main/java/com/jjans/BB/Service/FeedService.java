@@ -26,8 +26,7 @@ public interface FeedService {
     // 북마크
     void bookmarkFeed(Long feedId);
     void unbookmarkFeed(Long feedId);
-    List<FeedResponseDto> getBookmarkedFeeds(String userEmail);
-
+    List<FeedResponseDto> getBookmarkedFeeds();
     // 팔로워 피드
     List<FeedResponseDto> getFeedsOfFollowing(int page, int size);
 

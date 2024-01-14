@@ -22,8 +22,7 @@ public interface FeedRepository extends JpaRepository<Feed,Long> {
 
     List<Feed> findByHashTags_TagName(String tagName);
 
-    List<Feed> findByBookmarkedPostsOrderByUser(Users user);
-
+    List<Feed> findByBookMarks_User(Users user);
 
     Page<Feed> findByUserIn(Set<Users> users, Pageable pageable);
 

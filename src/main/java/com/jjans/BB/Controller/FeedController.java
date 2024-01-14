@@ -135,6 +135,7 @@ public class FeedController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting feed");
         }
     }
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{feedId}/bookmark")
     public ResponseEntity<String> bookmarkFeed(@PathVariable Long feedId) {
         try {
@@ -146,6 +147,7 @@ public class FeedController {
     }
 
     // 피드 북마크 해제하기
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{feedId}/unbookmark")
     public ResponseEntity<String> unbookmarkFeed(@PathVariable Long feedId) {
         try {
@@ -155,17 +157,12 @@ public class FeedController {
             return new ResponseEntity<>("피드 북마크 해제에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/bookmarked")
     public ResponseEntity<List<FeedResponseDto>> getBookmarkedFeeds() {
-        try {
-            // 현재 인증된 사용자의 이메일을 가져옴
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userEmail = authentication.getName();
 
-            List<FeedResponseDto> bookmarkedFeeds = feedService.getBookmarkedFeeds(userEmail);
+            List<FeedResponseDto> bookmarkedFeeds = feedService.getBookmarkedFeeds();
             return new ResponseEntity<>(bookmarkedFeeds, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
+
 }

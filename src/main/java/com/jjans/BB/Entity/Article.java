@@ -45,8 +45,6 @@ public class Article extends BaseTime {
     @Column(nullable = true)
     private String imageUrl;
 
-
-
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
@@ -61,9 +59,13 @@ public class Article extends BaseTime {
 //        this.setFeedLike(this.getFeedLike() + 1);
 //    }
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMark> bookMarks = new ArrayList<>();
+
     public void addArticleLike(ArticleLike articleLike) {
         this.likes.add(articleLike);
     }
+
     public List<Users> getLikedUsers() {
         return likes.stream().map(ArticleLike::getUser).collect(Collectors.toList());
     }
@@ -73,20 +75,12 @@ public class Article extends BaseTime {
         articleLike.setArticle(null);
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "bookmarked_articles",
-            joinColumns = @JoinColumn(name = "bookmark_id"),
-            inverseJoinColumns = @JoinColumn(name = "article_id"))
-    private List<Article> bookmarkedPosts = new ArrayList<>();
-
-    public void addBookmark(Feed feed) {
-        BookMark bookMark = new BookMark();
-        bookMark.setUser(user);
-        bookMark.setArticle(this);
-        this.bookmarkedPosts.add(bookMark.getArticle());
+    public void addBookmark(BookMark bookMark) {
+        this.bookMarks.add(bookMark);
     }
 
-    public void removeBookmark(Feed feed) {
-        bookmarkedPosts.removeIf(bookmark -> bookmark.getBookmarkedPosts().equals(feed));
+    public void removeBookmark(BookMark bookMark) {
+        this.bookMarks.remove(bookMark);
+        bookMark.setArticle(null);
     }
 }

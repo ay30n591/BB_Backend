@@ -20,13 +20,18 @@ public class BookMark {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "nickName")
-    private Users user;
-
-    @ManyToOne
     @JoinColumn(name = "article")
     private Article article;
 
-    @ManyToMany(mappedBy = "bookmarkedPosts", cascade = CascadeType.ALL)
-    private List<Article> feeds = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "nickName")
+    private Users user;
+//
+//    @ManyToMany(mappedBy = "bookmarkedPosts", cascade = CascadeType.ALL)
+//    private List<Article> feeds = new ArrayList<>();
+
+    public BookMark(Article article, Users user) {
+        this.article = article;
+        this.user = user;
+    }
 }
