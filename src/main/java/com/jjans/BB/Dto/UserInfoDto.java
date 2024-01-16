@@ -2,6 +2,9 @@ package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Playlist;
 import com.jjans.BB.Entity.Users;
+import com.jjans.BB.Entity.UsersDocument;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +19,6 @@ public class UserInfoDto {
     private String imgSrc;
     private String gender;
     private String birth;
-
     private int followingCnt;
     private int followerCnt;
 
@@ -30,7 +32,7 @@ public class UserInfoDto {
         this.birth = users.getBirth();
         this.followingCnt = users.getFollowing().size();
         this.followerCnt = users.getFollowers().size();
-
     }
 
-    }
+}
+

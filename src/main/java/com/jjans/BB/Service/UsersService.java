@@ -70,7 +70,6 @@ public class UsersService {
         usersRepository.save(user);
 
 
-
         addAdminRoleToUser(signUp.getEmail());
 
         return response.success("회원가입에 성공했습니다.");
@@ -95,11 +94,11 @@ public class UsersService {
 
         if (!passwordEncoder.matches(login.getPassword(), user.getPassword())) {
             return response.fail("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        else {
+        } else {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(login.getEmail());
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+            tokenInfo.withUserInfo(user);
 
             System.out.println(tokenInfo.getAccessToken());
             System.out.println(tokenInfo.getRefreshToken());
@@ -159,7 +158,7 @@ public class UsersService {
         String imageFileUrl = null;
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                imageFileUrl = s3Uploader.upload(imageFile,"user");
+                imageFileUrl = s3Uploader.upload(imageFile, "user");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -229,16 +228,25 @@ public class UsersService {
         usersSearchRepository.saveAll(users);
     }
 
-    public List<UserResponseDto> findByNickName(String nickname) {
+    public List<UserResponseDto.searchInfo> findByNickName(String nickname) {
         return usersSearchRepository.findByNickName(nickname)
                 .stream()
-                .map(UserResponseDto::from)
+                .map(usersDocument -> UserResponseDto.searchInfo.builder().build().searchUserInfo(usersDocument))
                 .collect(Collectors.toList());
     }
-    public List<UserResponseDto> searchByCondition(UserRequestDto.SearchCondition searchCondition, Pageable pageable) {
-        return usersSearchQueryRepository.findByCondition(searchCondition, pageable)
-                .stream()
-                .map(UserResponseDto::from)
-                .collect(Collectors.toList());
+        public List<UserResponseDto> searchByCondition (UserRequestDto.SearchCondition searchCondition, Pageable
+        pageable){
+            return usersSearchQueryRepository.findByCondition(searchCondition, pageable)
+                    .stream()
+                    .map(UserResponseDto::from)
+                    .collect(Collectors.toList());
     }
+
+    public void checkDataInElasticsearch() {
+        Iterable<UsersDocument> allUsersDocuments = usersSearchRepository.findAll();
+
+        // 출력 혹은 로깅을 통해 데이터 확인
+        allUsersDocuments.forEach(System.out::println);
+    }
+
 }

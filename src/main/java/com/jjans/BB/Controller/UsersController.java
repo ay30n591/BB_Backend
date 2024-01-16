@@ -7,6 +7,8 @@ import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserInfoDto;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Dto.UserResponseDto;
+import com.jjans.BB.Entity.Users;
+import com.jjans.BB.Entity.UsersDocument;
 import com.jjans.BB.Oauth2.UserPrincipal;
 import com.jjans.BB.Service.CustomOAuth2UserService;
 import com.jjans.BB.Service.Helper;
@@ -33,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @RestController
 @Validated
@@ -156,7 +159,7 @@ public class UsersController {
             return ResponseEntity.status(401).body(null);
         }
     }
-    @PostMapping("/users")
+    @PostMapping("/search/users")
     public ResponseEntity<Void> saveAll(@RequestBody List<UserRequestDto.RequestUserSaveDto> requestUserSaveDto){
         usersService.saveAll(requestUserSaveDto);
         return ResponseEntity.ok().build();
@@ -168,11 +171,13 @@ public class UsersController {
 //        return ResponseEntity.ok().build();
 //    }
 
+//닉네임 검색
+    @GetMapping("/search/nickname")
+    public ResponseEntity<List<UserResponseDto.searchInfo>> searchByNickname(@RequestParam String nickname) {
+        log.info("닉네임으로 검색 중: {}", nickname);
 
-    @GetMapping("/nickname")
-    public ResponseEntity<List<UserResponseDto>> searchByNickname(@RequestParam String nickname){
-        return ResponseEntity.ok(usersService.findByNickName(nickname));
-//        return ResponseEntity.ok(usersService.findByNickName(nickname, pageable));
+        List<UserResponseDto.searchInfo> searchInfos = usersService.findByNickName(nickname);
+        return ResponseEntity.ok(searchInfos);
     }
 
 
