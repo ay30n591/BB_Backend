@@ -38,7 +38,7 @@ dependencies {
 
 	// Mysql
 	implementation 'com.mysql:mysql-connector-j'
-	implementation 'mysql:mysql-connector-java:8.0.28'
+	implementation 'mysql:mysql-connector-java:5.1.49'
 
 	// Jwt, security
 	implementation 'org.springframework.security:spring-security-test'

@@ -6,8 +6,8 @@ public class CheckMySQLDriverVersion {
     public static void main(String[] args) {
         Connection connection = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/beatbuddy", "root", "qwer1234");
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3307/beatbuddy", "root", "1234");
 
             // Get driver version
             System.out.println("MySQL JDBC Driver Version: " + connection.getMetaData().getDriverVersion());
