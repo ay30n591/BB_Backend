@@ -1,10 +1,9 @@
 package com.jjans.BB.Service;
 
 import com.jjans.BB.Config.Security.JwtTokenProvider;
+import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
-import com.jjans.BB.Dto.Response;
-import com.jjans.BB.Dto.UserRequestDto;
-import com.jjans.BB.Dto.UserResponseDto;
+import com.jjans.BB.Dto.*;
 import com.jjans.BB.Entity.UserFollower;
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Enum.AuthProvider;
@@ -12,6 +11,7 @@ import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Slf4j
 public class UsersService {
+    @Autowired
+    private S3Uploader s3Uploader;
     private final UsersRepository usersRepository;
     private final Response response;
     private final PasswordEncoder passwordEncoder;
@@ -43,10 +47,12 @@ public class UsersService {
             return response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
+
         Users user = Users.builder()
                 .email(signUp.getEmail())
                 .password(passwordEncoder.encode(signUp.getPassword()))
                 .userName(signUp.getUserName())
+                //.imgSrc(imageFileUrl)
                 .gender(signUp.getGender())
                 .birth(signUp.getBirth())
                 .nickName(signUp.getNickName())
@@ -54,6 +60,8 @@ public class UsersService {
                 .role(Role.ROLE_USER) // 일반 사용자 권한 부여
                 .build();
         usersRepository.save(user);
+
+
 
         addAdminRoleToUser(signUp.getEmail());
 
@@ -134,7 +142,49 @@ public class UsersService {
         return response.success("로그아웃 되었습니다.");
     }
 
-    public ResponseEntity<?> authority() {
+
+    public ResponseEntity<?> userImageUpdate(MultipartFile imageFile) {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        String imageFileUrl = null;
+        try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                imageFileUrl = s3Uploader.upload(imageFile,"user");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 이미지 저장에 실패한 경우 예외 처리
+            throw new RuntimeException("Failed to save image.");
+        }
+        user.setImgSrc(imageFileUrl);
+        usersRepository.save(user);
+
+        return response.success();
+    }
+
+    public UserInfoDto userInfo() {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        UserInfoDto userInfo = new UserInfoDto(user);
+
+        return userInfo;
+
+    }
+
+    public UserInfoDto userInfo(String email) {
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        UserInfoDto userInfo = new UserInfoDto(user);
+
+        return userInfo;
+    }
+
+        public ResponseEntity<?> authority() {
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));

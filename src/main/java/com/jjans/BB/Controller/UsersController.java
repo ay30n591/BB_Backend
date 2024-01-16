@@ -2,7 +2,9 @@ package com.jjans.BB.Controller;
 
 
 import com.jjans.BB.Config.Security.JwtTokenProvider;
+import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.Response;
+import com.jjans.BB.Dto.UserInfoDto;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Oauth2.UserPrincipal;
 import com.jjans.BB.Service.CustomOAuth2UserService;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -44,6 +48,23 @@ public class UsersController {
         return usersService.getAllUsers();
     }
 
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/info")
+    public ResponseEntity<?> getUserInfo() {
+        UserInfoDto userInfo = usersService.userInfo();
+        return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+    @GetMapping("/info/{email}")
+    public ResponseEntity<?> getUserInfoByEmail(@PathVariable String email) {
+        UserInfoDto userInfo = usersService.userInfo(email);
+        return new ResponseEntity<>(userInfo, HttpStatus.OK);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping(value = "/updateImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUserImage(@RequestParam("imageFile") MultipartFile imageFile) {
+        return usersService.userImageUpdate(imageFile);
+    }
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
         // validation check
@@ -56,7 +77,6 @@ public class UsersController {
         }
         return usersService.signUp(signUp);
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Validated UserRequestDto.Login login, Errors errors) {
