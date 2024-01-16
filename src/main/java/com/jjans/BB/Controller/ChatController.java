@@ -4,6 +4,7 @@ import com.jjans.BB.Config.Kafka.KafkaProducer;
 import com.jjans.BB.Config.Security.JwtTokenProvider;
 import com.jjans.BB.Dto.ChatDto;
 import com.jjans.BB.Dto.ChatRoomDto;
+import com.jjans.BB.Entity.Chat;
 import com.jjans.BB.Service.ChatRoomService;
 import com.jjans.BB.Service.ChatService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -53,6 +54,7 @@ public class ChatController {
         String email = jwtTokenProvider.extractUserEmail(Authorization);
         String key = "chatroom:" + chatDto.getRoomId().toString();
         int size = chatRoomConnectTemplate.opsForSet().members(key).size();
+        chatDto.setChatType(Chat.ChatType.MESSAGE);
         ChatDto savedMessage = chatService.saveChatMessage(chatDto,email);
 
         if (size > 1){
