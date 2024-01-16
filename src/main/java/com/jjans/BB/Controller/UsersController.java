@@ -6,6 +6,7 @@ import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserInfoDto;
 import com.jjans.BB.Dto.UserRequestDto;
+import com.jjans.BB.Dto.UserResponseDto;
 import com.jjans.BB.Oauth2.UserPrincipal;
 import com.jjans.BB.Service.CustomOAuth2UserService;
 import com.jjans.BB.Service.Helper;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -153,6 +155,30 @@ public class UsersController {
             // 인증되지 않은 경우 응답합니다.
             return ResponseEntity.status(401).body(null);
         }
+    }
+    @PostMapping("/users")
+    public ResponseEntity<Void> saveAll(@RequestBody List<UserRequestDto.RequestUserSaveDto> requestUserSaveDto){
+        usersService.saveAll(requestUserSaveDto);
+        return ResponseEntity.ok().build();
+    }
+
+//    @PostMapping("/usersDocuments")
+//    public ResponseEntity<Void> saveUsersDocument(){
+//        usersService.saveUsersDocument();
+//        return ResponseEntity.ok().build();
+//    }
+
+
+    @GetMapping("/nickname")
+    public ResponseEntity<List<UserResponseDto>> searchByNickname(@RequestParam String nickname){
+        return ResponseEntity.ok(usersService.findByNickName(nickname));
+//        return ResponseEntity.ok(usersService.findByNickName(nickname, pageable));
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserResponseDto>> searchByName(UserRequestDto.SearchCondition searchCondition, Pageable pageable){
+        return ResponseEntity.ok(usersService.searchByCondition(searchCondition,pageable));
     }
 }
 

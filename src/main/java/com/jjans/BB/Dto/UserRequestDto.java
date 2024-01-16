@@ -1,12 +1,18 @@
 package com.jjans.BB.Dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.elasticsearch.core.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class UserRequestDto {
 
@@ -68,4 +74,42 @@ public class UserRequestDto {
         @NotEmpty(message = "잘못된 요청입니다.")
         private String refreshToken;
     }
+
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class RequestUserSaveDto {
+
+        @NotEmpty(message = "이메일은 필수 입력값입니다.")
+        @Email(message = "올바른 이메일 주소를 입력해주세요.")
+        @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
+        private String email;
+
+        private  String userName;
+
+        private  String nickName;
+
+        private List<RequestUserSaveDto> userSaveDtoList;
+        public List<RequestUserSaveDto> getuserSaveDtoList() {
+            return this.userSaveDtoList;
+        }
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    public class SearchCondition {
+
+        @Nullable
+        private Long id;
+
+        @Nullable
+        private String userName;
+
+        @Nullable
+        private String nickName;
+
+    }
+
 }

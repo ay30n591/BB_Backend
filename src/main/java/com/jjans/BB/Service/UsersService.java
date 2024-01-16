@@ -6,12 +6,16 @@ import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.*;
 import com.jjans.BB.Entity.UserFollower;
 import com.jjans.BB.Entity.Users;
+import com.jjans.BB.Entity.UsersDocument;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
+import com.jjans.BB.Repository.UsersSearchQueryRepository;
+import com.jjans.BB.Repository.UsersSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +33,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -39,8 +46,9 @@ public class UsersService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
-
     private final CustomUserDetailsService customUserDetailsService;
+    private final UsersSearchRepository usersSearchRepository;
+    private final UsersSearchQueryRepository usersSearchQueryRepository;
 
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (usersRepository.existsByEmail(signUp.getEmail())) {
@@ -184,7 +192,7 @@ public class UsersService {
         return userInfo;
     }
 
-        public ResponseEntity<?> authority() {
+    public ResponseEntity<?> authority() {
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
@@ -199,5 +207,38 @@ public class UsersService {
         return response.success(allUsers, "모든 사용자 정보를 성공적으로 가져왔습니다.", HttpStatus.OK);
     }
 
+//    @Transactional
+//    public void saveAllUsers(UserRequestDto.RequestUserSaveDto requestUserSaveDto) {
+//        List<Users> usersList =
+//                requestUserSaveDto.getuserSaveDtoList().stream() // 수정된 부분
+//                        .map().collect(Collectors.toList());
+//        usersRepository.saveAll(usersList);
+//    }
 
+    //    @Transactional
+//    public void saveAllUsersDocuments() {
+//        List<UsersDocument> usersDocumentList
+//                = usersRepository.findAll().stream().map(saveAllUsersDocuments()::from).collect(Collectors.toList());
+//        usersSearchRepository.saveAll(usersDocumentList);
+//    }
+    @Transactional
+    public void saveAll(List<UserRequestDto.RequestUserSaveDto> info) {
+        List<UsersDocument> users = info.stream()
+                .map(UsersDocument::of)
+                .collect(Collectors.toList());
+        usersSearchRepository.saveAll(users);
+    }
+
+    public List<UserResponseDto> findByNickName(String nickname) {
+        return usersSearchRepository.findByNickName(nickname)
+                .stream()
+                .map(UserResponseDto::from)
+                .collect(Collectors.toList());
+    }
+    public List<UserResponseDto> searchByCondition(UserRequestDto.SearchCondition searchCondition, Pageable pageable) {
+        return usersSearchQueryRepository.findByCondition(searchCondition, pageable)
+                .stream()
+                .map(UserResponseDto::from)
+                .collect(Collectors.toList());
+    }
 }
