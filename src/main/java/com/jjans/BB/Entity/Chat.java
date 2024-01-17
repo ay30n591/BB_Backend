@@ -34,8 +34,7 @@ public class Chat extends BaseTime {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    @Builder.Default // 기본값을 사용하도록 지정
-    private int readCount = 1;
+    private int readCount;
 
     public enum ChatType {
         ENTER,
