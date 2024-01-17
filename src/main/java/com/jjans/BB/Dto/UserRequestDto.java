@@ -1,5 +1,6 @@
 package com.jjans.BB.Dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -44,6 +45,8 @@ public class UserRequestDto {
         @NotEmpty(message = "이메일은 필수 입력값입니다.")
         @Email(message = "올바른 이메일 주소를 입력해주세요.")
         @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
+        @Schema(description = "이메일 주소", example = "@gmail.com")
+
         private String email;
 
         @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
