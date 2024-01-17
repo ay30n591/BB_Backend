@@ -31,9 +31,20 @@ public class PlaylistController {
 
     @GetMapping
     @Operation(summary = "Get all playlists", description = "모든 플리 가져오기[id 순서. 개인화x]")
-    public ResponseEntity<List<PlaylistResponseDto>> getAllPls() {
-        List<PlaylistResponseDto> pls = playlistService.getAllPls();
+    public ResponseEntity<List<PlaylistResponseDto>> getAllPls(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<PlaylistResponseDto> pls = playlistService.getAllPls(page, size);
         return new ResponseEntity<>(pls, HttpStatus.OK);
+    }
+    @GetMapping("/orderedByLikeCount")
+    public ResponseEntity<List<PlaylistResponseDto>> getPlaylistsOrderedByLikeCount(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+            List<PlaylistResponseDto> playlists = playlistService.getArticlesOrderByLikeCount(page, size);
+            return new ResponseEntity<>(playlists, HttpStatus.OK);
+
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -47,16 +58,19 @@ public class PlaylistController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/my")
     @Operation(summary = "Get my playlist", description = "내 플리 가져오기")
-    public ResponseEntity<List<PlaylistResponseDto>> getMyPls() {
-        List<PlaylistResponseDto> myPls = playlistService.getMyPls();
+    public ResponseEntity<List<PlaylistResponseDto>> getMyPls(@RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "10") int size) {
+        List<PlaylistResponseDto> myPls = playlistService.getMyPls(page,size);
         return ResponseEntity.ok(myPls);
     }
 
 
     @GetMapping("/user/{nickname}")
     @Operation(summary = "Get User's all playlists", description = "유저 플리 전체 가져오기")
-    public ResponseEntity<List<PlaylistResponseDto>> getUserAllFeeds(@PathVariable String nickname) {
-        List<PlaylistResponseDto> userPls = playlistService.getUserAllPls(nickname);
+    public ResponseEntity<List<PlaylistResponseDto>> getUserAllFeeds(@PathVariable String nickname,
+                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size) {
+        List<PlaylistResponseDto> userPls = playlistService.getUserAllPls(nickname,page, size);
         return ResponseEntity.ok(userPls);
     }
 
@@ -107,7 +121,7 @@ public class PlaylistController {
             playlistService.likePl(plId);
             return ResponseEntity.ok("Feed liked successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking feed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking pl");
         }
     }
 
@@ -115,8 +129,14 @@ public class PlaylistController {
     @PostMapping("/{plId}/unlike")
     @Operation(summary = "Unlike a playlist", description = "플리 좋아요 취소")
     public ResponseEntity<String> unlikeFeed(@PathVariable Long plId) {
-        playlistService.unlikePl(plId);
-        return ResponseEntity.ok("Feed unliked successfully");
+        try {
+
+            playlistService.unlikePl(plId);
+            return ResponseEntity.ok("Feed unliked successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking pl");
+        }
     }
 
 
