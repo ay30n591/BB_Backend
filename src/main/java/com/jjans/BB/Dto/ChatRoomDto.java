@@ -11,7 +11,7 @@ public class ChatRoomDto {
     private Long id;
     private Set<Long> participantIds;
     private Set<String> participantNames;
-
+    private Set<String> participantImgSrc;
 
     public ChatRoomDto(ChatRoom chatRoom) {
         this.id = chatRoom.getId();
@@ -20,6 +20,9 @@ public class ChatRoomDto {
                 .collect(Collectors.toSet());
         this.participantNames = chatRoom.getParticipants().stream()
                 .map(Users::getNickName)
+                .collect(Collectors.toSet());
+        this.participantImgSrc = chatRoom.getParticipants().stream()
+                .map(Users::getImgSrc)
                 .collect(Collectors.toSet());
     }
 
