@@ -1,137 +1,18 @@
 {
-  "beatbuddy" : {
-    "aliases" : { },
-    "mappings" : {
-      "properties" : {
-        "@timestamp" : {
-          "type" : "date"
-        },
-        "@version" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "album_name" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "album_url" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "create_date" : {
-          "type" : "date"
-        },
-        "email" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "id" : {
-          "type" : "long"
-        },
-        "modified_date" : {
-          "type" : "date"
-        },
-        "music_artist" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "music_title" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "nick_name" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "password" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "release_date" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "role" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "user_name" : {
-          "type" : "text",
-          "fields" : {
-            "keyword" : {
-              "type" : "keyword",
-              "ignore_above" : 256
-            }
-          }
-        },
-        "settings" : {
-          "index" : {
-            "routing" : {
-              "allocation" : {
-                "include" : {
-                  "_tier_preference" : "data_content"
-                }
-              }
-            },
-            "number_of_shards" : "1",
-            "provided_name" : "beatbuddy",
-            "creation_date" : "1705328810828",
-            "number_of_replicas" : "0",
-            "uuid" : "03f7pbDSRVKloAjgowwxEg",
-            "version" : {
-              "created" : "7171399"
-            }
-          }
+  "properties": {
+    "nickName": {
+      "type": "text",
+      "analyzer": "nori_analyzer"
+    }
+  },
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "nori_analyzer": {
+          "type": "custom",
+          "tokenizer": "nori_tokenizer"
         }
       }
     }
+  }
+}

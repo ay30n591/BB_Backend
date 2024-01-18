@@ -205,7 +205,6 @@ public class UsersService {
         List<Users> allUsers = usersRepository.findAll();
         return response.success(allUsers, "모든 사용자 정보를 성공적으로 가져왔습니다.", HttpStatus.OK);
     }
-
 //    @Transactional
 //    public void saveAllUsers(UserRequestDto.RequestUserSaveDto requestUserSaveDto) {
 //        List<Users> usersList =
@@ -219,6 +218,13 @@ public class UsersService {
 //        List<UsersDocument> usersDocumentList
 //                = usersRepository.findAll().stream().map(saveAllUsersDocuments()::from).collect(Collectors.toList());
 //        usersSearchRepository.saveAll(usersDocumentList);
+//    }
+//    @Transactional
+//    public void saveAll(List<UserRequestDto.RequestUserSaveDto> info) {
+//        List<UsersDocument> users = info.stream()
+//                .map(UsersDocument::of)
+//                .collect(Collectors.toList());
+//        usersSearchRepository.saveAll(users);
 //    }
     @Transactional
     public void saveAll(List<UserRequestDto.RequestUserSaveDto> info) {
@@ -234,19 +240,11 @@ public class UsersService {
                 .map(usersDocument -> UserResponseDto.searchInfo.builder().build().searchUserInfo(usersDocument))
                 .collect(Collectors.toList());
     }
-        public List<UserResponseDto> searchByCondition (UserRequestDto.SearchCondition searchCondition, Pageable
-        pageable){
-            return usersSearchQueryRepository.findByCondition(searchCondition, pageable)
-                    .stream()
-                    .map(UserResponseDto::from)
-                    .collect(Collectors.toList());
+
+    public List<UserResponseDto> searchByCondition(UserRequestDto.SearchCondition searchCondition, Pageable pageable) {
+        return usersSearchQueryRepository.findByCondition(searchCondition, pageable)
+                .stream()
+                .map(UserResponseDto::from)
+                .collect(Collectors.toList());
     }
-
-    public void checkDataInElasticsearch() {
-        Iterable<UsersDocument> allUsersDocuments = usersSearchRepository.findAll();
-
-        // 출력 혹은 로깅을 통해 데이터 확인
-        allUsersDocuments.forEach(System.out::println);
-    }
-
 }

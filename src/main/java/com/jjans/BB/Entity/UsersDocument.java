@@ -5,9 +5,7 @@ import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import lombok.*;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Mapping;
-import org.springframework.data.elasticsearch.annotations.Setting;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,9 +18,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
-@Document(indexName = "users")
+@Document(indexName = "beatbuddy", useServerConfiguration = true, createIndex = false)
 @Mapping(mappingPath = "elastic/users-mapping.json") //타입 매핑
-@Setting(settingPath = "elastic/users-setting.json") //분석기 매핑
+//@Setting(settingPath = "elastic/users-setting.json") //분석기 매핑
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
 @JsonIgnoreProperties({"following", "followers", "bookmarkedPosts"})
@@ -33,25 +31,20 @@ public class UsersDocument {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true, name = "email")
-//    @Column(nullable = true)
     private String email;
 
-    @Column(nullable = true)
     private String password = "";
 
+    private String userName;
+
     @Column(nullable = true)
-    private  String userName;
-    @Column(nullable = true)
-//    @Column(nullable = false, unique = true)
-    private  String nickName;
-    @Column(nullable = true)
+    @Field(type = FieldType.Text, analyzer = "nori_analyzer")
+    private String nickName;
 
     private String imgSrc;
 
-    @Column(nullable = true)
     private String gender;
 
-    @Column(nullable = true)
     private String birth;
 
     private String oauth2Id;
@@ -95,5 +88,6 @@ public class UsersDocument {
         // roles를 초기화
         usersDocument.setRoles(new ArrayList<>());
 
-        return usersDocument;    }
+        return usersDocument;
+    }
 }

@@ -59,6 +59,7 @@ public class UsersController {
         UserInfoDto userInfo = usersService.userInfo();
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
+
     @GetMapping("/info/{email}")
     public ResponseEntity<?> getUserInfoByEmail(@PathVariable String email) {
         UserInfoDto userInfo = usersService.userInfo(email);
@@ -70,6 +71,7 @@ public class UsersController {
     public ResponseEntity<?> updateUserImage(@RequestParam("imageFile") MultipartFile imageFile) {
         return usersService.userImageUpdate(imageFile);
     }
+
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
         // validation check
@@ -159,31 +161,4 @@ public class UsersController {
             return ResponseEntity.status(401).body(null);
         }
     }
-    @PostMapping("/search/users")
-    public ResponseEntity<Void> saveAll(@RequestBody List<UserRequestDto.RequestUserSaveDto> requestUserSaveDto){
-        usersService.saveAll(requestUserSaveDto);
-        return ResponseEntity.ok().build();
-    }
-
-//    @PostMapping("/usersDocuments")
-//    public ResponseEntity<Void> saveUsersDocument(){
-//        usersService.saveUsersDocument();
-//        return ResponseEntity.ok().build();
-//    }
-
-//닉네임 검색
-    @GetMapping("/search/nickname")
-    public ResponseEntity<List<UserResponseDto.searchInfo>> searchByNickname(@RequestParam String nickname) {
-        log.info("닉네임으로 검색 중: {}", nickname);
-
-        List<UserResponseDto.searchInfo> searchInfos = usersService.findByNickName(nickname);
-        return ResponseEntity.ok(searchInfos);
-    }
-
-
-    @GetMapping("/search")
-    public ResponseEntity<List<UserResponseDto>> searchByName(UserRequestDto.SearchCondition searchCondition, Pageable pageable){
-        return ResponseEntity.ok(usersService.searchByCondition(searchCondition,pageable));
-    }
 }
-

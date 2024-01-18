@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Repository
 @RequiredArgsConstructor
 public class UsersSearchQueryRepository {
@@ -39,10 +40,10 @@ public class UsersSearchQueryRepository {
             query.addCriteria(Criteria.where("id").is(searchCondition.getId()));
 
         if(StringUtils.hasText(searchCondition.getUserName()))
-            query.addCriteria(Criteria.where("username").is(searchCondition.getUserName()));
+            query.addCriteria(Criteria.where("userName").is(searchCondition.getUserName()));
 
-        if(StringUtils.hasText(searchCondition.getNickName()))
-            query.addCriteria(Criteria.where("nickname").is(searchCondition.getNickName()));
+        if (StringUtils.hasText(searchCondition.getNickName()))
+            query.addCriteria(Criteria.where("nickName").is(searchCondition.getNickName()));
 
         return query;
     }
