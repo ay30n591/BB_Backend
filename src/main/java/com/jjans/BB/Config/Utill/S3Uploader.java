@@ -91,6 +91,7 @@ public class S3Uploader {
     }
 
     public void delete(String dirName) {
+
         amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, dirName));
         log.info("S3 bucket에서 File {} 삭제.", dirName);
     }
