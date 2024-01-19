@@ -1,10 +1,6 @@
 package com.jjans.BB.Dto;
 
-import com.jjans.BB.Entity.Playlist;
 import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Entity.UsersDocument;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
