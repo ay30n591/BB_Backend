@@ -1,43 +1,30 @@
 package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.ChatRoom;
-import com.jjans.BB.Entity.Users;
 import lombok.Getter;
-
+import java.util.Comparator;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
+
 @Getter
 public class ChatRoomDto {
     private Long id;
-    private Set<Long> participantIds;
-    private Set<String> participantNames;
+    private Set<ParticipantDto> participants;
 
 
     public ChatRoomDto(ChatRoom chatRoom) {
+        System.out.println("Debugging: ChatRoomDto constructor");
         this.id = chatRoom.getId();
-        this.participantIds = chatRoom.getParticipants().stream()
-                .map(Users::getId)
-                .collect(Collectors.toSet());
-        this.participantNames = chatRoom.getParticipants().stream()
-                .map(Users::getNickName)
-                .collect(Collectors.toSet());
-    }
+        this.participants = new TreeSet<>(Comparator.comparingLong(ParticipantDto::getParticipantId));
 
-    public ChatRoom toEntity() {
-        ChatRoom chatRoom = new ChatRoom();
-
-        // participantIds가 주어진 경우, Users 엔터티로 변환하여 chatRoom에 추가
-        if (participantIds != null && !participantIds.isEmpty()) {
-            Set<Users> participants = participantIds.stream()
-                    .map(userId -> {
-                        Users user = new Users();
-                        user.setId(userId);
-                        return user;
-                    })
-                    .collect(Collectors.toSet());
-            chatRoom.setParticipants(participants);
+        if (chatRoom.getParticipants() != null) {
+            chatRoom.getParticipants().stream()
+                    .map(ParticipantDto::new)
+                    .forEach(participants::add);
+        } else {
+            System.out.println("Debugging: Participants list is null");
         }
-
-        return chatRoom;
     }
+
 }
+

@@ -32,14 +32,7 @@ public class Article extends BaseTime {
     private String content;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ArticleLike> likes = new ArrayList<>();
-//    private int feedLike;
-
-    // 피드 플리 구분
-
-
-//    @ElementCollection
-//    private List<String> hashTagList;
+    private Set<ArticleLike> likes = new HashSet<>();
 
     // 사진
     @Column(nullable = true)

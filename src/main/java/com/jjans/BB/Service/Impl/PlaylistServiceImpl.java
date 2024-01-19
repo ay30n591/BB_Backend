@@ -13,6 +13,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,9 +57,17 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<PlaylistResponseDto> getAllPls() {
-        List<Playlist> pls = playlistRepository.findAll();
-        return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
+    public List<PlaylistResponseDto> getAllPls(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Playlist> pls = playlistRepository.findAllByOrderByCreateDateDesc(pageable);
+        return pls.getContent().stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PlaylistResponseDto> getArticlesOrderByLikeCount(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Playlist> pls = playlistRepository.findAllOrderByLikeCountDesc(pageable);
+        return pls.getContent().stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
@@ -117,12 +129,16 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<PlaylistResponseDto> getUserAllPls(String nickname) {
+    public List<PlaylistResponseDto> getUserAllPls(String nickname, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
         Users user = usersRepository.findByNickName(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Playlist> pls = playlistRepository.findByUserNickName(nickname);
-        return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
+        Page<Playlist> pls = playlistRepository.findByUserNickName(nickname, pageable);
+        return pls.getContent().stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
+
     }
 
     @Override
@@ -147,19 +163,22 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public List<PlaylistResponseDto> getMyPls() {
+    public List<PlaylistResponseDto> getMyPls(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Playlist> pls = playlistRepository.findByUserNickName(user.getNickName());
-        return pls.stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
+        Page<Playlist> pls = playlistRepository.findByUserNickName(user.getNickName(),pageable);
+        return pls.getContent().stream().map(PlaylistResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
     public void likePl(Long plId) {
         Playlist pl = playlistRepository.findById(plId)
                 .orElseThrow(() -> new EntityNotFoundException("피드 ID 찾을 수 없음: " + plId));
+
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
@@ -169,7 +188,6 @@ public class PlaylistServiceImpl implements PlaylistService {
         articleLike.setArticle(pl);
 
         pl.addArticleLike(articleLike);
-
         playlistRepository.save(pl);
     }
 
@@ -202,21 +220,5 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlistRepository.deleteById(plId);
     }
 
-    private String saveImage(MultipartFile imageFile) throws IOException {
-        String originalFilename = imageFile.getOriginalFilename();
-        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")); // 파일 확장자 추출
-
-        // UUID를 사용하여 고유한 파일 이름 생성
-        String fileName = UUID.randomUUID().toString() + fileExtension;
-        String filePath = imageUploadDirectory + File.separator + fileName;
-
-        File dest = new File(filePath);
-        imageFile.transferTo(dest);
-
-        return fileName;
-    }
-    public String getImagePath(String fileName) {
-        return imageUploadDirectory + File.separator + fileName;
-    }
 
 }

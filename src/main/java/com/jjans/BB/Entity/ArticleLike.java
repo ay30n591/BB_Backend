@@ -1,5 +1,6 @@
 package com.jjans.BB.Entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = {"article", "user"})
 public class ArticleLike {
 
     @Id

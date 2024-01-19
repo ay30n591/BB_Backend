@@ -1,7 +1,6 @@
 package com.jjans.BB.Dto;
 
 import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Entity.UsersDocument;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,10 +18,9 @@ public class UserResponseDto {
         private Long refreshTokenExpirationTime;
         private long id;
         private String email;
-        private String userName;
-        private String nickName;
+        private  String userName;
+        private  String nickName;
         private String imgSrc;
-
         public TokenInfo withUserInfo(Users user) {
             this.id = user.getId();
             this.email = user.getEmail();
@@ -32,4 +30,8 @@ public class UserResponseDto {
             return this;
         }
     }
+
+
+
+
 }
