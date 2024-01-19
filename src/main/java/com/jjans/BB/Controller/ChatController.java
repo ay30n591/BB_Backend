@@ -55,15 +55,19 @@ public class ChatController {
         String key = "chatroom:" + chatDto.getRoomId().toString();
         int size = chatRoomConnectTemplate.opsForSet().members(key).size();
         chatDto.setChatType(Chat.ChatType.MESSAGE);
-        ChatDto savedMessage = chatService.saveChatMessage(chatDto,email);
 
         if (size > 1){
-            savedMessage.setReadCount(0);
+            chatDto.setReadCount(0);
         }
         else {
-            savedMessage.setReadCount(1);
+            chatDto.setReadCount(1);
         }
-        producer.sendMessage(savedMessage);
+
+        producer.sendMessage(chatDto);
+
+        chatService.saveChatMessage(chatDto,email);
+
+
 
     }
 
