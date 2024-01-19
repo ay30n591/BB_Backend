@@ -2,25 +2,15 @@ package com.jjans.BB.Controller;
 
 
 import com.jjans.BB.Config.Security.JwtTokenProvider;
-import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserInfoDto;
 import com.jjans.BB.Dto.UserRequestDto;
-import com.jjans.BB.Dto.UserResponseDto;
-import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Entity.UsersDocument;
-import com.jjans.BB.Oauth2.UserPrincipal;
-import com.jjans.BB.Service.CustomOAuth2UserService;
+import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Service.Helper;
 import com.jjans.BB.Service.UsersService;
-import com.nimbusds.oauth2.sdk.util.StringUtils;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @RestController
 @Validated
@@ -159,11 +146,11 @@ public class UsersController {
             return ResponseEntity.status(401).body(null);
         }
     }
-    @PostMapping("/search/users")
-    public ResponseEntity<Void> saveAll(@RequestBody List<UserRequestDto.RequestUserSaveDto> requestUserSaveDto){
-        usersService.saveAll(requestUserSaveDto);
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/search/users")
+//    public ResponseEntity<Void> saveAll(@RequestBody List<UserRequestDto.RequestUserSaveDto> requestUserSaveDto){
+//        usersService.saveAll(requestUserSaveDto);
+//        return ResponseEntity.ok().build();
+//    }
 
 //    @PostMapping("/usersDocuments")
 //    public ResponseEntity<Void> saveUsersDocument(){
@@ -173,17 +160,17 @@ public class UsersController {
 
 //닉네임 검색
     @GetMapping("/search/nickname")
-    public ResponseEntity<List<UserResponseDto.searchInfo>> searchByNickname(@RequestParam String nickname) {
+    public ResponseEntity<List<UsersDocument>> searchByNickname(@RequestParam String nickname) {
         log.info("닉네임으로 검색 중: {}", nickname);
 
-        List<UserResponseDto.searchInfo> searchInfos = usersService.findByNickName(nickname);
+        List<UsersDocument> searchInfos = usersService.findByNickName(nickname);
         return ResponseEntity.ok(searchInfos);
     }
 
-
-    @GetMapping("/search")
-    public ResponseEntity<List<UserResponseDto>> searchByName(UserRequestDto.SearchCondition searchCondition, Pageable pageable){
-        return ResponseEntity.ok(usersService.searchByCondition(searchCondition,pageable));
-    }
+//
+//    @GetMapping("/search")
+//    public ResponseEntity<List<UserResponseDto>> searchByName(UserRequestDto.SearchCondition searchCondition, Pageable pageable){
+//        return ResponseEntity.ok(usersService.searchByCondition(searchCondition,pageable));
+//    }
 }
 

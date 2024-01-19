@@ -1,13 +1,14 @@
 package com.jjans.BB.Repository;
 
-import com.jjans.BB.Entity.UsersDocument;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.data.domain.Pageable;
+import com.jjans.BB.Document.UsersDocument;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import java.util.List;
+public interface UsersSearchRepository extends ElasticsearchRepository<UsersDocument,String> {
 
-public interface UsersSearchRepository extends ElasticsearchRepository<UsersDocument,Long> {
-    List<UsersDocument> findByNickName(String nickname);
-//    List<UsersDocument> findByNickName(String nickname, Pageable pageable);
 }
+
+// Long 형태로 -> String
+
+// 엘라스틱 서치는 기본적으로 findby -> 안써
+// elasticTemplate -> s
+// elasticsearch 의 데이터를 가져올 수 있어
