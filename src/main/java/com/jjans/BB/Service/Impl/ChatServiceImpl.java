@@ -58,6 +58,7 @@ public class ChatServiceImpl implements ChatService {
             chat.setChatRoom(room);
             chat.setSender(user);
             chat.setChatType(chatDto.getChatType());
+            chat.setReadCount(chatDto.getReadCount());
 
             Chat savedChat = chatRepository.save(chat);
 
@@ -85,27 +86,37 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void decreaseReadCount(Long roomId, String email) {
+    public void decreaseReadCount(Long roomId, String email, int size) {
         List<Chat> chats = chatRepository.getChatByRoomId(roomId);
         // 내가 쓰지 않은 chat에 대해서만 읽음 처리.
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        for (Chat chat : chats) {
-            if (!( user.getNickName() == chat.getSender().getNickName()))
-                if (chat != null) {
-                    chat.setReadCount(0);
-                    chatRepository.save(chat);
-                }
+        if (size > 1) {
+            for (Chat chat : chats) {
+                if (!(user.getNickName() == chat.getSender().getNickName()))
+                    if (chat != null) {
+                        chat.setReadCount(0);
+                        chatRepository.save(chat);
+                    }
+            }
         }
+
+
     }
 
     @Override
-    public void updateMessage(Long roomId, String email) {
+    public void updateMessage(Long roomId, String email, int size) {
         ChatDto chat = new ChatDto();
         chat.setChatType(Chat.ChatType.ENTER);
         chat.setMessage(email+"님 입장");
         chat.setSender("SysTem");
+        if (size > 1){
+            chat.setReadCount(0);
+        }
+        else {
+            chat.setReadCount(1);
+        }
         chat.setRoomId(roomId);
         producer.sendMessage(chat);
     }
