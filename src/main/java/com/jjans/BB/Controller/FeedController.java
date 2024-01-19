@@ -32,8 +32,10 @@ public class FeedController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping
     @Operation(summary = "Get all feeds", description = "모든 피드 가져오기[id 순서. 개인화x]")
-    public ResponseEntity<List<FeedResponseDto>> getAllFeeds() {
-        List<FeedResponseDto> feeds = feedService.getAllFeeds();
+    public ResponseEntity<List<FeedResponseDto>> getAllFeeds(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<FeedResponseDto> feeds = feedService.getAllFeeds(page,size);
         return new ResponseEntity<>(feeds, HttpStatus.OK);
     }
 
@@ -49,8 +51,9 @@ public class FeedController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/my")
     @Operation(summary = "Get my feeds", description = "내 피드 전체 가져오기")
-    public ResponseEntity<List<FeedResponseDto>> getMyFeeds() {
-        List<FeedResponseDto> userFeeds = feedService.getMyFeeds();
+    public ResponseEntity<List<FeedResponseDto>> getMyFeeds(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size) {
+        List<FeedResponseDto> userFeeds = feedService.getMyFeeds(page, size);
         return ResponseEntity.ok(userFeeds);
     }
 
@@ -65,8 +68,10 @@ public class FeedController {
 
     @GetMapping("/user/{nickname}")
     @Operation(summary = "Get User's all feeds", description = "유저 피드 전체 가져오기")
-    public ResponseEntity<List<FeedResponseDto>> getUserAllFeeds(@PathVariable String nickname) {
-        List<FeedResponseDto> userFeeds = feedService.getUserAllFeeds(nickname);
+    public ResponseEntity<List<FeedResponseDto>> getUserAllFeeds(@PathVariable String nickname,
+                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
+        List<FeedResponseDto> userFeeds = feedService.getUserAllFeeds(nickname,page,size);
         return ResponseEntity.ok(userFeeds);
     }
 
@@ -79,8 +84,10 @@ public class FeedController {
     }
 
     @GetMapping("/byTag/{tagName}")
-    public ResponseEntity<List<FeedResponseDto>> getFeedsByTagName(@PathVariable String tagName) {
-        List<FeedResponseDto> feedDtos = feedService.findFeedsByTagName(tagName);
+    public ResponseEntity<List<FeedResponseDto>> getFeedsByTagName(@PathVariable String tagName,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "10") int size) {
+        List<FeedResponseDto> feedDtos = feedService.findFeedsByTagName(tagName,page,size);
         return new ResponseEntity<>(feedDtos, HttpStatus.OK);
     }
 
@@ -159,9 +166,10 @@ public class FeedController {
     }
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/bookmarked")
-    public ResponseEntity<List<FeedResponseDto>> getBookmarkedFeeds() {
+    public ResponseEntity<List<FeedResponseDto>> getBookmarkedFeeds( @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size) {
 
-            List<FeedResponseDto> bookmarkedFeeds = feedService.getBookmarkedFeeds();
+            List<FeedResponseDto> bookmarkedFeeds = feedService.getBookmarkedFeeds(page, size);
             return new ResponseEntity<>(bookmarkedFeeds, HttpStatus.OK);
     }
 

@@ -16,13 +16,14 @@ import java.util.Set;
 
 @Repository
 public interface FeedRepository extends JpaRepository<Feed,Long> {
-    List<Feed> findByUserNickName(String nickname);
+    Page<Feed> findAll(Pageable pageable);
+    Page<Feed> findByUserNickName(String nickname,Pageable pageable);
 
     Feed findByIdAndUserNickName(Long id, String nickname);
 
-    List<Feed> findByHashTags_TagName(String tagName);
+    Page<Feed> findByHashTags_TagName(String tagName,Pageable pageable);
 
-    List<Feed> findByBookMarks_User(Users user);
+    Page<Feed> findByBookMarks_User(Users user,Pageable pageable);
 
     Page<Feed> findByUserIn(Set<Users> users, Pageable pageable);
 

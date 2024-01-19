@@ -2,6 +2,7 @@ package com.jjans.BB.Service.Impl;
 
 import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
+import com.jjans.BB.Dto.PlaylistResponseDto;
 import com.jjans.BB.Entity.*;
 import com.jjans.BB.Dto.FeedRequestDto;
 import com.jjans.BB.Dto.FeedResponseDto;
@@ -54,7 +55,9 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedResponseDto> getAllFeeds() {
+    public List<FeedResponseDto> getAllFeeds(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
 
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
@@ -62,8 +65,9 @@ public class FeedServiceImpl implements FeedService {
 
         List<FeedResponseDto> feedResponseDtos = new ArrayList<>();
 
-        List<Feed> feeds = feedRepository.findAll();
-        for (Feed feed : feeds) {
+        Page<Feed> feeds = feedRepository.findAll(pageable);
+
+        for (Feed feed : feeds.getContent()) {
             List<Users> likedUsers = feed.getLikedUsers();
             boolean userLiked = likedUsers.stream()
                     .anyMatch(likedUser -> likedUser.getId() == user.getId());
@@ -72,6 +76,8 @@ public class FeedServiceImpl implements FeedService {
             feedResponseDto.setLikeCheck(userLiked);
             feedResponseDtos.add(feedResponseDto);
         }
+
+
         return feedResponseDtos;
     }
 
@@ -131,7 +137,6 @@ public class FeedServiceImpl implements FeedService {
                 .orElseThrow(() -> new RuntimeException("Feed not found with id: " + feedId));
 
         existingFeed.setContent(updatedFeedDto.getContent());
-        //existingFeed.setFeedImage(updatedFeedDto.getFeedImage());
 
         Feed updatedFeed = feedRepository.save(existingFeed);
 
@@ -139,13 +144,16 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedResponseDto> getUserAllFeeds(String nickname) {
+    public List<FeedResponseDto> getUserAllFeeds(String nickname,int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
         Users user = usersRepository.findByNickName(nickname)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Feed> feeds = feedRepository.findByUserNickName(nickname);
+        Page<Feed> feeds = feedRepository.findByUserNickName(nickname, pageable);
 
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        return feeds.getContent().stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
@@ -158,13 +166,16 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedResponseDto> getMyFeeds() {
+    public List<FeedResponseDto> getMyFeeds(int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Feed> feeds = feedRepository.findByUserNickName(user.getNickName());
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        Page<Feed> feeds = feedRepository.findByUserNickName(user.getNickName(), pageable);
+        return feeds.getContent().stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
@@ -185,10 +196,11 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedResponseDto> findFeedsByTagName(String tagName) {
+    public List<FeedResponseDto> findFeedsByTagName(String tagName,int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        List<Feed> feeds =  feedRepository.findByHashTags_TagName(tagName);
-        return feeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        Page<Feed> feeds =  feedRepository.findByHashTags_TagName(tagName, pageable);
+        return feeds.getContent().stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
@@ -267,14 +279,15 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.save(feed);
     }
     @Override
-    public List<FeedResponseDto> getBookmarkedFeeds() {
+    public List<FeedResponseDto> getBookmarkedFeeds(int page, int size) {
         String userEmail = SecurityUtil.getCurrentUserEmail();
+        Pageable pageable = PageRequest.of(page, size);
 
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        List<Feed> bookmarkedFeeds = feedRepository.findByBookMarks_User(user);
-        return bookmarkedFeeds.stream().map(FeedResponseDto::new).collect(Collectors.toList());
+        Page<Feed> bookmarkedFeeds = feedRepository.findByBookMarks_User(user,pageable);
+        return bookmarkedFeeds.getContent().stream().map(FeedResponseDto::new).collect(Collectors.toList());
     }
 
     @Override
