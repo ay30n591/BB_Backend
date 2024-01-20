@@ -9,10 +9,9 @@ import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
-import com.jjans.BB.Repository.UsersSearchRepository;
+import com.jjans.BB.Repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.client.RestHighLevelClient;
 
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +53,7 @@ public class UsersService {
 
     @Autowired
     private ElasticsearchRestTemplate elasticsearchTemplate;
-    private final UsersSearchRepository usersSearchRepository;
+    private final SearchRepository searchRepository;
 
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (usersRepository.existsByEmail(signUp.getEmail())) {

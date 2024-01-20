@@ -17,6 +17,9 @@ import java.util.Set;
 @Setter
 @Getter
 @Document(indexName = "bb_users")
+//        , useServerConfiguration = true, createIndex = false)
+//@Mapping(mappingPath = "elastic/users-mapping.json") //타입 매핑
+//@Setting(settingPath = "elastic/users-setting.json") //분석기 매핑
 public class UsersDocument {
 
     @Id
@@ -26,6 +29,7 @@ public class UsersDocument {
 
     private  String user_name;
 
+//    @Field(type = FieldType.Text, analyzer = "nori_analyzer")
     private  String nick_name;
 
     private String img_src;

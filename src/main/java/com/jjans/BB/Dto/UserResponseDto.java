@@ -30,8 +30,4 @@ public class UserResponseDto {
             return this;
         }
     }
-
-
-
-
 }

@@ -3,7 +3,7 @@ package com.jjans.BB.Repository;
 import com.jjans.BB.Document.UsersDocument;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-public interface UsersSearchRepository extends ElasticsearchRepository<UsersDocument,String> {
+public interface SearchRepository extends ElasticsearchRepository<UsersDocument,String> {
 
 }
 
