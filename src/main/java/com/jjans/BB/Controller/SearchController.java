@@ -2,14 +2,9 @@ package com.jjans.BB.Controller;
 
 import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Dto.Response;
-import com.jjans.BB.Dto.UserRequestDto;
-import com.jjans.BB.Dto.UserResponseDto;
 import com.jjans.BB.Service.SearchService;
-import com.jjans.BB.Service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +22,7 @@ public class SearchController {
 
     //닉네임 검색
     @GetMapping("/users/nickname")
-    public ResponseEntity<List<com.jjans.BB.Document.UsersDocument>> searchByNickname(@RequestParam String nickname) {
+    public ResponseEntity<List<UsersDocument>> searchByNickname(@RequestParam String nickname) {
         log.info("닉네임으로 검색 중: {}", nickname);
 
         List<UsersDocument> searchInfos = searchService.findByNickName(nickname);

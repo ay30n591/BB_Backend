@@ -1,7 +1,6 @@
 //package com.jjans.BB.Repository;
 //
 //import com.jjans.BB.Dto.UserRequestDto;
-//import com.jjans.BB.Document.UsersDocument;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.data.domain.Pageable;
 //import org.springframework.data.elasticsearch.core.ElasticsearchOperations;

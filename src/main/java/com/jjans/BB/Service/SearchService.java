@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SearchService {
     @Autowired
-    private final ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final SearchRepository SearchRepository;
 
     public List<UsersDocument> findByNickName(String nickname) {
