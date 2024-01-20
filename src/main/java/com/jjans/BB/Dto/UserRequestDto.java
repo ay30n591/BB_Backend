@@ -103,13 +103,11 @@ public class UserRequestDto {
     public class SearchCondition {
 
         @Nullable
-        private Long id;
-
+        private String user_name;
         @Nullable
-        private String userName;
-
+        private String nick_name;
         @Nullable
-        private String nickName;
+        private String email;
 
     }
 

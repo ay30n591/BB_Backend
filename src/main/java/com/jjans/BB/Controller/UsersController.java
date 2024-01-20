@@ -7,6 +7,7 @@ import com.jjans.BB.Dto.UserInfoDto;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Service.Helper;
 import com.jjans.BB.Service.UsersService;
+import io.jsonwebtoken.io.IOException;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -60,7 +62,7 @@ public class UsersController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
-        // validation check
+            // validation check
         System.out.println(signUp.getEmail());
         System.out.println(signUp.getPassword());
         System.out.println(signUp.getNickName());

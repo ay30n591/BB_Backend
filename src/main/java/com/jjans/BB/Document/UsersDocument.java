@@ -1,6 +1,7 @@
 package com.jjans.BB.Document;
 
 
+import com.jjans.BB.Dto.UserRequestDto;
 import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Mapping;
@@ -33,5 +34,12 @@ public class UsersDocument {
     private  String nick_name;
 
     private String img_src;
+    public static UsersDocument of(UserRequestDto.RequestUserSaveDto requestUserSaveDto) {
+        UsersDocument usersDocument = new UsersDocument();
+        usersDocument.setEmail(requestUserSaveDto.getEmail());
+        usersDocument.setUser_name(requestUserSaveDto.getUserName());
+        usersDocument.setNick_name(requestUserSaveDto.getNickName());
+        // 나머지 필드들도 필요에 따라 설정하세요
 
+        return usersDocument;    }
 }
