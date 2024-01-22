@@ -1,6 +1,6 @@
 package com.jjans.BB.Repository;
 
-import com.jjans.BB.Document.UsersDocument;
+//import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Dto.UserRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +20,14 @@ public class SearchQueryRepository {
 
     private final ElasticsearchOperations operations;
 
-    public List<UsersDocument> findByCondition(UserRequestDto.SearchCondition searchCondition, Pageable pageable) {
-        CriteriaQuery query = createConditionCriteriaQuery(searchCondition).setPageable(pageable);
-
-        SearchHits<UsersDocument> search = operations.search(query, UsersDocument.class);
-        return search.stream()
-                .map(SearchHit::getContent)
-                .collect(Collectors.toList());
-    }
+//    public List<UsersDocument> findByCondition(UserRequestDto.SearchCondition searchCondition, Pageable pageable) {
+//        CriteriaQuery query = createConditionCriteriaQuery(searchCondition).setPageable(pageable);
+//
+//        SearchHits<UsersDocument> search = operations.search(query, UsersDocument.class);
+//        return search.stream()
+//                .map(SearchHit::getContent)
+//                .collect(Collectors.toList());
+//    }
 
     private CriteriaQuery createConditionCriteriaQuery(UserRequestDto.SearchCondition searchCondition) {
         CriteriaQuery query = new CriteriaQuery(new Criteria());

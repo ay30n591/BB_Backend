@@ -5,21 +5,16 @@ import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.*;
 import com.jjans.BB.Entity.Users;
-import com.jjans.BB.Document.UsersDocument;
+//import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
-import com.jjans.BB.Repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.SearchHit;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -53,7 +48,7 @@ public class UsersService {
 
     @Autowired
     private ElasticsearchRestTemplate elasticsearchTemplate;
-    private final SearchRepository searchRepository;
+//    private final SearchUsersRepository searchUsersRepository;
 
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (usersRepository.existsByEmail(signUp.getEmail())) {
@@ -222,65 +217,4 @@ public class UsersService {
         List<Users> allUsers = usersRepository.findAll();
         return response.success(allUsers, "모든 사용자 정보를 성공적으로 가져왔습니다.", HttpStatus.OK);
     }
-
-//    @Transactional
-//    public void saveAllUsers(UserRequestDto.RequestUserSaveDto requestUserSaveDto) {
-//        List<Users> usersList =
-//                requestUserSaveDto.getuserSaveDtoList().stream() // 수정된 부분
-//                        .map().collect(Collectors.toList());
-//        usersRepository.saveAll(usersList);
-//    }
-
-//        @Transactional
-//    public void saveAllUsersDocuments() {
-//        List<UsersDocument> usersDocumentList
-//                = usersRepository.findAll().stream().map(saveAllUsersDocuments()::from).collect(Collectors.toList());
-//        usersSearchRepository.saveAll(usersDocumentList);
-//    }
-//    @Transactional
-//    public void saveAll(List<UserRequestDto.RequestUserSaveDto> info) {
-//        List<UsersDocument> users = info.stream()
-//                .map(UsersDocument::of)
-//                .collect(Collectors.toList());
-//        usersSearchRepository.saveAll(users);
-//    }
-//
-//    public List<UserResponseDto.searchInfo> findByNickName(String nickname) {
-//        return usersSearchRepository.findByNickName(nickname)
-//                .stream()
-//                .map(usersDocument -> UserResponseDto.searchInfo.builder().build().searchUserInfo(usersDocument))
-//                .collect(Collectors.toList());
-//    }
-//        public List<UserResponseDto> searchByCondition (UserRequestDto.SearchCondition searchCondition, Pageable
-//        pageable){
-//            return usersSearchQueryRepository.findByCondition(searchCondition, pageable)
-//                    .stream()
-//                    .map(UserResponseDto::from)
-//                    .collect(Collectors.toList());
-//    }
-//
-//    public void checkDataInElasticsearch() {
-//        Iterable<UsersDocument> allUsersDocuments = usersSearchRepository.findAll();
-//
-//        // 출력 혹은 로깅을 통해 데이터 확인
-//        allUsersDocuments.forEach(System.out::println);
-//    }
-
-
-    public List<UsersDocument> findByNickName(String nickname) {
-
-        // 어떤 QueryBuilders -> 제공하는 함수 중에 -> lsc -> ls - X l
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.matchPhrasePrefixQuery("nick_name", nickname))
-                .build();
-
-        SearchHits<UsersDocument> searchHits = elasticsearchTemplate.search(searchQuery, UsersDocument.class);
-
-        return searchHits.getSearchHits().stream()
-                .map(SearchHit::getContent)
-                .collect(Collectors.toList());
-
-    }
-
-
 }

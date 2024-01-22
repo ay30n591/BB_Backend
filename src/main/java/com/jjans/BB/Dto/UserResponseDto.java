@@ -1,6 +1,6 @@
 package com.jjans.BB.Dto;
 
-import com.jjans.BB.Document.UsersDocument;
+//import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,15 +31,15 @@ public class UserResponseDto {
             return this;
         }
     }
-    @Builder
-    public UserResponseDto(String nickName, String userName,String email) {
-    }
-
-    public static UserResponseDto from(UsersDocument usersDocument) {
-        return UserResponseDto.builder()
-                .userName(usersDocument.getUser_name())
-                .nickName(usersDocument.getNick_name())
-                .email(usersDocument.getEmail())
-                .build();
-    }
+//    @Builder
+//    public UserResponseDto(String nickName, String userName,String email) {
+//    }
+//
+//    public static UserResponseDto from(UsersDocument usersDocument) {
+//        return UserResponseDto.builder()
+//                .userName(usersDocument.getUser_name())
+//                .nickName(usersDocument.getNick_name())
+//                .email(usersDocument.getEmail())
+//                .build();
+//    }
 }
