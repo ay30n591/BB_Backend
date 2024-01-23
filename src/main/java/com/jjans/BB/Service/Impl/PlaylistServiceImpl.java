@@ -47,9 +47,6 @@ public class PlaylistServiceImpl implements PlaylistService {
     private HashTagRepository hashTagRepository;
 
 
-    @Value("${image.upload.directory}")
-    private String imageUploadDirectory;
-
     public PlaylistServiceImpl(PlaylistRepository playlistRepository, UsersRepository usersRepository, HashTagRepository hashTagRepository) {
         this.playlistRepository = playlistRepository;
         this.usersRepository = usersRepository;

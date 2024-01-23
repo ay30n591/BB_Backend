@@ -43,8 +43,6 @@ public class FeedServiceImpl implements FeedService {
 
     private HashTagRepository hashTagRepository;
 
-    @Value("${image.upload.directory}")
-    private String imageUploadDirectory;
 
 
     @Autowired
