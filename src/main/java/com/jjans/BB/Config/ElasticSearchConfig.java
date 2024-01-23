@@ -1,6 +1,7 @@
 package com.jjans.BB.Config;
 
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
@@ -13,11 +14,12 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.jjans.BB.Repository") // Elasticsearch repository 패키지 설정
 public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
-
+    @Value("${spring.elasticsearch.hostname}")
+    private String elasticsearchServers;
     @Override
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo("localhost:9200")
+                .connectedTo(elasticsearchServers)
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }

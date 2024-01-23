@@ -62,9 +62,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker rm -f $(docker ps -qa)
-            sudo docker pull yisc/redis
-            sudo docker pull yisc/mysql-8.0
+            sudo  docker rm -f springboot
             sudo docker pull yisc/springboot
-            sudo /docker-elk/docker-compose up -d
+            sudo ./docker-elk/docker-compose up -d
             sudo docker image prune -f
