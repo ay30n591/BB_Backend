@@ -105,7 +105,7 @@ public class JwtTokenProvider {
 
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
-        log.info("토큰 유효 검사 시작");
+        log.info("토큰 유효 검사 시작 token : {}", token);
 
         try {
             Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
