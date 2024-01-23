@@ -194,8 +194,8 @@ public class UsersService {
 
     }
 
-    public UserInfoDto userInfo(String email) {
-        Users user = usersRepository.findByEmail(email)
+    public UserInfoDto userInfo(String nickName) {
+        Users user = usersRepository.findByNickName(nickName)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
         UserInfoDto userInfo = new UserInfoDto(user);
