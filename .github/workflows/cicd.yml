@@ -66,5 +66,5 @@ jobs:
             sudo docker pull yisc/redis
             sudo docker pull yisc/mysql-8.0
             sudo docker pull yisc/springboot
-            sudo docker-compose up -d
+            sudo /docker-elk/docker-compose up -d
             sudo docker image prune -f
