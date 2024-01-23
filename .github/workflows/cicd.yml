@@ -35,11 +35,6 @@ jobs:
           chmod +x ./gradlew
           ./gradlew clean build -x test
 
-      - name: Build MySQL 8.0 Docker Image
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-          docker build -f docker/mysql/Dockerfile -t yisc/mysql-8.0 .
-          docker push yisc/mysql-8.0
 
       - name: Build Redis Docker Image
         run: |
