@@ -64,5 +64,5 @@ jobs:
           script: |
             sudo docker pull yisc/springboot
             cd /home/ubuntu/docker-elk
-            /home/ubuntu/docker-elk/docker-compose.yml up -d
+            /home/ubuntu/docker-elk/docker-compose up -d
             sudo docker image prune -f
