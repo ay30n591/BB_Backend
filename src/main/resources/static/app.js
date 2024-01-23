@@ -1,5 +1,11 @@
+let subscription;
+
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://ec2-13-125-0-53.ap-northeast-2.compute.amazonaws.com:8080/ws-chat',
+
+    brokerURL: 'wss://34ae-39-124-165-135.ngrok-free.app/ws-chat',
+    connectHeaders : {
+        Authorization : "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsc2NAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE3MDU0Njk3MDZ9.FoIQteN2r1N4TBYHJe--XwGwQj5ZM_pXVCKpoNIsZAQ"
+    }
 });
 
 // Set up event handlers
@@ -11,11 +17,11 @@ stompClient.onStompError = onStompError;
 function onStompConnect(frame) {
     setConnected(true);
     console.log('Connected: ' + frame);
-    // 구독
-    stompClient.subscribe('/chatting/topic/room/1', (greeting) => {
+    console.log('jwt', stompClient.connectHeaders);
+    subscription = stompClient.subscribe('/chatting/topic/room/1', (greeting) => {
         const content = greeting.body;
         showChatlist(content);
-    });
+    }, stompClient.connectHeaders);
 }
 
 // Function to handle WebSocket error
@@ -51,10 +57,27 @@ function disconnect() {
 
 // Function to send a message
 function sendChat() {
+    const headers = {
+        Authorization: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsc2NAZ21haWwuY29tIiwiYXV0aCI6IlJPTEVfQURNSU4iLCJleHAiOjE3MDU0Njk3MDZ9.FoIQteN2r1N4TBYHJe--XwGwQj5ZM_pXVCKpoNIsZAQ"
+    };
     stompClient.publish({
+        headers: headers,
         destination: "/chatting/pub/message",
         body: JSON.stringify({'message': $("#chat").val(), 'roomId': 1})
     });
+
+    // STOMP 프로토콜에서는 publish 대신 send를 사용합니다.
+
+}
+function unsubscribe() {
+    // 저장한 subscription 객체를 사용하여 unsubscribe
+    if (subscription) {
+        stompClient.unsubscribe(subscription);
+        setConnected(false);
+        console.log("Unsubscribed");
+    } else {
+        console.error('No active subscription to unsubscribe.');
+    }
 }
 
 // Function to display a greeting message
@@ -75,4 +98,6 @@ $(function () {
     $("#connect").click(() => connect());
     $("#disconnect").click(() => disconnect());
     $("#send").click(() => sendChat());
+    $("#unsubscribe").click(() => unsubscribe()); // Add this line for the 'Unsubscribe' button
+
 });
