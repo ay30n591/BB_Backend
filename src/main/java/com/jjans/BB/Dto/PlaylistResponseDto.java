@@ -21,7 +21,7 @@ public class PlaylistResponseDto {
     private boolean likeCheck;
     private String imageFileUrl;
     private Long userId;
-    private String userName;
+    private String nickName;
 
     private List<MusicInfo> musicInfoList;
 
@@ -37,7 +37,7 @@ public class PlaylistResponseDto {
         this.plLike = playlist.getLikes().size();
         this.imageFileUrl = playlist.getImageUrl();
         this.userId = playlist.getUser().getId();
-        this.userName = playlist.getUser().getUserName();
+        this.nickName = playlist.getUser().getNickName();
         this.musicInfoList = playlist.getMusicInfoList(); // Updated field name
         this.createdAt = playlist.getCreateDate();
         this.modifiedAt = playlist.getModifiedDate();
