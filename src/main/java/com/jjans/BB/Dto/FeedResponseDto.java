@@ -21,7 +21,7 @@ public class FeedResponseDto{
     private boolean likeCheck;
     private List<MusicInfo> musicInfoList;
     private String nickName;
-
+    private String UserimgSrc;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
@@ -34,6 +34,7 @@ public class FeedResponseDto{
         this.imageFileUrl = feed.getImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.nickName = feed.getUser().getNickName();
+        this.UserimgSrc = feed.getUser().getImgSrc();
         this.createdAt = feed.getCreateDate();
         this.modifiedAt = feed.getModifiedDate();
         this.musicInfoList = Collections.singletonList(feed.getMusicInfo());
