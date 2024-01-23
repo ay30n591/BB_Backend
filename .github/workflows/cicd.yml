@@ -62,7 +62,6 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker rm -f springboot
             sudo docker pull yisc/springboot
-            sudo /usr/local/bin/docker-compose -f /home/ubuntu/docker-elk/docker-compose.yml up -d
+            sudo /home/ubuntu/docker-elk/docker-compose.yml up -d
             sudo docker image prune -f
