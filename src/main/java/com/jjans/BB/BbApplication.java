@@ -3,6 +3,7 @@ package com.jjans.BB;
 import com.jjans.BB.Repository.SearchFeedRepository;
 //import com.jjans.BB.Repository	.SearchUsersRepository;
 import com.jjans.BB.Repository.SearchPlaylistRepository;
+import com.jjans.BB.Repository.SearchTotalRepository;
 import com.jjans.BB.Repository.SearchUsersRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
 		type = FilterType.ASSIGNABLE_TYPE,
-		classes = { SearchFeedRepository.class, SearchUsersRepository.class, SearchPlaylistRepository.class}
+		classes = { SearchFeedRepository.class, SearchUsersRepository.class, SearchPlaylistRepository.class, SearchTotalRepository.class}
 		))
 @SpringBootApplication( exclude = {
 		org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,

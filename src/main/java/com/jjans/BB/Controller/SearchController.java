@@ -3,6 +3,7 @@ package com.jjans.BB.Controller;
 import com.jjans.BB.Document.FeedDocument;
 //import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Document.PlaylistDocument;
+import com.jjans.BB.Document.TotalDocument;
 import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
@@ -91,6 +92,13 @@ public class SearchController {
         List<PlaylistDocument> plistresult = searchService.findByPlistKeyword(keyword);
         log.info("PKeyword 검색 결과: {}", plistresult);
         return new ResponseEntity<>(plistresult, HttpStatus.OK);
+    }
+    @GetMapping("/total/Keyword")
+    public ResponseEntity<List<TotalDocument>> searchByTotalKeyword(@RequestParam String keyword) {
+        log.info("TKeyword 검색 중: {}", keyword);
+        List<TotalDocument> totalresult = searchService.findByTotalKeyword(keyword);
+        log.info("TKeyword 검색 결과: {}", totalresult);
+        return new ResponseEntity<>(totalresult, HttpStatus.OK);
     }
 }
 
