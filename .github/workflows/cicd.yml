@@ -63,5 +63,5 @@ jobs:
           port: 22
           script: |
             sudo docker pull yisc/springboot
-            sudo /home/ubuntu/docker-elk/docker-compose.yml up -d
+            /home/ubuntu/docker-elk/docker-compose.yml up -d
             sudo docker image prune -f
