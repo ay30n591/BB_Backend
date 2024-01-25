@@ -12,7 +12,7 @@ public class CommentResponseDto {
     private Long feedId;
     private String comment;
     private String nickName;
-    private String imgsrc;
+    private String userImgSrc;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -21,7 +21,7 @@ public class CommentResponseDto {
         this.id = comment.getId();
         this.comment = comment.getContents();
         this.nickName = comment.getUser().getNickName();
-        this.imgsrc = comment.getUser().getUserImgSrc();
+        this.userImgSrc = comment.getUser().getUserImgSrc();
         this.feedId = comment.getArticle().getId();
         this.createdAt = comment.getCreateDate();
         this.modifiedAt = comment.getModifiedDate();

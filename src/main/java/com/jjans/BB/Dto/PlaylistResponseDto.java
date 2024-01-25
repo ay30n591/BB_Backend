@@ -23,8 +23,8 @@ public class PlaylistResponseDto {
     private Long userId;
     private String nickName;
     private String userImgSrc;
-    private List<MusicInfo> musicInfoList;
 
+    private List<MusicInfo> musicInfoList;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;

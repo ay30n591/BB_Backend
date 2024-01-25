@@ -16,7 +16,7 @@ public class FeedResponseDto{
     private Long id;
     private String content;
     private int feedLike;
-    private String imageFileUrl;
+    private String feedImgSrc;
     private Long userId;
     private boolean likeCheck;
     private List<MusicInfo> musicInfoList;
@@ -31,7 +31,7 @@ public class FeedResponseDto{
         this.id = feed.getId();
         this.content = feed.getContent();
         this.feedLike = feed.getLikes().size(); // feed의 좋아요 수를 유저 수로 변경
-        this.imageFileUrl = feed.getImgSrc();  // 수정된 부분
+        this.feedImgSrc = feed.getImgSrc();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.nickName = feed.getUser().getNickName();
         this.userImgSrc = feed.getUser().getUserImgSrc();

@@ -25,14 +25,17 @@ public class ChatRoom extends BaseTime {
     @JoinTable(
             name = "user_chat_rooms",
             joinColumns = @JoinColumn(name = "chat_room_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<Users> participants = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+
+    private final Set<Users> participants = new HashSet<>();
 
     public void addParticipant(Users user) {
         this.participants.add(user);
     }
-
     public void removeParticipant(Users user) {
         this.participants.remove(user);
     }
+
+
 }
