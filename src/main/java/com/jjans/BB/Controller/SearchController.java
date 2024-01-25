@@ -27,7 +27,6 @@ import java.util.List;
 @Slf4j
 public class SearchController {
     private final SearchService searchService;
-//    private final Response response;
 
     //닉네임 검색
     @GetMapping("/users/nickname")
@@ -39,40 +38,6 @@ public class SearchController {
 
         return ResponseEntity.ok(searchInfos);
     }
-
-//    @GetMapping("/search")
-//    public ResponseEntity<List<UserResponseDto>> searchByName(UserRequestDto.SearchCondition searchCondition, Pageable pageable){
-//        return ResponseEntity.ok(searchService.searchByCondition(searchCondition,pageable));
-//    }
-
-//    tag 검색
-//    @GetMapping("/feed/tagName")
-//    public ResponseEntity<List<FeedDocument>> searchByTagName(@RequestParam String tagName) {
-//        log.info("tag로 검색 중: {}", tagName);
-//
-//        List<FeedDocument> feedtagsearchInfos = searchService.findByTagName(tagName);
-//        log.info("tag 검색 결과: {}", feedtagsearchInfos);
-//
-//        return ResponseEntity.ok(feedtagsearchInfos);
-//    }
-//    @GetMapping("/feed/musicTitle")
-//    public ResponseEntity<List<FeedDocument>> searchByMusicTitle(@RequestParam String musicTitle) {
-//        log.info("tag로 검색 중: {}", musicTitle);
-//
-//        List<FeedDocument> feedmusicsearchInfos = searchService.findByMusicTitle(musicTitle);
-//        log.info("tag 검색 결과: {}", feedmusicsearchInfos);
-//
-//        return ResponseEntity.ok(feedmusicsearchInfos);
-//    }
-//    @GetMapping("/feed/musicArtist")
-//    public ResponseEntity<List<FeedDocument>> searchByMusicArtist(@RequestParam String musicArtist) {
-//        log.info("Artist로 검색 중: {}", musicArtist);
-//
-//        List<FeedDocument> feedartistsearchInfos = searchService.findByMusicArtist(musicArtist);
-//        log.info("Artist로 검색 결과: {}", feedartistsearchInfos);
-//
-//        return ResponseEntity.ok(feedartistsearchInfos);
-//    }
 
     @Autowired
     public SearchController(SearchService searchService) {

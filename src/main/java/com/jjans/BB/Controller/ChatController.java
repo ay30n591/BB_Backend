@@ -64,10 +64,7 @@ public class ChatController {
         }
 
         producer.sendMessage(chatDto);
-
         chatService.saveChatMessage(chatDto,email);
-
-
 
     }
 
@@ -92,12 +89,6 @@ public class ChatController {
     @PostMapping("/create-room")
     public ChatRoomDto createChatRoom(@RequestParam String nickname) {
         return chatRoomService.createChatRoom(nickname);
-    }
-
-    @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/room/exists")
-    public boolean existsRoom(@RequestParam Long roomId) {
-        return chatRoomService.existsRoom(roomId);
     }
 
 }

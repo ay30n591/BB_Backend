@@ -50,7 +50,7 @@ public class UsersController {
     }
 
     @GetMapping("/info/{nickName}")
-    public ResponseEntity<?> getUserInfoByEmail(@PathVariable String nickName) {
+    public ResponseEntity<?> getUserInfoByNickname(@PathVariable String nickName) {
         UserInfoDto userInfo = usersService.userInfo(nickName);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
@@ -112,42 +112,10 @@ public class UsersController {
         return usersService.logout(logout);
     }
 
-    @GetMapping("/authority")
-    public ResponseEntity<?> authority() {
-        log.info("ADD ROLE_ADMIN");
-        return usersService.authority();
-    }
+//    @GetMapping("/authority")
+//    public ResponseEntity<?> authority() {
+//        log.info("ADD ROLE_ADMIN");
+//        return usersService.authority();
+//    }
 
-    @GetMapping("/userTest")
-    public ResponseEntity<?> userTest() {
-        log.info("ROLE_USER TEST");
-        return response.success();
-    }
-
-    @GetMapping("/adminTest")
-    public ResponseEntity<?> adminTest() {
-        log.info("ROLE_ADMIN TEST");
-        return response.success();
-    }
-
-    @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/current-user")
-    public ResponseEntity<?> getCurrentUser() {
-        // 현재 사용자의 인증 객체를 가져옵니다.
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            // 현재 사용자의 정보를 가져옵니다.
-            Object principal = authentication.getPrincipal();
-
-            // principal이 UserDetails를 구현한 경우, 사용자 이름을 가져옵니다.
-            String currentUserName = (principal instanceof UserDetails)
-                    ? ((UserDetails) principal).getUsername()
-                    : principal.toString();
-
-            return ResponseEntity.ok(List.of(currentUserName));
-        } else {
-            // 인증되지 않은 경우 응답합니다.
-            return ResponseEntity.status(401).body(null);
-        }
-    }
 }
