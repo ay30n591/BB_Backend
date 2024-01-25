@@ -18,17 +18,13 @@ public class FeedDocument {
 
     private String album_name;
 
-    private String feed_id;
-
-    private String article_id;
-
-    private String image_url;
-
-    private String content;
+    private String img_src;
 
     private String video_id;
 
     private String music_title;
+
+    private String release_date;
 
     private String album_url;
 
@@ -36,15 +32,7 @@ public class FeedDocument {
 
     private String user_id;
 
-    private String email;
-
-    private  String user_name;
-
-    //    @Field(type = FieldType.Text, analyzer = "nori_analyzer")
     private  String nick_name;
 
-    private String img_src;
+    private String user_img_src;
 }
-
-
-// 깃 메인
