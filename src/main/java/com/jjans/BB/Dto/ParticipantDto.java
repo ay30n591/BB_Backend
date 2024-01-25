@@ -12,6 +12,6 @@ public class ParticipantDto {
     public ParticipantDto(Users user) {
         this.participantId = user.getId();
         this.participantName = user.getNickName();
-        this.participantImgSrc = user.getImgSrc();
+        this.participantImgSrc = user.getUserImgSrc();
     }
 }

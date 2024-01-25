@@ -105,7 +105,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist pl = plDto.toEntity();
         pl.setMusicInfoList(plDto.getMusicInfoList());
         pl.setHashTags(hashTags);
-        pl.setImageUrl(imageFileUrl);
+        pl.setImgSrc(imageFileUrl);
         pl.setUser(user);
         entityManager.persist(pl);
 

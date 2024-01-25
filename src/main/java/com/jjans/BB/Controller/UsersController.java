@@ -3,7 +3,6 @@ package com.jjans.BB.Controller;
 
 import com.jjans.BB.Config.Security.JwtTokenProvider;
 import com.jjans.BB.Dto.Response;
-import com.jjans.BB.Dto.UserInfoDto;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Service.Helper;
 import com.jjans.BB.Service.UsersService;
@@ -24,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import com.jjans.BB.Dto.UserResponseDto.UserInfoDto;
+
 
 @RestController
 @Validated

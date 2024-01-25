@@ -36,7 +36,7 @@ public class Article extends BaseTime {
 
     // 사진
     @Column(nullable = true)
-    private String imageUrl;
+    private String imgSrc;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
@@ -48,9 +48,6 @@ public class Article extends BaseTime {
             inverseJoinColumns = @JoinColumn(name = "hashtagId"))
     private Set<HashTag> hashTags = new HashSet<>();
 
-//    public void increaseFeedLike() {
-//        this.setFeedLike(this.getFeedLike() + 1);
-//    }
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookMark> bookMarks = new ArrayList<>();

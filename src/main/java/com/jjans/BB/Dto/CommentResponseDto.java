@@ -21,7 +21,7 @@ public class CommentResponseDto {
         this.id = comment.getId();
         this.comment = comment.getContents();
         this.nickName = comment.getUser().getNickName();
-        this.imgsrc = comment.getUser().getImgSrc();
+        this.imgsrc = comment.getUser().getUserImgSrc();
         this.feedId = comment.getArticle().getId();
         this.createdAt = comment.getCreateDate();
         this.modifiedAt = comment.getModifiedDate();

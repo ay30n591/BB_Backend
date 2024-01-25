@@ -22,7 +22,7 @@ public class PlaylistResponseDto {
     private String imageFileUrl;
     private Long userId;
     private String nickName;
-    private String UserimgSrc;
+    private String userImgSrc;
     private List<MusicInfo> musicInfoList;
 
     private LocalDateTime createdAt;
@@ -35,10 +35,10 @@ public class PlaylistResponseDto {
         this.title = playlist.getTitle();
         this.contents = playlist.getContent();
         this.plLike = playlist.getLikes().size();
-        this.imageFileUrl = playlist.getImageUrl();
+        this.imageFileUrl = playlist.getImgSrc();
         this.userId = playlist.getUser().getId();
         this.nickName = playlist.getUser().getNickName();
-        this.UserimgSrc = playlist.getUser().getImgSrc();
+        this.userImgSrc = playlist.getUser().getUserImgSrc();
 
         this.musicInfoList = playlist.getMusicInfoList(); // Updated field name
         this.createdAt = playlist.getCreateDate();

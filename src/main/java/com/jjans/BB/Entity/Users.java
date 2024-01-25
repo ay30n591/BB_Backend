@@ -12,7 +12,6 @@ import java.util.*;
 
 @Builder
 @NoArgsConstructor
-//        (access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Setter
 @Getter
@@ -28,7 +27,6 @@ public class Users extends BaseTime{
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true, name = "email")
-//    @Column(nullable = true)
     private String email;
 
     @Column(nullable = true)
@@ -37,11 +35,11 @@ public class Users extends BaseTime{
     @Column(nullable = true)
     private  String userName;
     @Column(nullable = true)
-//    @Column(nullable = false, unique = true)
+
     private  String nickName;
     @Column(nullable = true)
 
-    private String imgSrc;
+    private String userImgSrc;
 
     @Column(nullable = true)
     private String gender;
@@ -77,7 +75,7 @@ public class Users extends BaseTime{
     private Set<UserFollower> following;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserFollower> followers;
+    private Set<UserFollower> follower;
 
     public void addRole(String roleName) {
         if (this.roles == null) {

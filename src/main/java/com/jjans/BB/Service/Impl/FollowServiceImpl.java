@@ -53,7 +53,7 @@ public class FollowServiceImpl implements FollowService {
         UserFollower userFollower = getUserFollower(user, follower);
         if (userFollower != null) {
             user.getFollowing().remove(userFollower);
-            follower.getFollowers().remove(userFollower);
+            follower.getFollower().remove(userFollower);
 
             usersRepository.save(user);
             usersRepository.save(follower);

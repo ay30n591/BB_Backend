@@ -4,15 +4,16 @@ import com.jjans.BB.Config.Security.JwtTokenProvider;
 import com.jjans.BB.Config.Utill.S3Uploader;
 import com.jjans.BB.Config.Utill.SecurityUtil;
 import com.jjans.BB.Dto.*;
+import com.jjans.BB.Dto.UserResponseDto.UserInfoDto;
+
 import com.jjans.BB.Entity.Users;
+
 //import com.jjans.BB.Document.UsersDocument;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 
@@ -156,10 +157,10 @@ public class UsersService {
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
 
-        if (user.getImgSrc() != null){
+        if (user.getUserImgSrc() != null){
             String dirName = "user/";
-            int lastSlashIndex = user.getImgSrc().lastIndexOf('/');
-            String fullPath = dirName + user.getImgSrc().substring(lastSlashIndex + 1);
+            int lastSlashIndex = user.getUserImgSrc().lastIndexOf('/');
+            String fullPath = dirName + user.getUserImgSrc().substring(lastSlashIndex + 1);
 
             log.info("S3 bucket에서 File {} 삭제.",fullPath);
             // s3Uploader.delete(fullPath);
@@ -177,7 +178,7 @@ public class UsersService {
             // 이미지 저장에 실패한 경우 예외 처리
             throw new RuntimeException("Failed to save image.");
         }
-        user.setImgSrc(imageFileUrl);
+        user.setUserImgSrc(imageFileUrl);
         usersRepository.save(user);
 
         return response.success();
@@ -198,7 +199,7 @@ public class UsersService {
         Users user = usersRepository.findByNickName(nickName)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        UserInfoDto userInfo = new UserInfoDto(user);
+        UserResponseDto.UserInfoDto userInfo = new UserInfoDto(user);
 
         return userInfo;
     }

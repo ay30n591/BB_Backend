@@ -16,12 +16,12 @@ public class FollowDto {
 
 
     public FollowDto(Users user) {
-        this.followerSize = user.getFollowers().size();
+        this.followerSize = user.getFollower().size();
         this.followingSize = user.getFollowing().size();
         this.FollowingNickNames = user.getFollowing().stream()
                 .map(UserFollower::getFollowingNickname)
                 .collect(Collectors.toSet());
-        this.FollowNickNames = user.getFollowers().stream()
+        this.FollowNickNames = user.getFollower().stream()
                 .map(UserFollower::getFollowerNickname)
                 .collect(Collectors.toSet());
     }

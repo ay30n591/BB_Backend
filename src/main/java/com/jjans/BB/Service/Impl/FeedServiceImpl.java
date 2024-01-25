@@ -120,7 +120,7 @@ public class FeedServiceImpl implements FeedService {
 
         feed.setMusicInfo(musicInfo);
         feed.setHashTags(hashTags);
-        feed.setImageUrl(imageFileUrl);
+        feed.setImgSrc(imageFileUrl);
         feed.setUser(user);
         entityManager.persist(feed);
 
