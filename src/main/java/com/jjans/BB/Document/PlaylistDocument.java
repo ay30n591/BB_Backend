@@ -44,7 +44,6 @@ public class PlaylistDocument {
 
     private  String user_name;
 
-    //    @Field(type = FieldType.Text, analyzer = "nori_analyzer")
     private  String nick_name;
 
     private String img_src;
