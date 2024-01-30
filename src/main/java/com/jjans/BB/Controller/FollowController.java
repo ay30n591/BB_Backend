@@ -19,7 +19,7 @@ public class FollowController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Follow a user", description = "Follow a user with the specified email.")
+    @Operation(summary = "유저 팔로우", description = "Follow a user with the specified email.")
     @PostMapping("/follow")
     public ResponseEntity<?> followUser(@RequestParam String followerEmail) {
         followService.followUser(followerEmail);
@@ -27,7 +27,7 @@ public class FollowController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Unfollow a user", description = "Unfollow a user with the specified email.")
+    @Operation(summary = "유저 언팔로우", description = "Unfollow a user with the specified email.")
     @PostMapping("/unfollow")
     public ResponseEntity<?> unfollowUser(@RequestParam String followerEmail) {
         followService.unfollowUser(followerEmail);
@@ -35,7 +35,7 @@ public class FollowController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @Operation(summary = "Get followers", description = "Get the list of users following the current user.")
+    @Operation(summary = "팔로워 정보 가져오기", description = "Get the list of users following the current user.")
     @GetMapping("/followInfo")
     public ResponseEntity<?>  getFollowers() {
         return ResponseEntity.ok(followService.getFollowInfo());

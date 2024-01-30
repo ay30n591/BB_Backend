@@ -2,6 +2,7 @@ package com.jjans.BB.Controller;
 import com.jjans.BB.Dto.CommentRequestDto;
 import com.jjans.BB.Dto.CommentResponseDto;
 import com.jjans.BB.Service.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ public class CommentController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/save/{feedId}")
+    @Operation(summary = "댓글 작성", description = "댓글 작성")
+
     public ResponseEntity<?> saveComment(
             @PathVariable Long feedId,
             @RequestBody CommentRequestDto commentDto
@@ -35,6 +38,7 @@ public class CommentController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/update/{feedId}/{commentId}")
+    @Operation(summary = "댓글 수정", description = "댓글 수정")
     public ResponseEntity<?> updateComment(
             @PathVariable Long feedId,
             @PathVariable Long commentId,
@@ -52,6 +56,7 @@ public class CommentController {
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/delete/{feedId}/{commentId}")
+    @Operation(summary = "댓글 삭제", description = "댓글 삭제")
     public ResponseEntity<?> deleteComment(
             @PathVariable Long feedId,
             @PathVariable Long commentId

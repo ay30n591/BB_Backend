@@ -6,23 +6,17 @@ import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Service.Helper;
 import com.jjans.BB.Service.UsersService;
-import io.jsonwebtoken.io.IOException;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import com.jjans.BB.Dto.UserResponseDto.UserInfoDto;
 
 
@@ -31,37 +25,42 @@ import com.jjans.BB.Dto.UserResponseDto.UserInfoDto;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
-//@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000"}) // CORS 설정
 public class UsersController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UsersService usersService;
     private final Response response;
 
     @GetMapping("/all")
+    @Operation(summary = "모든 유저 가져오기", description = "모든 유저 가져오기")
+
     public ResponseEntity<?> getAllUsers() {
         return usersService.getAllUsers();
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/info")
+    @Operation(summary = "유저 정보 가져오기", description = "유저 정보 가져오기")
     public ResponseEntity<?> getUserInfo() {
         UserInfoDto userInfo = usersService.userInfo();
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
     @GetMapping("/info/{nickName}")
+    @Operation(summary = "닉네임으로 유저 정보 가져오기", description = "닉네임으로 유저 정보 가져오기")
     public ResponseEntity<?> getUserInfoByNickname(@PathVariable String nickName) {
         UserInfoDto userInfo = usersService.userInfo(nickName);
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
     @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "유저 프로필 사진 저장", description = "유저 프로필 사진 저장")
     @PostMapping(value = "/updateImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUserImage(@RequestParam("imageFile") MultipartFile imageFile) {
         return usersService.userImageUpdate(imageFile);
     }
 
     @PostMapping("/sign-up")
+    @Operation(summary = "회원가입", description = "회원가입")
     public ResponseEntity<?> signUp(@RequestBody @Validated UserRequestDto.SignUp signUp, Errors errors) {
             // validation check
         System.out.println(signUp.getEmail());
@@ -75,6 +74,7 @@ public class UsersController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "로그인", description = "로그인")
     public ResponseEntity<?> login(@RequestBody @Validated UserRequestDto.Login login, Errors errors) {
         // validation check
         System.out.println(login.getEmail());
@@ -87,6 +87,7 @@ public class UsersController {
     }
 
     @PostMapping("/reissue")
+    @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     public ResponseEntity<?> reissue(@RequestBody @Validated UserRequestDto.Reissue reissue, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -96,6 +97,7 @@ public class UsersController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃", description = "로그아웃")
     public ResponseEntity<?> logout(@RequestBody(required = false) @Validated UserRequestDto.Logout logout, Errors errors) {
         // validation check
         if (logout == null) {

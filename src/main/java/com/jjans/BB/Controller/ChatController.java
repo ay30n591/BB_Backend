@@ -7,6 +7,7 @@ import com.jjans.BB.Dto.ChatRoomDto;
 import com.jjans.BB.Entity.Chat;
 import com.jjans.BB.Service.ChatRoomService;
 import com.jjans.BB.Service.ChatService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -70,12 +71,15 @@ public class ChatController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/rooms")
+    @Operation(summary = "채팅방 목록 가져오기", description = "채팅방 목록 가져오기")
     public List<ChatRoomDto> getAllChatRoomsByUser() {
         return chatRoomService.getAllChatRoomsByUser();
     }
 
 
     @GetMapping("/room/{roomId}/messages")
+    @Operation(summary = "채팅 메세지 가져오기", description = "채팅 메세지 가져오기")
+
     public List<ChatDto> getChatMessagesByRoomIdWithPaging(
             @PathVariable Long roomId,
             @RequestParam(defaultValue = "0") int page,
@@ -87,6 +91,8 @@ public class ChatController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/create-room")
+    @Operation(summary = "채팅방 생성", description = "채팅방 생성")
+
     public ChatRoomDto createChatRoom(@RequestParam String nickname) {
         return chatRoomService.createChatRoom(nickname);
     }
