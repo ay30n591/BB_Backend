@@ -2,22 +2,21 @@
 
 BeatBuddy :   SNS
 
------
 
-기능 정리
-                
-            - 이성철
-                - 게시글(Feed/Playlist/Comment), 팔로잉, 북마크 CRUD 구현(80%)
-                - Docker, GitAction 활용한 CI/CD (100%)
-                - Websocket(STOMP)/Kafka 활용한 채팅 서비스 구축(100%)
-                - Docker-compose 작성(50%)
-                - S3 유저 이미지 업로드(100%)
-            - 장수현
-                - User 회원가입 로그인, Google 로그인 기능 구현(100%)
-                - ELK 구현 (100%)
-                - 게시글(Feed/Playlist/Comment), 팔로잉, 북마크 CRUD 구현(80%)
-                - 서치 컨트롤러 구현 (100%)
-                - Docker-compose 작성(50%)
+### 담당 기능
+      
+  - 이성철
+      - 게시글(Feed/Playlist/Comment), 팔로잉, 북마크 CRUD 구현(80%)
+      - Docker, GitAction 활용한 CI/CD (100%)
+      - Websocket(STOMP)/Kafka 활용한 채팅 서비스 구축(100%)
+      - Docker-compose 작성(50%)
+      - S3 유저 이미지 업로드(100%)
+  - 장수현
+      - User 회원가입 로그인, Google 로그인 기능 구현(100%)
+      - ELK 구현 (100%)
+      - 게시글(Feed/Playlist/Comment), 팔로잉, 북마크 CRUD 구현(80%)
+      - 서치 컨트롤러 구현 (100%)
+      - Docker-compose 작성(50%)
     
 
 ### 아키텍처 (서버)   
