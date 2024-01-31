@@ -30,7 +30,7 @@ BeatBuddy :   SNS
   <img width="688" alt="Untitled 1" src="https://github.com/ay30n591/BB_Backend/assets/59824783/7052a219-2b80-4422-80fc-371dc49a6f1d">
 
 ###  API
-<summary>UsersController</summary>
+- UsersController
 
   <img width="1416" alt="Untitled 2" src="https://github.com/ay30n591/BB_Backend/assets/59824783/df9f5228-2161-4225-a1db-2f1a8fd1999b">
     
