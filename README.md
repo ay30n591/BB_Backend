@@ -21,11 +21,11 @@ BeatBuddy :   SNS
     
 
 ### 아키텍처 (서버)   
-    <img width="1267" alt="Untitled" src="https://github.com/ay30n591/BB_Backend/assets/59824783/d15a38e1-1469-4a11-a5c8-be50e2fb216f">
+  <img width="1267" alt="Untitled" src="https://github.com/ay30n591/BB_Backend/assets/59824783/d15a38e1-1469-4a11-a5c8-be50e2fb216f">
     
 
 ### 협업 툴
-    - Notion, Discord, GitHub
+  - Notion, Discord, GitHub
 
 ### erd
   <img width="688" alt="Untitled 1" src="https://github.com/ay30n591/BB_Backend/assets/59824783/7052a219-2b80-4422-80fc-371dc49a6f1d">
@@ -58,16 +58,16 @@ BeatBuddy :   SNS
     
     
 ### 트러블 슈팅
-    - 백엔드
-        - 구글 로그인 → 로그인 시 백이랑 연결이 안되는 문제
-        - ci/cd → docker 쪽 자동화 안되는 현상
-        - S3 이미지 업로드시에 S3에 있는 기존 이미지 삭제 후 업로드
+  - 백엔드
+      - 구글 로그인 → 로그인 시 백이랑 연결이 안되는 문제
+      - ci/cd → docker 쪽 자동화 안되는 현상
+      - S3 이미지 업로드시에 S3에 있는 기존 이미지 삭제 후 업로드
 
 
 
 ### 개선사항 / 업그레이드 (2024.02.xx)
-    - 로그스태시 → 엘라스틱 서치 :  mysql rdb 모든 컬럼 전부 입력.
-        - 로그스태시 pipeline 안에서 mysql 테이블 필터링. / 엘라스틱서치 쿼리 or 성능 개선
-    - 알림 기능
-    - 대댓글
+  - 로그스태시 → 엘라스틱 서치 :  mysql rdb 모든 컬럼 전부 입력.
+      - 로그스태시 pipeline 안에서 mysql 테이블 필터링. / 엘라스틱서치 쿼리 or 성능 개선
+  - 알림 기능
+  - 대댓글
 
