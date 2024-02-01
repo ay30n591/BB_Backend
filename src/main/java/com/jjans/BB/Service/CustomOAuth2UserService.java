@@ -2,7 +2,7 @@ package com.jjans.BB.Service;
 
 import com.jjans.BB.Entity.Users;
 import com.jjans.BB.Enum.AuthProvider;
-import com.jjans.BB.Enum.Authority;
+import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import com.jjans.BB.Oauth2.OAuth2UserInfoFactory;
 import com.jjans.BB.Oauth2.UserPrincipal;
@@ -28,7 +28,9 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException{
         OAuth2UserService oAuth2UserService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
-        logger.info("OAuth2User information: " + oAuth2User);
+        logger.info("Type - " + oAuth2User.getClass() + ",OAuth2User information: " + oAuth2User);
+        System.out.println("OAuth2User information: " + oAuth2User);
+        System.out.println("OAuth2User type: " + oAuth2User.getClass().getName());
 
         return processOAuth2User(oAuth2UserRequest, oAuth2User);
 
@@ -69,7 +71,7 @@ public class CustomOAuth2UserService  implements OAuth2UserService<OAuth2UserReq
                 .nickName(" ")
                 .oauth2Id(oAuth2UserInfo.getOAuth2Id())
                 .authProvider(authProvider)
-//                .roles(Authority.ROLE_USER)
+//                .roles(Role.ROLE_USER)
                 .build();
 
         return usersRepository.save(users);

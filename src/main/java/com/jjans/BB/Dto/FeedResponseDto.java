@@ -10,14 +10,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class FeedResponseDto {
+public class FeedResponseDto{
 
     private Long id;
     private String contents;
     private int feedLike;
     private String imageFileUrl;
     private Long userId;
+
+    private String musicArtist;
+    private String releaseDate;
+    private String musicTitle;
+    private String albumName;
     private String userName;
+    private String vedioId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> comments;
@@ -26,11 +32,16 @@ public class FeedResponseDto {
         this.id = feed.getId();
         this.contents = feed.getContent();
         this.feedLike = feed.getFeedLike();
-        this.imageFileUrl = feed.getFeedImageUrl();  // 수정된 부분
+        this.imageFileUrl = feed.getImageUrl();  // 수정된 부분
         this.userId = feed.getUser().getId();
         this.userName = feed.getUser().getUserName();
+        this.vedioId = feed.getVideoId();
         this.createdAt = feed.getCreateDate();
         this.modifiedAt = feed.getModifiedDate();
+        this.releaseDate = feed.getReleaseDate();
+        this.musicTitle = feed.getMusicTitle();
+        this.albumName = feed.getAlbumName();
+        this.musicArtist = feed.getMusicArtist();
 
         List<Comment> comments = feed.getComments();
         if (comments != null) {
