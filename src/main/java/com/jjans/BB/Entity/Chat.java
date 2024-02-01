@@ -3,6 +3,7 @@ package com.jjans.BB.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Builder
@@ -18,6 +19,10 @@ public class Chat extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ChatType chatType;
+
     @ManyToOne
     @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
@@ -29,5 +34,11 @@ public class Chat extends BaseTime {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
+    private int readCount;
 
+    public enum ChatType {
+        ENTER,
+        MESSAGE,
+        EXIT,
+    }
 }

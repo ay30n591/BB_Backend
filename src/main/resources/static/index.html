@@ -25,12 +25,18 @@
             </form>
         </div>
         <div class="col-md-6">
+            <label for="jwtInput">JWT Token:</label>
+            <input type="text" id="jwtInput" placeholder="Enter your JWT token" />
+            <button id="connect_jwt" class="btn btn-default" type="submit">Connect with JWT</button>
+        </div>
+        <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
                     <label for="chat">input</label>
                     <input type="text" id="chat" class="form-control" placeholder="Your name here...">
                 </div>
                 <button id="send" class="btn btn-default" type="submit">Send</button>
+                <button id="unsubscribe" class="btn btn-default" type="submit">Unsubscribe</button>
             </form>
         </div>
     </div>

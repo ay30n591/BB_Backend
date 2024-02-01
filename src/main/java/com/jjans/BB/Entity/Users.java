@@ -1,36 +1,32 @@
 package com.jjans.BB.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Enum.AuthProvider;
 import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "email"}))
+@JsonIgnoreProperties({"following", "followers", "bookmarkedPosts"})
 public class Users extends BaseTime{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(nullable = false, unique = true, name = "email")
-    @Column(nullable = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
 
     @Column(nullable = true)
@@ -40,11 +36,10 @@ public class Users extends BaseTime{
     private  String userName;
     @Column(nullable = true)
 
-//    @Column(nullable = false, unique = true)
     private  String nickName;
     @Column(nullable = true)
 
-    private int picture;
+    private String userImgSrc;
 
     @Column(nullable = true)
     private String gender;
@@ -70,6 +65,18 @@ public class Users extends BaseTime{
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleLike> likedArticles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMark> bookMarkedArticles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserFollower> following;
+
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserFollower> follower;
+
     public void addRole(String roleName) {
         if (this.roles == null) {
             this.roles = new ArrayList<>();
@@ -77,10 +84,4 @@ public class Users extends BaseTime{
         this.roles.add(roleName);
     }
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return this.roles.stream()
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
 }

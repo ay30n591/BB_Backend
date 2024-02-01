@@ -4,7 +4,12 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Entity
 @Getter
 @Setter
@@ -26,22 +31,46 @@ public class Article extends BaseTime {
     @Column(length = 1000, nullable = false)
     private String content;
 
-    private int feedLike;
-
-    // 피드 플리 구분
-    private String musicArtist;
-    private String releaseDate;
-    private String musicTitle;
-    private String albumName;
-
-    @ElementCollection
-    private List<String> hashTagList;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ArticleLike> likes = new HashSet<>();
 
     // 사진
     @Column(nullable = true)
-    private String imageUrl;
+    private String imgSrc;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
+
+    @ManyToMany
+    @JoinTable(name = "articleHashtags",
+            joinColumns = @JoinColumn(name = "articleId"),
+            inverseJoinColumns = @JoinColumn(name = "hashtagId"))
+    private Set<HashTag> hashTags = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookMark> bookMarks = new ArrayList<>();
+
+    public void addArticleLike(ArticleLike articleLike) {
+        this.likes.add(articleLike);
+    }
+
+    public List<Users> getLikedUsers() {
+        return likes.stream().map(ArticleLike::getUser).collect(Collectors.toList());
+    }
+
+    public void removeArticleLike(ArticleLike articleLike) {
+        this.likes.remove(articleLike);
+        articleLike.setArticle(null);
+    }
+
+    public void addBookmark(BookMark bookMark) {
+        this.bookMarks.add(bookMark);
+    }
+
+    public void removeBookmark(BookMark bookMark) {
+        this.bookMarks.remove(bookMark);
+        bookMark.setArticle(null);
+    }
 }

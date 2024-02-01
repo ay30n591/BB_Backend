@@ -23,10 +23,6 @@ public class KafkaConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;
-    @Value("${spring.kafka.consumer.key-deserializer}")
-    private String deserializerKey;
-    @Value("${spring.kafka.consumer.value-deserializer}")
-    private String deserializerValue;
 
     @Bean
     public ConsumerFactory<String, ChatDto> consumerFactory() {

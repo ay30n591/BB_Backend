@@ -21,12 +21,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
-@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000"}) // CORS 설정
+@CrossOrigin(origins = {"http://localhost:3000", "http://3.37.110.13:3000","http://192.168.45.123:3000"}) // CORS 설정
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -39,7 +40,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         //httpBasic, csrf, formLogin, rememberMe, logout, session disable
-        http.cors().and()
+        http.cors().configurationSource(request -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.applyPermitDefaultValues();
+            corsConfiguration.addAllowedMethod("*");
+            return corsConfiguration;
+        }).and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .formLogin().disable()
@@ -53,8 +59,8 @@ public class SecurityConfig {
                         "/swagger-resources/**", "/configuration/security",
                         "/swagger-ui.html/**", "/webjars/**",
                         "/swagger-resources/configuration/ui", "/swagger-ui/**","http://localhost:9092/**",
-                        "https://94ed-121-190-220-40.ngrok-free.app/**",
-                        "https://94ed-121-190-220-40.ngrok-free.app").permitAll()
+                        "https://34ae-39-124-165-135.ngrok-free.app/**",
+                        "https://34ae-39-124-165-135.ngrok-free.app").permitAll()
                 .antMatchers("/api/v1/users/userTest").hasRole("USER")
                 .antMatchers("/api/v1/users/adminTest").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/**").permitAll()

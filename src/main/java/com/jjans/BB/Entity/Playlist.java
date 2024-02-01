@@ -14,13 +14,12 @@ import java.util.List;
 
 public class Playlist extends Article {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    //title
+    private String title;
 
     @ElementCollection
-    private List<String> videoIds;
-
+    @CollectionTable(name = "playlist_music_info", joinColumns = @JoinColumn(name = "playlist_id"))
+    private List<MusicInfo> musicInfoList;
 }
 
 
