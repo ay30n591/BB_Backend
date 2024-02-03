@@ -94,6 +94,17 @@ public class FeedController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/byTag/{tagName}")
+    @Operation(summary = "해시태그로 피드 검색", description = "해시태그로 피드 검색")
+    public ResponseEntity<List<FeedResponseDto>> getFeedsByTagName(@PathVariable String tagName,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "10") int size) {
+        List<FeedResponseDto> feedDtos = feedService.findFeedsByTagName(tagName,page,size);
+        return new ResponseEntity<>(feedDtos, HttpStatus.OK);
+    }
+
+
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{feedId}/like")
     @Operation(summary = "피드 좋아요", description = "피드 좋아요 클릭")
     public ResponseEntity<String> likeFeed(@PathVariable Long feedId) {
