@@ -38,7 +38,7 @@ public class Article extends BaseTime {
     @Column(nullable = true)
     private String imgSrc;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments;
 
