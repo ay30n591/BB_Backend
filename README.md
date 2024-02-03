@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # BB_Backend
 =======
 # 최종 정리
@@ -73,4 +73,3 @@ BeatBuddy :   SNS
   - 알림 기능
   - 대댓글
 
->>>>>>> github/develop
