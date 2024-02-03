@@ -126,7 +126,6 @@ public class FeedController {
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "피드 수정", description = "피드 수정")
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
     @PutMapping("/{feedId}")
     public ResponseEntity<FeedResponseDto> updateFeed(@PathVariable Long feedId,
                                                       @RequestPart(name = "feedRequestDto", required = true) @Valid FeedRequestDto feedRequestDto,
