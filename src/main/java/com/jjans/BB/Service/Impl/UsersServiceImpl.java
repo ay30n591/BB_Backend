@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Slf4j
 public class UsersServiceImpl implements UsersService {
+
     @Autowired
     private S3Uploader s3Uploader;
     private final UsersRepository usersRepository;
@@ -46,8 +47,6 @@ public class UsersServiceImpl implements UsersService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private ElasticsearchRestTemplate elasticsearchTemplate;
     @Override
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
         if (usersRepository.existsByEmail(signUp.getEmail())) {
