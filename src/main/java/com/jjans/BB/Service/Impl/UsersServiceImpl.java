@@ -58,7 +58,7 @@ public class UsersServiceImpl implements UsersService {
                 .email(signUp.getEmail())
                 .password(passwordEncoder.encode(signUp.getPassword()))
                 .userName(signUp.getUserName())
-                //.imgSrc(imageFileUrl)
+                .userImgSrc(signUp.getUserImgSrc())
                 .gender(signUp.getGender())
                 .birth(signUp.getBirth())
                 .nickName(signUp.getNickName())

@@ -30,6 +30,8 @@ public class UserRequestDto {
 
         private  String userName;
 
+        private String userImgSrc;
+
         private  String nickName;
 
         private String gender;
