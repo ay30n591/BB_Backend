@@ -16,7 +16,6 @@ import com.jjans.BB.Service.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +45,8 @@ public class UsersServiceImpl implements UsersService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate<String, Object> redisTemplate;
     private final CustomUserDetailsService customUserDetailsService;
+
+
 
     @Override
     public ResponseEntity<?> signUp(UserRequestDto.SignUp signUp) {
