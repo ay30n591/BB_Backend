@@ -120,4 +120,10 @@ public class UsersController {
 //        return usersService.authority();
 //    }
 
+    @SecurityRequirement(name = "bearerAuth")
+    @Operation(summary = "유저 삭제", description = "유저 삭제")
+    @DeleteMapping(value = "/deleteUser")
+    public  ResponseEntity<?> deleteUser(){
+       return usersService.deleteUsers();
+    }
 }

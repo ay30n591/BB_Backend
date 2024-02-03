@@ -190,7 +190,7 @@ public class UsersServiceImpl implements UsersService {
         Users user = usersRepository.findByNickName(nickName)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        UserResponseDto.UserInfoDto userInfo = new UserInfoDto(user);
+        UserInfoDto userInfo = new UserInfoDto(user);
 
         return userInfo;
     }
@@ -207,5 +207,17 @@ public class UsersServiceImpl implements UsersService {
     public ResponseEntity<?> getAllUsers() {
         List<Users> allUsers = usersRepository.findAll();
         return response.success(allUsers, "모든 사용자 정보를 성공적으로 가져왔습니다.", HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteUsers() {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("해당하는 이메일을 가진 사용자가 존재하지 않습니다."));
+
+        usersRepository.deleteById(user.getId()); // 사용자 삭제
+
+        return response.success(user,"사용자를 성공적으로 삭제했습니다.", HttpStatus.OK);
+
     }
 }

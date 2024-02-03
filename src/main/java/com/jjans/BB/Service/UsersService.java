@@ -15,4 +15,6 @@ public interface UsersService {
     UserResponseDto.UserInfoDto userInfo(String nickName);
     ResponseEntity<?> authority();
     ResponseEntity<?> getAllUsers();
+    ResponseEntity<?> deleteUsers();
+
 }
