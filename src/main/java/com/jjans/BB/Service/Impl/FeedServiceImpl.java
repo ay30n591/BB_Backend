@@ -130,16 +130,51 @@ public class FeedServiceImpl implements FeedService {
 
 
     @Override
-    public FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto) {
+    @Transactional
+    public FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto, MultipartFile imageFile) {
+        // 기존 피드 찾기
         Feed existingFeed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new RuntimeException("Feed not found with id: " + feedId));
 
+        // 이미지 업로드 및 업로드된 이미지 URL 설정
+        String imageFileUrl = null;
+        try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                imageFileUrl = s3Uploader.upload(imageFile, "feed-image");
+                existingFeed.setImgSrc(imageFileUrl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to save image.");
+        }
+
+        // 해시태그 설정
+        Set<HashTag> hashTags = new HashSet<>();
+        for (HashTag tag : updatedFeedDto.getHashTags()) {
+            HashTag existingHashTag = hashTagRepository.findByTagName(tag.getTagName());
+            if (existingHashTag == null) {
+                // 데이터베이스에 HashTag가 존재하지 않으면 새로 생성하고 저장
+                HashTag newHashTag = new HashTag(tag.getTagName());
+                entityManager.persist(newHashTag);
+                hashTags.add(newHashTag);
+            } else {
+                // 데이터베이스에 이미 존재하는 경우 기존 것을 사용
+                hashTags.add(existingHashTag);
+            }
+        }
+
+        // 기존 피드 업데이트
+        MusicInfo musicInfo = updatedFeedDto.getMusicInfo();
         existingFeed.setContent(updatedFeedDto.getContent());
+        existingFeed.setMusicInfo(musicInfo);
+        existingFeed.setHashTags(hashTags);
 
-        Feed updatedFeed = feedRepository.save(existingFeed);
+        // 피드 저장
+        entityManager.persist(existingFeed);
 
-        return new FeedResponseDto(updatedFeed);
+        return new FeedResponseDto(existingFeed);
     }
+
 
     @Override
     public List<FeedResponseDto> getUserAllFeeds(String nickname,int page, int size) {

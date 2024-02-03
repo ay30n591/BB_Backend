@@ -10,7 +10,7 @@ import java.util.List;
 public interface FeedService {
     List<FeedResponseDto> getAllFeeds(int page, int size);
     FeedResponseDto saveFeed(FeedRequestDto feedDto, MultipartFile imageFile); //
-    FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto);
+    FeedResponseDto updateFeed(Long feedId, FeedRequestDto updatedFeedDto, MultipartFile imageFile);
     List<FeedResponseDto> getUserAllFeeds(String nickname,int page, int size);
     FeedResponseDto getUserFeed(Long feed_id,String nickname);
     List<FeedResponseDto> getMyFeeds(int page, int size);
