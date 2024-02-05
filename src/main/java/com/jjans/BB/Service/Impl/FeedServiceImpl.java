@@ -143,6 +143,9 @@ public class FeedServiceImpl implements FeedService {
                 imageFileUrl = s3Uploader.upload(imageFile, "feed-image");
                 existingFeed.setImgSrc(imageFileUrl);
             }
+            else{
+                imageFileUrl = existingFeed.getImgSrc();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to save image.");
@@ -168,6 +171,7 @@ public class FeedServiceImpl implements FeedService {
         existingFeed.setContent(updatedFeedDto.getContent());
         existingFeed.setMusicInfo(musicInfo);
         existingFeed.setHashTags(hashTags);
+        existingFeed.setImgSrc(imageFileUrl);
 
         // 피드 저장
         entityManager.persist(existingFeed);
