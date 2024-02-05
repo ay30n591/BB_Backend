@@ -119,6 +119,15 @@ public class UsersController {
 //        log.info("ADD ROLE_ADMIN");
 //        return usersService.authority();
 //    }
+    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping("/updateUser")
+    @Operation(summary = "유저 정보 수정", description = "유저 정보 수정")
+    public  ResponseEntity<?> updateUser(@RequestBody @Validated UserRequestDto.InfoUpdate updateInfo){
+
+        return usersService.userUpdate(updateInfo);
+    }
+
+
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "유저 삭제", description = "유저 삭제")

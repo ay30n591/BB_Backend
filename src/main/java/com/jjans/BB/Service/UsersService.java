@@ -13,6 +13,8 @@ public interface UsersService {
     ResponseEntity<?> userImageUpdate(MultipartFile imageFile);
     UserResponseDto.UserInfoDto userInfo();
     UserResponseDto.UserInfoDto userInfo(String nickName);
+
+    ResponseEntity<?>  userUpdate(UserRequestDto.InfoUpdate userUpdate);
     ResponseEntity<?> authority();
     ResponseEntity<?> getAllUsers();
     ResponseEntity<?> deleteUsers();

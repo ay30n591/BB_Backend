@@ -113,4 +113,17 @@ public class UserRequestDto {
 
     }
 
+
+    @Getter
+    @AllArgsConstructor
+    public static class InfoUpdate {
+
+        private  String userName;
+
+        private  String nickName;
+
+        private String gender;
+
+        private String birth;
+    }
 }

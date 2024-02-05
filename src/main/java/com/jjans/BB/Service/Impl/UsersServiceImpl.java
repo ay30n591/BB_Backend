@@ -194,6 +194,23 @@ public class UsersServiceImpl implements UsersService {
 
         return userInfo;
     }
+
+    @Override
+    public ResponseEntity<?>  userUpdate(UserRequestDto.InfoUpdate userUpdate) {
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
+
+        user.setUserName(userUpdate.getUserName());
+        user.setBirth(userUpdate.getBirth());
+        user.setGender(userUpdate.getGender());
+        user.setNickName(userUpdate.getNickName());
+        usersRepository.save(user);
+
+        UserInfoDto userInfo = new UserInfoDto(user);
+        return response.success(userInfo, "사용자 정보를 성공적으로 수정했습니다.", HttpStatus.OK);
+    }
+
     @Override
     public ResponseEntity<?> authority() {
         String userEmail = SecurityUtil.getCurrentUserEmail();
@@ -216,7 +233,6 @@ public class UsersServiceImpl implements UsersService {
                 .orElseThrow(() -> new UsernameNotFoundException("해당하는 이메일을 가진 사용자가 존재하지 않습니다."));
 
         usersRepository.deleteById(user.getId()); // 사용자 삭제
-
         return response.success(user,"사용자를 성공적으로 삭제했습니다.", HttpStatus.OK);
 
     }
