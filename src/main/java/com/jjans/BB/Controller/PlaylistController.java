@@ -96,9 +96,10 @@ public class PlaylistController {
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "플리 수정", description = "플리 수정")
-    @PutMapping("/{plId}")
-    public ResponseEntity<PlaylistResponseDto> updatePl(@PathVariable Long plId, @RequestBody PlaylistRequestDto updatedPlDto) {
-        PlaylistResponseDto updatedPl = playlistService.updatePl(plId, updatedPlDto);
+    @PutMapping(value = "/{plId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PlaylistResponseDto> updatePl(@PathVariable Long plId,@RequestPart(name = "playlistRequestDto", required = true) @Valid PlaylistRequestDto updatedPlDto
+            , @RequestPart(name = "imageFile", required = false) @Valid MultipartFile imageFile){
+        PlaylistResponseDto updatedPl = playlistService.updatePl(plId, updatedPlDto, imageFile);
         return new ResponseEntity<>(updatedPl, HttpStatus.OK);
     }
 

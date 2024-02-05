@@ -15,7 +15,7 @@ public interface PlaylistService {
 
 
     PlaylistResponseDto savePl(PlaylistRequestDto plDto, MultipartFile imageFile); //
-    PlaylistResponseDto updatePl(Long feedId, PlaylistRequestDto updatedPlDto);
+    PlaylistResponseDto updatePl(Long feedId, PlaylistRequestDto updatedPlDto,MultipartFile imageFile);
     List<PlaylistResponseDto> getUserAllPls(String nickname,int page, int size);
     PlaylistResponseDto getUserPl(Long pl_id,String nickname);
     PlaylistResponseDto getMyPl(Long feed_id);

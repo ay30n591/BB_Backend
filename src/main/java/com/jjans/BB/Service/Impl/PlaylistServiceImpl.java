@@ -87,7 +87,6 @@ public class PlaylistServiceImpl implements PlaylistService {
             throw new RuntimeException("Failed to save image.");
         }
 
-
         Set<HashTag> hashTags = new HashSet<>();
         for (HashTag tag : plDto.getHashTags()) {
             HashTag existingHashTag = hashTagRepository.findByTagName(tag.getTagName());
@@ -113,17 +112,58 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public PlaylistResponseDto updatePl(Long plId, PlaylistRequestDto updatedPlDto) {
-        Playlist existingPl = playlistRepository.findById(plId)
-                .orElseThrow(() -> new RuntimeException("Feed not found with id: " + plId));
+    @Transactional
+    public PlaylistResponseDto updatePl(Long playlistId, PlaylistRequestDto plDto, MultipartFile imageFile) {
+        // 플레이리스트 ID로 기존 플레이리스트를 찾습니다.
+        Playlist existingPlaylist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new EntityNotFoundException("Playlist not found with id: " + playlistId));
 
-        existingPl.setContent(updatedPlDto.getContent());
-        //existingFeed.setFeedImage(updatedFeedDto.getFeedImage());
+        // 현재 사용자 정보 가져오기
+        String userEmail = SecurityUtil.getCurrentUserEmail();
+        Users user = usersRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
 
-        Playlist updatedPl = playlistRepository.save(existingPl);
+        // 이미지 파일 업로드 처리
+        String imageFileUrl = null;
+        try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                imageFileUrl = s3Uploader.upload(imageFile, "playlist-image");
+            }
+            else{
+                imageFileUrl = existingPlaylist.getImgSrc();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 이미지 저장에 실패한 경우 예외 처리
+            throw new RuntimeException("Failed to save image.");
+        }
 
-        return new PlaylistResponseDto(updatedPl);
+        // 해시태그 엔터티 처리
+        Set<HashTag> hashTags = new HashSet<>();
+        for (HashTag tag : plDto.getHashTags()) {
+            HashTag existingHashTag = hashTagRepository.findByTagName(tag.getTagName());
+            if (existingHashTag == null) {
+                // 데이터베이스에 HashTag가 존재하지 않으면 새로 생성하고 저장
+                HashTag newHashTag = new HashTag(tag.getTagName());
+                entityManager.persist(newHashTag);
+                hashTags.add(newHashTag);
+            } else {
+                // 데이터베이스에 이미 존재하는 경우 기존 것을 사용
+                hashTags.add(existingHashTag);
+            }
+        }
+
+        // 기존 플레이리스트 업데이트
+        existingPlaylist.setTitle(plDto.getTitle());
+        existingPlaylist.setMusicInfoList(plDto.getMusicInfoList());
+        existingPlaylist.setHashTags(hashTags);
+        existingPlaylist.setImgSrc(imageFileUrl);
+        existingPlaylist.setUser(user);
+        entityManager.merge(existingPlaylist); // Merge를 사용하여 업데이트된 엔터티를 저장합니다.
+
+        return new PlaylistResponseDto(existingPlaylist);
     }
+
 
     @Override
     public List<PlaylistResponseDto> getUserAllPls(String nickname, int page, int size) {
