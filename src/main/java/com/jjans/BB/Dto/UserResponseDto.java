@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserResponseDto {
@@ -48,7 +49,7 @@ public class UserResponseDto {
         private  String nickName;
         private String userImgSrc;
         private String gender;
-        private LocalDateTime birth;
+        private LocalDate birth;
         private int followingCnt;
         private int followerCnt;
 
