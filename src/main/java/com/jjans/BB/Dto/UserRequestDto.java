@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserRequestDto {
@@ -124,6 +125,6 @@ public class UserRequestDto {
 
         private String gender;
 
-        private String birth;
+        private LocalDateTime birth;
     }
 }

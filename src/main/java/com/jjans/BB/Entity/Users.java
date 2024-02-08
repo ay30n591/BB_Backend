@@ -7,6 +7,7 @@ import com.jjans.BB.Enum.Role;
 import com.jjans.BB.Oauth2.OAuth2UserInfo;
 import lombok.*;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -45,7 +46,7 @@ public class Users extends BaseTime{
     private String gender;
 
     @Column(nullable = true)
-    private String birth;
+    private LocalDateTime birth;
 
     private String oauth2Id;
 
