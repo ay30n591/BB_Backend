@@ -37,7 +37,7 @@ public class UserRequestDto {
 
         private String gender;
 
-        private String birth;
+        private LocalDateTime birth;
     }
 
     @Getter
