@@ -1,6 +1,6 @@
 
-# BB_Backend
-=======
+# BeatBuddy :<br/>플레이리스트 공유  SNS 플랫폼
+
 # 최종 정리
 
 BeatBuddy :   SNS
