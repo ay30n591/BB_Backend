@@ -1,11 +1,6 @@
 
 # BeatBuddy :<br/>플레이리스트 공유  SNS 플랫폼
 
-# 최종 정리
-
-BeatBuddy :   SNS
-
-
 ### 담당 기능
       
   - 이성철
