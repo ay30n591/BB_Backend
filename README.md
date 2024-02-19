@@ -1,10 +1,5 @@
 
-# BB_Backend
-=======
-# 최종 정리
-
-BeatBuddy :   SNS
-
+# BeatBuddy :<br/>플레이리스트 공유  SNS 플랫폼
 
 ### 담당 기능
       
@@ -29,7 +24,7 @@ BeatBuddy :   SNS
 ### 협업 툴
   - Notion, Discord, GitHub
 
-### erd
+### ERD
   <img width="688" alt="Untitled 1" src="https://github.com/ay30n591/BB_Backend/assets/59824783/7052a219-2b80-4422-80fc-371dc49a6f1d">
 
 ###  API
@@ -56,15 +51,12 @@ BeatBuddy :   SNS
 - ChatController
   <img width="1415" alt="Untitled 9" src="https://github.com/ay30n591/BB_Backend/assets/59824783/61699173-76f8-4ffc-9fae-7f0becf13fd7">
 
-
-    
     
 ### 트러블 슈팅
   - 백엔드
       - 구글 로그인 → 로그인 시 백이랑 연결이 안되는 문제
       - ci/cd → docker 쪽 자동화 안되는 현상
       - S3 이미지 업로드시에 S3에 있는 기존 이미지 삭제 후 업로드
-
 
 
 ### 개선사항 / 업그레이드 (2024.02.xx)
