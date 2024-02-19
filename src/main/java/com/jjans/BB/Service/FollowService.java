@@ -6,7 +6,7 @@ import com.jjans.BB.Entity.UserFollower;
 import java.util.Set;
 
 public interface FollowService {
-    void followUser(String followerEmail);
-    void unfollowUser(String followerEmail);
+    void followUser(String followerNickName);
+    void unfollowUser(String followerNickName);
     FollowDto getFollowInfo();
 }

@@ -19,14 +19,14 @@ public class FollowServiceImpl implements FollowService {
 
 
     @Override
-    public void followUser(String followerEmail) {
+    public void followUser(String followerNickName) {
         String userEmail = SecurityUtil.getCurrentUserEmail();
 
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + userEmail));
 
-        Users follower = usersRepository.findByEmail(followerEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Follower not found with email: " + followerEmail));
+        Users follower = usersRepository.findByNickName(followerNickName)
+                .orElseThrow(() -> new IllegalArgumentException("Follower not found with email: " + followerNickName));
 
         if (!userIsFollowing(user, follower)) {
             UserFollower userFollower = new UserFollower();
@@ -41,14 +41,14 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public void unfollowUser(String followerEmail) {
+    public void unfollowUser(String followerNickName) {
         String userEmail = SecurityUtil.getCurrentUserEmail();
 
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + userEmail));
 
-        Users follower = usersRepository.findByEmail(followerEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Follower not found with email: " + followerEmail));
+        Users follower = usersRepository.findByNickName(followerNickName)
+                .orElseThrow(() -> new IllegalArgumentException("Follower not found with email: " + followerNickName));
 
         UserFollower userFollower = getUserFollower(user, follower);
         if (userFollower != null) {

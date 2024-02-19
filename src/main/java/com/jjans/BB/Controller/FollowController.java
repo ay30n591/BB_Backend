@@ -21,16 +21,16 @@ public class FollowController {
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "유저 팔로우", description = "Follow a user with the specified email.")
     @PostMapping("/follow")
-    public ResponseEntity<?> followUser(@RequestParam String followerEmail) {
-        followService.followUser(followerEmail);
+    public ResponseEntity<?> followUser(@RequestParam String followerNickName) {
+        followService.followUser(followerNickName);
         return ResponseEntity.ok("Successfully followed the user.");
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "유저 언팔로우", description = "Unfollow a user with the specified email.")
     @PostMapping("/unfollow")
-    public ResponseEntity<?> unfollowUser(@RequestParam String followerEmail) {
-        followService.unfollowUser(followerEmail);
+    public ResponseEntity<?> unfollowUser(@RequestParam String followerNickName) {
+        followService.unfollowUser(followerNickName);
         return ResponseEntity.ok("Successfully unfollowed the user.");
     }
 
