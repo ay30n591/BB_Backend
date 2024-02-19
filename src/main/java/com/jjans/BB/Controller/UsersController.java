@@ -2,6 +2,8 @@ package com.jjans.BB.Controller;
 
 
 import com.jjans.BB.Config.Security.JwtTokenProvider;
+import com.jjans.BB.Dto.FeedRequestDto;
+import com.jjans.BB.Dto.FeedResponseDto;
 import com.jjans.BB.Dto.Response;
 import com.jjans.BB.Dto.UserRequestDto;
 import com.jjans.BB.Service.Helper;
@@ -18,6 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.jjans.BB.Dto.UserResponseDto.UserInfoDto;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -120,14 +124,13 @@ public class UsersController {
 //        return usersService.authority();
 //    }
     @SecurityRequirement(name = "bearerAuth")
-    @PutMapping("/updateUser")
+    @PutMapping(value = "/updateUser", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "유저 정보 수정", description = "유저 정보 수정")
-    public  ResponseEntity<?> updateUser(@RequestBody @Validated UserRequestDto.InfoUpdate updateInfo){
+    public  ResponseEntity<?> updateUser(@RequestPart(name = "updateInfo", required = true) @Validated UserRequestDto.InfoUpdate updateInfo
+            , @RequestPart(name = "imageFile", required = false) @Valid MultipartFile imageFile){
 
-        return usersService.userUpdate(updateInfo);
+        return usersService.userUpdate(updateInfo,imageFile);
     }
-
-
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "유저 삭제", description = "유저 삭제")

@@ -196,7 +196,7 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public ResponseEntity<?>  userUpdate(UserRequestDto.InfoUpdate userUpdate) {
+    public ResponseEntity<?>  userUpdate(UserRequestDto.InfoUpdate userUpdate, MultipartFile imageFile) {
         String userEmail = SecurityUtil.getCurrentUserEmail();
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("No authentication information."));
@@ -205,6 +205,18 @@ public class UsersServiceImpl implements UsersService {
         user.setBirth(userUpdate.getBirth());
         user.setGender(userUpdate.getGender());
         user.setNickName(userUpdate.getNickName());
+
+        String imageFileUrl = null;
+        try {
+            if (imageFile != null && !imageFile.isEmpty()) {
+                imageFileUrl = s3Uploader.upload(imageFile, "user");
+                user.setUserImgSrc(imageFileUrl);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 이미지 저장에 실패한 경우 예외 처리
+            throw new RuntimeException("Failed to save image.");
+        }
         usersRepository.save(user);
 
         UserInfoDto userInfo = new UserInfoDto(user);

@@ -14,7 +14,7 @@ public interface UsersService {
     UserResponseDto.UserInfoDto userInfo();
     UserResponseDto.UserInfoDto userInfo(String nickName);
 
-    ResponseEntity<?>  userUpdate(UserRequestDto.InfoUpdate userUpdate);
+    ResponseEntity<?>  userUpdate(UserRequestDto.InfoUpdate userUpdate, MultipartFile imageFile);
     ResponseEntity<?> authority();
     ResponseEntity<?> getAllUsers();
     ResponseEntity<?> deleteUsers();
