@@ -34,4 +34,12 @@ public class UserFollower {
         return user.getNickName();
     }
 
+    public String getFollowingImgs() {
+        return follower.getUserImgSrc();
+    }
+
+    public String getFollowerImgs() {
+        return user.getUserImgSrc();
+    }
+
 }

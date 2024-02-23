@@ -13,6 +13,8 @@ public class FollowDto {
     int followingSize;
     private Set<String> FollowNickNames;
     private Set<String> FollowingNickNames;
+    private Set<String> FollowingImgs;
+    private Set<String> FollowImgs;
 
 
     public FollowDto(Users user) {
@@ -23,6 +25,12 @@ public class FollowDto {
                 .collect(Collectors.toSet());
         this.FollowNickNames = user.getFollower().stream()
                 .map(UserFollower::getFollowerNickname)
+                .collect(Collectors.toSet());
+        this.FollowingImgs = user.getFollowing().stream()
+                .map(UserFollower::getFollowingImgs)
+                .collect(Collectors.toSet());
+        this.FollowImgs = user.getFollower().stream()
+                .map(UserFollower::getFollowingImgs)
                 .collect(Collectors.toSet());
     }
 

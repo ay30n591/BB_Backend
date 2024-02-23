@@ -67,7 +67,6 @@ public class FollowServiceImpl implements FollowService {
         Users user = usersRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with email: " + userEmail));
 
-
         return new FollowDto(user);
     }
 
